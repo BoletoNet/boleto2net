@@ -1,2 +1,2 @@
-# boletonet2.0
+# boleto2net
 Nova versão do Boleto.Net
