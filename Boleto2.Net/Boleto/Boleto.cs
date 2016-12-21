@@ -7,7 +7,6 @@ namespace Boleto2Net
     [Serializable, Browsable(false)]
     public class Boleto
     {
-
         public int CodigoMoeda { get; set; } = 9;
         public string EspecieMoeda { get; set; } = "R$";
         public int QuantidadeMoeda { get; set; } = 0;
@@ -80,7 +79,7 @@ namespace Boleto2Net
         public CodigoBarra CodigoBarra { get; } = new CodigoBarra();
         public ObservableCollection<GrupoDemonstrativo> Demonstrativos { get; } = new ObservableCollection<GrupoDemonstrativo>();
 
-        public void Valida()
+        public void ValidarDados()
         {
             // Banco Obrigatório
             if (this.Banco == null)
