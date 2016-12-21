@@ -386,6 +386,20 @@ namespace Boleto2Net
                     infoSacado += string.Format(" - CEP: {0}", Utils.FormataCEP(boleto.Sacado.Endereco.CEP));
             }
 
+            // Dados do Avalista
+            var avalista = string.Empty;
+            if (boleto.Avalista.Nome != string.Empty & boleto.Avalista.CPFCNPJ == string.Empty)
+                avalista = "- " + boleto.Avalista.Nome;
+            else
+                if (boleto.Avalista.CPFCNPJ.Length <= 11)
+                avalista = string.Format("- {0} - CPF: {1}", boleto.Avalista.Nome, Utils.FormataCPF(boleto.Avalista.CPFCNPJ));
+            else
+                avalista = string.Format("- {0} - CNPJ: {1}", boleto.Avalista.Nome, Utils.FormataCNPJ(boleto.Avalista.CPFCNPJ));
+
+            if (boleto.Avalista.Observacoes != string.Empty)
+                avalista += " - " + boleto.Avalista.Observacoes;
+
+
             if (!FormatoCarne)
                 html.Append(GeraHtmlReciboCedente());
             else
@@ -429,6 +443,7 @@ namespace Boleto2Net
                 .Replace("@AGENCIACONTA", boleto.Banco.Cedente.CodigoFormatado)
                 .Replace("@SACADO", sacado)
                 .Replace("@INFOSACADO", infoSacado)
+                .Replace("@AVALISTA", avalista)
                 .Replace("@AGENCIACODIGOCEDENTE", boleto.Banco.Cedente.CodigoFormatado)
                 .Replace("@CPFCNPJ", boleto.Banco.Cedente.CPFCNPJ)
                 .Replace("@MORAMULTA", (boleto.ValorMulta == 0 ? "" : boleto.ValorMulta.ToString("R$ ##,##0.00")))

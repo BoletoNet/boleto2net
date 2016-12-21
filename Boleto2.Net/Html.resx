@@ -347,7 +347,7 @@
   <data name="ReciboCedenteParte10" xml:space="preserve">
     <value>&lt;table class="w666 ctN"&gt;
 				&lt;tr&gt;
-						&lt;td class="pL6  w409"&gt;Sacador / Avalista&lt;/td&gt;
+						&lt;td class="pL6  w409"&gt;Sacador / Avalista &lt;b class="cpN"&gt;@AVALISTA&lt;/b&gt;&lt;/td&gt;
 						&lt;td class="w250 Ar"&gt;Autenticação mecânica - &lt;b class="cpN"&gt;Ficha de Compensação&lt;/b&gt;&lt;/td&gt;
 				&lt;/tr&gt;
 				&lt;tr class="h13"&gt;&lt;td colspan="3" /&gt;&lt;/tr&gt;

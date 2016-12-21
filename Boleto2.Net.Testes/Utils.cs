@@ -29,12 +29,11 @@ namespace Boleto2Net.Testes
             };
         }
 
-        static int proximoAlternado = 1;
+        static int contador = 1;
         internal static Sacado GerarSacado()
         {
-            if (proximoAlternado == 1)
+            if (contador % 2 == 0)
             {
-                proximoAlternado = 2;
                 return new Sacado
                 {
                     CPFCNPJ = "123.456.789-09",
@@ -53,7 +52,6 @@ namespace Boleto2Net.Testes
             }
             else
             {
-                proximoAlternado = 1;
                 return new Sacado
                 {
                     CPFCNPJ = "98.765.432/1098-74",
@@ -98,7 +96,7 @@ namespace Boleto2Net.Testes
                 NossoNumero = proximoNossoNumero.ToString(),
                 NumeroDocumento = "BB" + proximoNossoNumero.ToString("D6") + (char)(64 + i),
                 SiglaEspecieDocumento = "DM",
-                Aceite = (proximoAlternado % 2) == 0 ? "N" : "S",
+                Aceite = (contador % 2) == 0 ? "N" : "S",
                 CodigoInstrucao1 = "11",
                 CodigoInstrucao2 = "22",
                 DataDesconto = DateTime.Now.AddMonths(i),
@@ -113,7 +111,14 @@ namespace Boleto2Net.Testes
                 MensagemInstrucoesCaixa = "Mensagem para instruções do caixa",
                 NumeroControleParticipante = "CHAVEPRIMARIA="+ proximoNossoNumero.ToString()
             };
+            if (contador % 3 == 0)
+            {
+                boleto.Avalista = GerarSacado();
+                boleto.Avalista.Nome = boleto.Avalista.Nome.Replace("Sacado", "Avalista");
+            }
+                
             boleto.ValidarDados();
+            contador++;
             proximoNossoNumero++;
             return boleto;
         }

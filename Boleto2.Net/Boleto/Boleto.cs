@@ -75,7 +75,8 @@ namespace Boleto2Net
         public string RegistroArquivoRetorno { get; set; } = string.Empty;
 
         public IBanco Banco { get; set; }
-        public Sacado Sacado { get; set; }
+        public Sacado Sacado { get; set; } = new Sacado();
+        public Sacado Avalista { get; set; } = new Sacado();
         public CodigoBarra CodigoBarra { get; } = new CodigoBarra();
         public ObservableCollection<GrupoDemonstrativo> Demonstrativos { get; } = new ObservableCollection<GrupoDemonstrativo>();
 
