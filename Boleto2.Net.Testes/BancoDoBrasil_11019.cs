@@ -4,13 +4,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Boleto2Net.Testes
 {
     [TestClass]
-    public class Brasil_11019
+    public class Banco001_Brasil_11019
     {
         Banco banco;
-        Boletos boletos;
-
-        [TestMethod]
-        public void Banco001_Brasil_17019_Testes()
+        public Banco001_Brasil_11019()
         {
             var contaBancaria = new ContaBancaria
             {
@@ -30,29 +27,16 @@ namespace Boleto2Net.Testes
             };
             banco.FormataCedente();
 
-            boletos = new Boletos
-            {
-                Banco = banco
-            };
 
-            //Banco001_Brasil_11019_DV1();
-            //Banco001_Brasil_11019_DV2();
-            //Banco001_Brasil_11019_DV3();
-            //Banco001_Brasil_11019_DV4();
-            //Banco001_Brasil_11019_DV5();
-            //Banco001_Brasil_11019_DV6();
-            //Banco001_Brasil_11019_DV7();
-            //Banco001_Brasil_11019_DV8();
-            //Banco001_Brasil_11019_DV9();
-
-            //Utils.TestarArquivoRemessa(TipoArquivo.CNAB240, boletos, nameof(Banco001_Brasil_11019));
-
-            //Utils.TestarArquivoRemessa(TipoArquivo.CNAB400, boletos, nameof(Banco001_Brasil_11019));
-
-            //Utils.TestarBoletoPDF(boletos, nameof(Banco001_Brasil_11019));
-
-            Assert.Inconclusive("Aguardando boletos de exemplo (gerados pelo banco - segunda via) para implementar o teste.");
-
+        }
+        [TestMethod]
+        public void Banco001_Brasil_11019_TestePendente()
+        {
+            Assert.Inconclusive("Aguardando boletos de exemplo (gerados pelo banco - segunda via) para implementar os testes:/n" +
+                                "Remessa Cnab240/n" +
+                                "Remessa Cnab400/n" +
+                                "Arquivo PDF/n" +
+                                "DV de 1 a 9");
         }
 
     }

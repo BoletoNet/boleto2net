@@ -29,12 +29,12 @@ namespace Boleto2Net.Testes
             };
         }
 
-        static int proximoTipoSacado = 1;
+        static int proximoAlternado = 1;
         internal static Sacado GerarSacado()
         {
-            if (proximoTipoSacado == 1)
+            if (proximoAlternado == 1)
             {
-                proximoTipoSacado = 2;
+                proximoAlternado = 2;
                 return new Sacado
                 {
                     CPFCNPJ = "123.456.789-09",
@@ -53,7 +53,7 @@ namespace Boleto2Net.Testes
             }
             else
             {
-                proximoTipoSacado = 1;
+                proximoAlternado = 1;
                 return new Sacado
                 {
                     CPFCNPJ = "98.765.432/1098-74",
@@ -72,13 +72,59 @@ namespace Boleto2Net.Testes
             }
         }
 
-        internal static void TestarBoletoPDF(Boletos boletos, string nomeCarteira)
+        static int proximoNossoNumero = 1;
+        internal static Boletos GerarBoletos(Banco banco, int quantidadeBoletos)
         {
-            // Esperamos receber 9 boletos, com DV entre 1 e 9.
-            Assert.AreEqual(9, boletos.Count, "Quantidade de boletos diferente de 9");
+            var boletos = new Boletos
+            {
+                Banco = banco
+            };
+            for (int i = 1; i <= quantidadeBoletos; i++)
+            {
+                boletos.Add(GerarBoleto(banco, i));
+            }
+            return boletos;
+        }
+        internal static Boleto GerarBoleto(Banco banco, int i)
+        {
+            var boleto = new Boleto
+            {
+                Banco = banco,
+                Sacado = Utils.GerarSacado(),
+                DataEmissao = DateTime.Now.AddDays(-3),
+                DataProcessamento = DateTime.Now,
+                DataVencimento = DateTime.Now.AddMonths(i),
+                ValorTitulo = (decimal)100 * i,
+                NossoNumero = proximoNossoNumero.ToString(),
+                NumeroDocumento = "BB" + proximoNossoNumero.ToString("D6") + (char)(64 + i),
+                SiglaEspecieDocumento = "DM",
+                Aceite = (proximoAlternado % 2) == 0 ? "N" : "S",
+                CodigoInstrucao1 = "11",
+                CodigoInstrucao2 = "22",
+                DataDesconto = DateTime.Now.AddMonths(i),
+                ValorDesconto = (decimal)(100 * i * 0.10),
+                DataMulta = DateTime.Now.AddMonths(i),
+                PercentualMulta = (decimal)0.02,
+                ValorMulta = (decimal)(100 * i * 0.02),
+                DataJuros = DateTime.Now.AddMonths(i),
+                PercentualJuros = (decimal)0.002,
+                ValorJuros = (decimal)(100 * i * 0.002),
+                MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
+                MensagemInstrucoesCaixa = "Mensagem para instruções do caixa",
+                NumeroControleParticipante = "CHAVEPRIMARIA="+ proximoNossoNumero.ToString()
+            };
+            boleto.ValidarDados();
+            proximoNossoNumero++;
+            return boleto;
+        }
+
+        internal static void TestarBoletoPDF(Banco banco, string nomeCarteira)
+        {
+            var boletos = GerarBoletos(banco, 1);
+            Assert.AreEqual(1, boletos.Count, "Quantidade de boletos diferente de 1");
 
             // Define o nome do arquivo.
-            var nomeArquivo = Path.GetTempPath() + "Boleto2Net\\" + nomeCarteira + "_Boletos.PDF";
+            var nomeArquivo = Path.GetTempPath() + "Boleto2Net\\" + nomeCarteira + "_Arquivo.PDF";
 
             // Cria pasta para os arquivos
             if (Directory.Exists(Path.GetDirectoryName(nomeArquivo)) == false)
@@ -132,13 +178,13 @@ namespace Boleto2Net.Testes
             Assert.IsTrue(File.Exists(nomeArquivo), "Arquivo Boletos (PDF) não encontrado: " + nomeArquivo);
         }
 
-        internal static void TestarArquivoRemessa(TipoArquivo tipoArquivo, Boletos boletos, string nomeCarteira)
+        internal static void TestarArquivoRemessa(Banco banco, TipoArquivo tipoArquivo, string nomeCarteira)
         {
-            // Esperamos receber 9 boletos, com DV entre 1 e 9.
-            Assert.AreEqual(9, boletos.Count, "Quantidade de boletos diferente de 9");
+            var boletos = GerarBoletos(banco, 12);
+            Assert.AreEqual(12, boletos.Count, "Quantidade de boletos diferente de 12");
 
             // Define o nome do arquivo.
-            var nomeArquivo = Path.GetTempPath() + "Boleto2Net\\" + nomeCarteira + "_Remessa_" + tipoArquivo.ToString() + ".REM";
+            var nomeArquivo = Path.GetTempPath() + "Boleto2Net\\" + nomeCarteira + "_Arquivo" + tipoArquivo.ToString() + ".REM";
 
             // Cria pasta para os arquivos
             if (Directory.Exists(Path.GetDirectoryName(nomeArquivo)) == false)

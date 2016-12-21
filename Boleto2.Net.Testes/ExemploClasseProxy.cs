@@ -5,10 +5,10 @@ using System.IO;
 namespace Boleto2Net.Testes
 {
     [TestClass]
-    public class ExemploClasseProxy
+    public class Boleto2Net_ExemploClasseProxy
     {
         [TestMethod]
-        public void ExemploDaClasseProxy()
+        public void Boleto2Net_ExemploProxy()
         {
             var mensagemErro = "";
             var retorno = false;

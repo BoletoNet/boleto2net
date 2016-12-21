@@ -442,7 +442,7 @@ namespace Boleto2Net
                     mensagemErro = "Realize o setup da cobrança antes de executar este método.";
                     return false;
                 }
-                boleto.Valida();
+                boleto.ValidarDados();
                 boletos.Add(boleto);
                 return true;
             }
