@@ -1,0 +1,19 @@
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace Boleto2Net.Testes
+{
+    [TestClass]
+    public class Boleto2Net_FatorVencimento
+    {
+        [TestMethod]
+        public void Boleto2Net_FatorVencimentos()
+        {
+            Assert.AreEqual(1000, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2025, 2, 22, 0, 0, 0) }));
+            Assert.AreEqual(1001, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2025, 2, 23, 0, 0, 0) }));
+            Assert.AreEqual(5947, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2014, 1, 18, 0, 0, 0) } ));
+            Assert.AreEqual(6000, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2014, 3, 12, 0, 0, 0) }));
+            Assert.AreEqual(9999, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2025, 2, 21, 0, 0, 0) }));
+        }
+    }
+}
