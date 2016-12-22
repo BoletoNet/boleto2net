@@ -462,9 +462,9 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0129, 008, 0, boleto.Sacado.Endereco.CEP.Replace("-", ""), ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0137, 015, 0, boleto.Sacado.Endereco.Cidade, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0152, 002, 0, boleto.Sacado.Endereco.UF, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0154, 001, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0155, 015, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0170, 040, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0154, 001, 0, boleto.Avalista.TipoCPFCNPJ("0"), '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0155, 015, 0, boleto.Avalista.CPFCNPJ, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0170, 040, 0, boleto.Avalista.Nome, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0210, 003, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0213, 020, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0233, 008, 0, string.Empty, ' ');
@@ -628,12 +628,32 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0081, 002, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0083, 002, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0085, 003, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0088, 001, 0, string.Empty, ' ');
+                if (boleto.Avalista.Nome == string.Empty)
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0088, 001, 0, string.Empty, ' ');
+                else
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0088, 001, 0, string.Empty, 'A');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0089, 003, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0092, 003, 0, boleto.Banco.Cedente.ContaBancaria.VariacaoCarteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0095, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0096, 006, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 005, 0, string.Empty, ' '); // Modalidade: Em branco = Simples   /   04DSC Descontada   /   08VDR BBVendor   /    02VIN Vinculada
+                switch (boleto.Banco.Cedente.ContaBancaria.TipoCarteira)
+                {
+                    case TipoCarteira.CarteiraCobrancaVinculada:
+                        reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 005, 0, "02VIN", ' ');
+                        break;
+                    case TipoCarteira.CarteiraCobrancaDescontada:
+                        reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 005, 0, "04DSC", ' ');
+                        break;
+                    case TipoCarteira.CarteiraCobrancaVendor:
+                        reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 005, 0, "08VDR", ' ');
+                        break;
+                    default:
+                        // Cobrança Simples (Em Branco)
+                        // Cobrança Caucionada (O Manual do BB não contempla essa possibilidade, será considerada "Cobrança Simples")
+                        reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 005, 0, string.Empty, ' ');
+                        break;
+                }
+                // Modalidade: Em branco = Simples   /   04DSC Descontada   /   08VDR BBVendor   /    02VIN Vinculada
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0107, 002, 0, boleto.Banco.Cedente.ContaBancaria.Carteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 002, 0, "01", ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 010, 0, boleto.NumeroDocumento, ' ');
@@ -666,7 +686,28 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0327, 008, 0, boleto.Sacado.Endereco.CEP.Replace("-", ""), '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0335, 015, 0, boleto.Sacado.Endereco.Cidade, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0350, 002, 0, boleto.Sacado.Endereco.UF, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 040, 0, string.Empty, ' ');
+                if (string.IsNullOrEmpty(boleto.Avalista.Nome))
+                {
+                    // Não tem avalista, utiliza a mensagem para o sacado
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 040, 0, boleto.MensagemArquivoRemessa, ' ');
+                }
+                else if (boleto.Avalista.TipoCPFCNPJ("A") == "F")
+                {
+                    // Avalista Pessoa Física
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 025,0, boleto.Avalista.Nome, ' ');
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0377, 001, 0, string.Empty, ' ');
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0378, 003, 0, "CPF", ' ');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0381, 011, 0, boleto.Avalista.CPFCNPJ, ' ');
+                }
+                else
+                {
+                    // Avalista Pessoa Juridica
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 021, 0, boleto.Avalista.Nome, ' ');
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0373, 001, 0, string.Empty, ' ');
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0374, 004, 0, "CNPJ", ' ');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0378, 014, 0, boleto.Avalista.CPFCNPJ, ' ');
+                }
+
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0392, 002, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0394, 001, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');

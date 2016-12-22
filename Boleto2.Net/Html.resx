@@ -480,7 +480,7 @@
     <value>&lt;table class="w666"&gt;
 				&lt;tr class="rBb"&gt;
 						&lt;td class="w478 BL"&gt;
-								&lt;div class="cpN pL6"&gt;@INFOSACADO&lt;/div&gt;
+								&lt;div class="cpN pL6"&gt;@ENDERECOSACADO&lt;/div&gt;
 						&lt;/td&gt;
 						&lt;td class="Ab BL"&gt;
 								&lt;div class="ctN pL6"&gt;Cód. baixa&lt;/div&gt;
@@ -570,7 +570,7 @@
 						&lt;td&gt;@SACADO&lt;/td&gt;
 				&lt;/tr&gt;
 				&lt;tr class="cp h12 rBb"&gt;
-						&lt;td&gt;@INFOSACADO&lt;/td&gt;
+						&lt;td&gt;@ENDERECOSACADO&lt;/td&gt;
 				&lt;/tr&gt;
 		&lt;/table&gt;</value>
   </data>

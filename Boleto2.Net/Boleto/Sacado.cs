@@ -28,6 +28,8 @@ namespace Boleto2Net
         }
         public string TipoCPFCNPJ(string formatoRetorno)
         {
+            if (CPFCNPJ == string.Empty)
+                return "?";
             switch (formatoRetorno)
             {
                 case "A":
@@ -36,9 +38,9 @@ namespace Boleto2Net
                     return CPFCNPJ.Length <= 11 ? "1" : "2";
                 case "00":
                     return CPFCNPJ.Length <= 11 ? "01" : "02";
-                default:
-                    throw new Exception("TipoCPFCNPJ: Formato do retorno inválido.");
             }
+            throw new Exception("TipoCPFCNPJ: Formato do retorno inválido.");
         }
     }
 }
+

@@ -125,7 +125,8 @@ namespace Boleto2Net {
         ///														&lt;/td&gt;
         ///												&lt;/tr&gt;
         ///												&lt;tr class=&quot;cp h12 At rBb&quot;&gt;
-        ///														&lt;td&gt;        /// [rest of string was truncated]&quot;;.
+        ///														&lt;td&gt;
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Carne {
             get {
@@ -570,7 +571,7 @@ namespace Boleto2Net {
         ///   Looks up a localized string similar to &lt;table class=&quot;w666&quot;&gt;
         ///				&lt;tr class=&quot;rBb&quot;&gt;
         ///						&lt;td class=&quot;w478 BL&quot;&gt;
-        ///								&lt;div class=&quot;cpN pL6&quot;&gt;@INFOSACADO&lt;/div&gt;
+        ///								&lt;div class=&quot;cpN pL6&quot;&gt;@ENDERECOSACADO&lt;/div&gt;
         ///						&lt;/td&gt;
         ///						&lt;td class=&quot;Ab BL&quot;&gt;
         ///								&lt;div class=&quot;ctN pL6&quot;&gt;Cód. baixa&lt;/div&gt;
@@ -734,7 +735,7 @@ namespace Boleto2Net {
         ///						&lt;td&gt;@SACADO&lt;/td&gt;
         ///				&lt;/tr&gt;
         ///				&lt;tr class=&quot;cp h12 rBb&quot;&gt;
-        ///						&lt;td&gt;@INFOSACADO&lt;/td&gt;
+        ///						&lt;td&gt;@ENDERECOSACADO&lt;/td&gt;
         ///				&lt;/tr&gt;
         ///		&lt;/table&gt;.
         /// </summary>

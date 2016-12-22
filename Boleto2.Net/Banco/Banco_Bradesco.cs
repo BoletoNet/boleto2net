@@ -37,7 +37,7 @@ namespace Boleto2Net
 
             this.Cedente.CodigoDV = "";
 
-            this.Cedente.CodigoFormatado = String.Format("{0}/{1}", this.Cedente.ContaBancaria.Agencia, codigoCedenteSemFormatacao);
+            this.Cedente.CodigoFormatado = String.Format("{0}-{1}/{2}-{3}", this.Cedente.ContaBancaria.Agencia, this.Cedente.ContaBancaria.DigitoAgencia, this.Cedente.ContaBancaria.Conta, this.Cedente.ContaBancaria.DigitoConta);
 
             this.Cedente.ContaBancaria.LocalPagamento = "ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO BRADESCO.";
 
@@ -322,7 +322,7 @@ namespace Boleto2Net
                     // Não tem avalista.
                     reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0335, 060, 0, string.Empty, ' ');
                 }
-                else if (boleto.Avalista.TipoCPFCNPJ("00") == "01")
+                else if (boleto.Avalista.TipoCPFCNPJ("A") == "F")
                 {
                     // Avalista Pessoa Física
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0335, 009, 0, boleto.Avalista.CPFCNPJ.Substring(0, 9), '0');

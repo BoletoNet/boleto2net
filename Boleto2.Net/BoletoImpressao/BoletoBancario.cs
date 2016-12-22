@@ -366,38 +366,44 @@ namespace Boleto2Net
             }
 
             // Dados do Sacado
-            var sacado = string.Empty;
-            var infoSacado = string.Empty;
-            if (boleto.Sacado.CPFCNPJ == string.Empty)
-                sacado = boleto.Sacado.Nome;
-            else
-                if (boleto.Sacado.CPFCNPJ.Length <= 11)
-                sacado = string.Format("{0} - CPF: {1}", boleto.Sacado.Nome, Utils.FormataCPF(boleto.Sacado.CPFCNPJ));
-            else
-                sacado = string.Format("{0} - CNPJ: {1}", boleto.Sacado.Nome, Utils.FormataCNPJ(boleto.Sacado.CPFCNPJ));
-
+            var sacado = boleto.Sacado.Nome;
+            switch (boleto.Sacado.TipoCPFCNPJ("A"))
+            {
+                case "F":
+                    sacado += string.Format(" - CPF: " + Utils.FormataCPF(boleto.Sacado.CPFCNPJ));
+                    break;
+                case "J":
+                    sacado += string.Format(" - CNPJ: " + Utils.FormataCPF(boleto.Sacado.CPFCNPJ));
+                    break;
+            }
             if (boleto.Sacado.Observacoes != string.Empty)
                 sacado += " - " + boleto.Sacado.Observacoes;
 
+            var enderecoSacado = string.Empty;
             if (!OcultarEnderecoSacado)
             {
-                infoSacado = boleto.Sacado.Endereco.FormataLogradouro(0) + "<br />" + string.Format("{0} - {1}/{2}", boleto.Sacado.Endereco.Bairro, boleto.Sacado.Endereco.Cidade, boleto.Sacado.Endereco.UF);
+                enderecoSacado = boleto.Sacado.Endereco.FormataLogradouro(0) + "<br />" + string.Format("{0} - {1}/{2}", boleto.Sacado.Endereco.Bairro, boleto.Sacado.Endereco.Cidade, boleto.Sacado.Endereco.UF);
                 if (boleto.Sacado.Endereco.CEP != String.Empty)
-                    infoSacado += string.Format(" - CEP: {0}", Utils.FormataCEP(boleto.Sacado.Endereco.CEP));
+                    enderecoSacado += string.Format(" - CEP: {0}", Utils.FormataCEP(boleto.Sacado.Endereco.CEP));
             }
 
             // Dados do Avalista
             var avalista = string.Empty;
-            if (boleto.Avalista.Nome != string.Empty & boleto.Avalista.CPFCNPJ == string.Empty)
-                avalista = "- " + boleto.Avalista.Nome;
-            else
-                if (boleto.Avalista.CPFCNPJ.Length <= 11)
-                avalista = string.Format("- {0} - CPF: {1}", boleto.Avalista.Nome, Utils.FormataCPF(boleto.Avalista.CPFCNPJ));
-            else
-                avalista = string.Format("- {0} - CNPJ: {1}", boleto.Avalista.Nome, Utils.FormataCNPJ(boleto.Avalista.CPFCNPJ));
-
-            if (boleto.Avalista.Observacoes != string.Empty)
-                avalista += " - " + boleto.Avalista.Observacoes;
+            if (boleto.Avalista.Nome != string.Empty)
+            {
+                avalista = boleto.Avalista.Nome;
+                switch (boleto.Avalista.TipoCPFCNPJ("A"))
+                {
+                    case "F":
+                        sacado += string.Format(" - CPF: " + Utils.FormataCPF(boleto.Sacado.CPFCNPJ));
+                        break;
+                    case "J":
+                        sacado += string.Format(" - CNPJ: " + Utils.FormataCPF(boleto.Sacado.CPFCNPJ));
+                        break;
+                }
+                if (boleto.Avalista.Observacoes != string.Empty)
+                    avalista += " - " + boleto.Avalista.Observacoes;
+            }
 
 
             if (!FormatoCarne)
@@ -442,7 +448,7 @@ namespace Boleto2Net
                 .Replace("@DESCONTOS", (boleto.ValorDesconto == 0 ? "" : boleto.ValorDesconto.ToString("R$ ##,##0.00")))
                 .Replace("@AGENCIACONTA", boleto.Banco.Cedente.CodigoFormatado)
                 .Replace("@SACADO", sacado)
-                .Replace("@INFOSACADO", infoSacado)
+                .Replace("@ENDERECOSACADO", enderecoSacado)
                 .Replace("@AVALISTA", avalista)
                 .Replace("@AGENCIACODIGOCEDENTE", boleto.Banco.Cedente.CodigoFormatado)
                 .Replace("@CPFCNPJ", boleto.Banco.Cedente.CPFCNPJ)
