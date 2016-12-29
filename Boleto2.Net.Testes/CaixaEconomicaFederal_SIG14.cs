@@ -22,7 +22,7 @@ namespace Boleto2Net.Testes
             };
             banco = new Banco(104)
             {
-                Cedente = Utils.GerarCedente("123456", contaBancaria)
+                Cedente = Utils.GerarCedente("123456", "0", contaBancaria)
             };
             banco.FormataCedente();
         }
@@ -50,7 +50,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)500,
                 NossoNumero = "6",
                 NumeroDocumento = "BO123456F",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -70,7 +70,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)300,
                 NossoNumero = "4",
                 NumeroDocumento = "BO123456D",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -90,7 +90,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)409,
                 NossoNumero = "5",
                 NumeroDocumento = "BO123456E",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -110,7 +110,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)400,
                 NossoNumero = "5",
                 NumeroDocumento = "BO123456E",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -130,7 +130,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)700,
                 NossoNumero = "8",
                 NumeroDocumento = "BO123456B",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -151,7 +151,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)600,
                 NossoNumero = "7",
                 NumeroDocumento = "BO123456G",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -173,7 +173,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)800,
                 NossoNumero = "9",
                 NumeroDocumento = "BO123456B",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -195,7 +195,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)100,
                 NossoNumero = "2",
                 NumeroDocumento = "BO123456B",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -215,7 +215,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)200,
                 NossoNumero = "3",
                 NumeroDocumento = "BO123456C",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };

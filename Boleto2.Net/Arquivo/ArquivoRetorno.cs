@@ -25,7 +25,7 @@ namespace Boleto2Net
             Boletos.Clear();
             try
             {
-                if (TipoArquivo == TipoArquivo.CNAB400 && Banco.IdsRegistroDetalheCnab400.Count == 0)
+                if (TipoArquivo == TipoArquivo.CNAB400 && Banco.IdsRetornoCnab400RegistroDetalhe.Count == 0)
                     throw new Exception("Banco " + Banco.Codigo.ToString() + " não implementou os Ids do Registro Retorno do CNAB400.");
 
                 using (StreamReader arquivoRetorno = new StreamReader(arquivo, System.Text.Encoding.UTF8))
@@ -96,12 +96,12 @@ namespace Boleto2Net
             }
 
             // Se o registro não estiver na lista a ser processada pelo banco selecionado, ignora o registro
-            if (!Banco.IdsRegistroDetalheCnab400.Contains(tipoRegistro))
+            if (!Banco.IdsRetornoCnab400RegistroDetalhe.Contains(tipoRegistro))
                 return;
 
             // O primeiro ID da lista, identifica um novo boleto.
             bool novoBoleto = false;
-            if (tipoRegistro == Banco.IdsRegistroDetalheCnab400.First())
+            if (tipoRegistro == Banco.IdsRetornoCnab400RegistroDetalhe.First())
                 novoBoleto = true;
 
 

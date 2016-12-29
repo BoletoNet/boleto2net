@@ -12,7 +12,7 @@ namespace Boleto2Net
         public TipoCarteira TipoCarteira { get; set; } = TipoCarteira.CarteiraCobrancaSimples;
         public TipoFormaCadastramento TipoFormaCadastramento { get; set; } = TipoFormaCadastramento.ComRegistro;
         public TipoImpressaoBoleto TipoImpressaoBoleto { get; set; } = TipoImpressaoBoleto.Empresa;
-        public string LocalPagamento { get; set; } = "ATÉ O VENCIMENTO EM QUALQUER BANCO.";
+        public string LocalPagamento { get; set; } = "PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.";
         public string CarteiraComVariacao
         {
             get
@@ -23,6 +23,8 @@ namespace Boleto2Net
                     return Carteira + "/" + VariacaoCarteira;
             }
         }
+        public string CodigoBancoCorrespondente { get; set; }
+        public string NossoNumeroBancoCorrespondente { get; set; }
 
     }
 }

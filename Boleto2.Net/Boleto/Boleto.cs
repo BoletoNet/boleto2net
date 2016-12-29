@@ -12,8 +12,7 @@ namespace Boleto2Net
         public int QuantidadeMoeda { get; set; } = 0;
         public string ValorMoeda { get; set; } = string.Empty;
 
-        public string CodigoEspecieDocumento { get; set; } = string.Empty;
-        public string SiglaEspecieDocumento { get; set; } = string.Empty;
+        public TipoEspecieDocumento EspecieDocumento { get; set; } = TipoEspecieDocumento.NaoDefinido;
 
         public string NossoNumero { get; set; } = string.Empty;
         public string NossoNumeroDV { get; set; } = string.Empty;
@@ -32,10 +31,8 @@ namespace Boleto2Net
         // Valores do Boleto
         public decimal ValorTitulo { get; set; }
         public decimal ValorPago { get; set; }
-        // Se houver apenas um valor (CNAB400) utilizar a propriedade ValorPago
-        // Se houver dois valores (CNAB240) utilizar as propriedades ValorPago e ValorCredito
         public decimal ValorCredito { get; set; }
-        public decimal ValorJuros { get; set; }
+        public decimal ValorJurosDia { get; set; }
         public decimal ValorMulta { get; set; }
         public decimal ValorDesconto { get; set; }
         public decimal ValorTarifas { get; set; }
@@ -45,7 +42,7 @@ namespace Boleto2Net
         public decimal ValorAbatimento { get; set; }
 
         // Juros
-        public decimal PercentualJuros { get; set; }
+        public decimal PercentualJurosDia { get; set; }
         public DateTime DataJuros { get; set; }
         // Multa
         public decimal PercentualMulta { get; set; }
@@ -105,6 +102,10 @@ namespace Boleto2Net
             // Verifica se data de emissão é valida
             if (this.DataEmissao == DateTime.MinValue)
                 this.DataEmissao = DateTime.Now;
+
+            // Aceite
+            if (this.Aceite != "A" & this.Aceite != "N")
+                throw new Exception("Aceite do Boleto deve ser definido com A ou N");
 
             this.Banco.ValidaBoleto(this);
         }

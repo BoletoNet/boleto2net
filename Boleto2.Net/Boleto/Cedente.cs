@@ -24,7 +24,21 @@ namespace Boleto2Net
                 _cpfcnpj = o;
             }
         }
-        public string Tipo1CPF2CNPJ { get { return CPFCNPJ.Length <= 11 ? "1" : "2"; } }
+        public string TipoCPFCNPJ(string formatoRetorno)
+        {
+            if (CPFCNPJ == string.Empty)
+                return "?";
+            switch (formatoRetorno)
+            {
+                case "A":
+                    return CPFCNPJ.Length <= 11 ? "F" : "J";
+                case "0":
+                    return CPFCNPJ.Length <= 11 ? "1" : "2";
+                case "00":
+                    return CPFCNPJ.Length <= 11 ? "01" : "02";
+            }
+            throw new Exception("TipoCPFCNPJ: Formato do retorno inválido.");
+        }
         public string Nome { get; set; }
         public string Observacoes { get; set; } = string.Empty;
         public ContaBancaria ContaBancaria { get; set; } = new ContaBancaria();

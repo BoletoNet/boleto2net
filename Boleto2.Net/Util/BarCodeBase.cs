@@ -216,7 +216,7 @@ namespace Boleto2Net
 
             return mstream.GetBuffer();
         }
-        private static ImageCodecInfo GetEncoderInfo(string mimeType)
+        private ImageCodecInfo GetEncoderInfo(string mimeType)
         {
             int j;
             ImageCodecInfo[] encoders;

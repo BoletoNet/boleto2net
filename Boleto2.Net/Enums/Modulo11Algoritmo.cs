@@ -10,7 +10,8 @@ namespace Boleto2Net
         Padrao = 0,
         BancoBrasil = 1,
         CaixaEconomicaFederal = 2,
-        Bradesco = 3
+        Bradesco = 3,
+        Sicoob = 4
     }
 
 }

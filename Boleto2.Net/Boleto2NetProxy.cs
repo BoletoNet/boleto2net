@@ -24,6 +24,8 @@ namespace Boleto2Net
         //      Banco do Brasil - Retorno
         // 1.10 - Dezembro/2016
         //      github.com/BoletoNet/boleto2net
+        // 1.11 - Dezembro/2016
+        //      Sicoob - Carteira 1 Variação 01
 
         readonly public string Versao = "1.10";
 
@@ -35,7 +37,7 @@ namespace Boleto2Net
         public bool SetupCobranca(string cnpj, string razaoSocial,
                                     string enderecoLogradouro, string enderecoNumero, string enderecoComplemento, string enderecoBairro, string enderecoCidade, string enderecoEstado, string enderecoCep, string observacoes,
                                     int numeroBanco, string agencia, string digitoAgencia, string operacaoConta, string conta, string digitoConta,
-                                    string codigoCedente, string carteira, string variacaoCarteira,
+                                    string codigoCedente, string digitoCodigoCedente, string carteira, string variacaoCarteira,
                                     int tipoCarteira, int tipoFormaCadastramento, int tipoImpressaoBoleto,
                                     ref string mensagemErro)
         {
@@ -113,6 +115,7 @@ namespace Boleto2Net
                             TipoImpressaoBoleto = (TipoImpressaoBoleto)tipoImpressaoBoleto
                            },
                         Codigo = codigoCedente,
+                        CodigoDV = digitoCodigoCedente,
                         Endereco = new Endereco
                         {
                             LogradouroEndereco = enderecoLogradouro,
@@ -295,7 +298,7 @@ namespace Boleto2Net
                 boleto.DataVencimento = dataVencimento;
                 boleto.ValorTitulo = valorBoleto;
                 boleto.Aceite = aceite;
-                boleto.SiglaEspecieDocumento = siglaEspecieDocumento;
+                boleto.EspecieDocumento = Utils.ToEnum<TipoEspecieDocumento>(siglaEspecieDocumento, true, TipoEspecieDocumento.OU);
                 return true;
 
             }
@@ -388,8 +391,8 @@ namespace Boleto2Net
                     return false;
                 }
                 boleto.DataJuros = dataJuros;
-                boleto.PercentualJuros = percJuros;
-                boleto.ValorJuros = valorJuros;
+                boleto.PercentualJurosDia = percJuros;
+                boleto.ValorJurosDia = valorJuros;
                 return true;
             }
             catch (Exception ex)

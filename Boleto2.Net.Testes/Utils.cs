@@ -8,13 +8,14 @@ namespace Boleto2Net.Testes
     sealed class Utils
     {
 
-        internal static Cedente GerarCedente(string codigoCedente, ContaBancaria contaBancaria)
+        internal static Cedente GerarCedente(string codigoCedente, string digitoCodigoCedente, ContaBancaria contaBancaria)
         {
             return new Cedente
             {
                 CPFCNPJ = "12.123.123/1234-46",
                 Nome = "Cedente Teste",
                 Codigo = codigoCedente,
+                CodigoDV = digitoCodigoCedente,
                 Endereco = new Endereco
                 {
                     LogradouroEndereco = "Rua Teste do Cedente",
@@ -93,10 +94,10 @@ namespace Boleto2Net.Testes
                 DataProcessamento = DateTime.Now,
                 DataVencimento = DateTime.Now.AddMonths(i),
                 ValorTitulo = (decimal)100 * i,
-                NossoNumero = proximoNossoNumero.ToString(),
+                NossoNumero = (223344+proximoNossoNumero).ToString(),
                 NumeroDocumento = "BB" + proximoNossoNumero.ToString("D6") + (char)(64 + i),
-                SiglaEspecieDocumento = "DM",
-                Aceite = (contador % 2) == 0 ? "N" : "S",
+                EspecieDocumento = TipoEspecieDocumento.DM,
+                Aceite = (contador % 2) == 0 ? "N" : "A",
                 CodigoInstrucao1 = "11",
                 CodigoInstrucao2 = "22",
                 DataDesconto = DateTime.Now.AddMonths(i),
@@ -105,8 +106,8 @@ namespace Boleto2Net.Testes
                 PercentualMulta = (decimal)0.02,
                 ValorMulta = (decimal)(100 * i * 0.02),
                 DataJuros = DateTime.Now.AddMonths(i),
-                PercentualJuros = (decimal)0.002,
-                ValorJuros = (decimal)(100 * i * 0.002),
+                PercentualJurosDia = (decimal)0.002,
+                ValorJurosDia = (decimal)(100 * i * 0.002),
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
                 MensagemInstrucoesCaixa = "Mensagem para instruções do caixa",
                 NumeroControleParticipante = "CHAVEPRIMARIA="+ proximoNossoNumero.ToString()
@@ -125,8 +126,9 @@ namespace Boleto2Net.Testes
 
         internal static void TestarBoletoPDF(Banco banco, string nomeCarteira)
         {
-            var boletos = GerarBoletos(banco, 1);
-            Assert.AreEqual(1, boletos.Count, "Quantidade de boletos diferente de 1");
+            int quantidadeBoletosParaTeste = 3;
+            var boletos = GerarBoletos(banco, quantidadeBoletosParaTeste);
+            Assert.AreEqual(quantidadeBoletosParaTeste, boletos.Count, "Quantidade de boletos diferente de "+ quantidadeBoletosParaTeste.ToString());
 
             // Define o nome do arquivo.
             var nomeArquivo = Path.GetTempPath() + "Boleto2Net\\" + nomeCarteira + "_Arquivo.PDF";
@@ -185,8 +187,9 @@ namespace Boleto2Net.Testes
 
         internal static void TestarArquivoRemessa(Banco banco, TipoArquivo tipoArquivo, string nomeCarteira)
         {
-            var boletos = GerarBoletos(banco, 12);
-            Assert.AreEqual(12, boletos.Count, "Quantidade de boletos diferente de 12");
+            int quantidadeBoletosParaTeste = 36;
+            var boletos = GerarBoletos(banco, quantidadeBoletosParaTeste);
+            Assert.AreEqual(quantidadeBoletosParaTeste, boletos.Count, "Quantidade de boletos diferente de "+ quantidadeBoletosParaTeste.ToString());
 
             // Define o nome do arquivo.
             var nomeArquivo = Path.GetTempPath() + "Boleto2Net\\" + nomeCarteira + "_Arquivo" + tipoArquivo.ToString() + ".REM";

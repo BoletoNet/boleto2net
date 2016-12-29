@@ -12,7 +12,7 @@ namespace Boleto2Net
             this.Codigo = 237;
             this.Digito = "2";
             this.Nome = "Bradesco";
-            this.IdsRegistroDetalheCnab400.Add("1");
+            this.IdsRetornoCnab400RegistroDetalhe.Add("1");
         }
 
         public override void FormataCedente()
@@ -35,8 +35,6 @@ namespace Boleto2Net
             else if (this.Cedente.Codigo.Length < 20)
                 this.Cedente.Codigo = this.Cedente.Codigo.PadLeft(20, '0');
 
-            this.Cedente.CodigoDV = "";
-
             this.Cedente.CodigoFormatado = String.Format("{0}-{1}/{2}-{3}", this.Cedente.ContaBancaria.Agencia, this.Cedente.ContaBancaria.DigitoAgencia, this.Cedente.ContaBancaria.Conta, this.Cedente.ContaBancaria.DigitoConta);
 
             this.Cedente.ContaBancaria.LocalPagamento = "ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO BRADESCO.";
@@ -50,40 +48,20 @@ namespace Boleto2Net
 
         public override void ValidaBoleto(Boleto boleto)
         {
-
-            switch (boleto.SiglaEspecieDocumento)
-            {
-                case "DM":
-                    boleto.CodigoEspecieDocumento = "01";
-                    break;
-                case "NP":
-                    boleto.CodigoEspecieDocumento = "02";
-                    break;
-                case "ND":
-                    boleto.CodigoEspecieDocumento = "11";
-                    break;
-                case "DS":
-                    boleto.CodigoEspecieDocumento = "12";
-                    break;
-                default:
-                    throw new Exception("Espécie do documento (" + boleto.SiglaEspecieDocumento + ") inválida. Informe: DM, NP, ND ou DS.");
-            }
-
         }
 
         public override void FormataNossoNumero(Boleto boleto)
         {
             if (boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao == "09")
             {
-                FormataNossoNumero09(boleto);
+                FormataNossoNumero_09(boleto);
             }
             else
             {
                 throw new NotImplementedException("Não foi possível formatar o nosso número do boleto.");
             }
         }
-
-        private static void FormataNossoNumero09(Boleto boleto)
+                private void FormataNossoNumero_09(Boleto boleto)
         {
             // Carteira 09: Dúvida: Não sei se na carteira 09, o banco também emite o boleto. Se emitir, será necessário tirar a trava do nosso número em branco:
             // Se for só a empresa, devemos tratar aqui, que o nosso número não
@@ -100,7 +78,7 @@ namespace Boleto2Net
                 else
                     boleto.NossoNumero = boleto.NossoNumero.PadLeft(11, '0');
             }
-            boleto.NossoNumeroDV = Utils.Modulo11(boleto.Banco.Cedente.ContaBancaria.Carteira + boleto.NossoNumero, 7, Modulo11Algoritmo.Bradesco);
+            boleto.NossoNumeroDV = CalcularDV(boleto.Banco.Cedente.ContaBancaria.Carteira + boleto.NossoNumero);
             boleto.NossoNumeroFormatado = string.Format("{0}/{1}-{2}", boleto.Banco.Cedente.ContaBancaria.Carteira, boleto.NossoNumero, boleto.NossoNumeroDV);
         }
 
@@ -235,7 +213,6 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
             }
         }
-
         private string GerarDetalheRemessaCNAB400Registro1(Boleto boleto, ref int numeroRegistroGeral)
         {
             try
@@ -295,12 +272,12 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 013, 2, boleto.ValorTitulo, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0140, 003, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0143, 005, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0148, 002, 0, boleto.CodigoEspecieDocumento, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0148, 002, 0, AjustaEspecieCnab400(boleto.EspecieDocumento), '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0150, 001, 0, boleto.Aceite, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0151, 006, 0, boleto.DataEmissao, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0157, 002, 0, boleto.CodigoInstrucao1, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0159, 002, 0, boleto.CodigoInstrucao2, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0161, 013, 2, boleto.ValorJuros, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0161, 013, 2, boleto.ValorJurosDia, '0');
 
                 if (boleto.ValorDesconto == 0)
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0174, 006, 0, "0", '0');   // Sem Desconto
@@ -348,7 +325,6 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400.", ex);
             }
         }
-
         private string GerarDetalheRemessaCNAB400Registro2(Boleto boleto, ref int numeroRegistroGeral)
         {
             try
@@ -380,7 +356,6 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400.", ex);
             }
         }
-
         private string GerarTrailerRemessaCNAB400(ref int numeroRegistroGeral)
         {
             try
@@ -413,7 +388,6 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler HEADER do arquivo de RETORNO / CNAB 400.", ex);
             }
         }
-
         public override void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
             try
@@ -422,7 +396,8 @@ namespace Boleto2Net
                 boleto.NumeroControleParticipante = registro.Substring(37, 25);
 
                 //Carteira
-                boleto.Banco.Cedente.ContaBancaria.Carteira = registro.Substring(107, 1).PadLeft(2, '0');
+                boleto.Banco.Cedente.ContaBancaria.Carteira = registro.Substring(107, 1);
+                boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 //Identificação do Título no Banco
                 boleto.NossoNumero = registro.Substring(70, 11);//Sem o DV
@@ -431,14 +406,12 @@ namespace Boleto2Net
 
                 //Identificação de Ocorrência
                 boleto.CodigoOcorrencia = registro.Substring(108, 2);
-                boleto.DescricaoOcorrencia = OcorrenciaCnab400Bradesco(boleto.CodigoOcorrencia);
+                boleto.DescricaoOcorrencia = DescricaoOcorrenciaCnab400(boleto.CodigoOcorrencia);
                 boleto.CodigoOcorrenciaAuxiliar = registro.Substring(318, 10);
 
                 //Número do Documento
                 boleto.NumeroDocumento = registro.Substring(116, 10);
-
-                //Espécie do Título
-                boleto.CodigoEspecieDocumento = registro.Substring(173, 2);
+                boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(173, 2));
 
                 //Valores do Título
                 boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
@@ -448,7 +421,7 @@ namespace Boleto2Net
                 boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(227, 13)) / 100;
                 boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
                 boleto.ValorPago = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
-                boleto.ValorJuros = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
+                boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
                 boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(279, 13)) / 100;
 
                 //Data Ocorrência no Banco
@@ -468,12 +441,11 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
             }
         }
-
         public override void LerTrailerRetornoCNAB400(string registro)
         {
         }
 
-        private string OcorrenciaCnab400Bradesco(string codigo)
+        private string DescricaoOcorrenciaCnab400(string codigo)
         {
             switch (codigo)
             {
@@ -534,66 +506,77 @@ namespace Boleto2Net
             }
         }
 
-        private string MotivoRejeicao(string codigo)
+        private string CalcularDV(string texto)
         {
-            switch (codigo)
+            string digito;
+            int pesoMaximo = 7, soma = 0, peso = 2;
+            for (int i = (texto.Length - 1); i >= 0; i--)
             {
-                case "02":
-                    return "02-Código do registro detalhe inválido";
-                case "03":
-                    return "03-Código da ocorrência inválida";
-                case "04":
-                    return "04-Código de ocorrência não permitida para a carteira";
-                case "05":
-                    return "05-Código de ocorrência não numérico";
-                case "07":
-                    return "07-Agência/conta/Digito - Inválido";
-                case "08":
-                    return "08-Nosso número inválido";
-                case "09":
-                    return "09-Nosso número duplicado";
-                case "10":
-                    return "10-Carteira inválida";
-                case "16":
-                    return "16-Data de vencimento inválida";
-                case "18":
-                    return "18-Vencimento fora do prazo de operação";
-                case "20":
-                    return "20-Valor do Título inválido";
-                case "21":
-                    return "21-Espécie do Título inválida";
-                case "22":
-                    return "22-Espécie não permitida para a carteira";
-                case "24":
-                    return "24-Data de emissão inválida";
-                case "38":
-                    return "38-Prazo para protesto inválido";
-                case "44":
-                    return "44-Agência Cedente não prevista";
-                case "50":
-                    return "50-CEP irregular - Banco Correspondente";
-                case "63":
-                    return "63-Entrada para Título já cadastrado";
-                case "68":
-                    return "68-Débito não agendado - erro nos dados de remessa";
-                case "69":
-                    return "69-Débito não agendado - Sacado não consta no cadastro de autorizante";
-                case "70":
-                    return "70-Débito não agendado - Cedente não autorizado pelo Sacado";
-                case "71":
-                    return "71-Débito não agendado - Cedente não participa da modalidade de débito automático";
-                case "72":
-                    return "72-Débito não agendado - Código de moeda diferente de R$";
-                case "73":
-                    return "73-Débito não agendado - Data de vencimento inválida";
-                case "74":
-                    return "74-Débito não agendado - Conforme seu pedido, Título não registrado";
-                case "75":
-                    return "75-Débito não agendado - Tipo de número de inscrição do debitado inválido";
-                default:
-                    return "";
+                soma = soma + (Convert.ToInt32(texto.Substring(i, 1)) * peso);
+                if (peso == pesoMaximo)
+                    peso = 2;
+                else
+                    peso = peso + 1;
             }
+            int resto = (soma % 11);
+            switch (resto)
+            {
+                case 0:
+                    digito = "0";
+                    break;
+                case 1:
+                    digito = "P";
+                    break;
+                default:
+                    digito = (11 - resto).ToString();
+                    break;
+            }
+            return digito;
         }
 
+        private TipoEspecieDocumento AjustaEspecieCnab400(string codigoEspecie)
+        {
+            switch (codigoEspecie)
+            {
+                case "01":
+                    return TipoEspecieDocumento.DM;
+                case "02":
+                    return TipoEspecieDocumento.NP;
+                case "03":
+                    return TipoEspecieDocumento.NS;
+                case "05":
+                    return TipoEspecieDocumento.RC;
+                case "10":
+                    return TipoEspecieDocumento.LC;
+                case "11":
+                    return TipoEspecieDocumento.ND;
+                case "12":
+                    return TipoEspecieDocumento.DS;
+                default:
+                    return TipoEspecieDocumento.OU;
+            }
+        }
+        private string AjustaEspecieCnab400(TipoEspecieDocumento especieDocumento)
+        {
+            switch (especieDocumento)
+            {
+                case TipoEspecieDocumento.DM:
+                    return "01";
+                case TipoEspecieDocumento.NP:
+                    return "02";
+                case TipoEspecieDocumento.NS:
+                    return "03";
+                case TipoEspecieDocumento.RC:
+                    return "05";
+                case TipoEspecieDocumento.LC:
+                    return "10";
+                case TipoEspecieDocumento.ND:
+                    return "11";
+                case TipoEspecieDocumento.DS:
+                    return "12";
+                default:
+                    return "99";
+            }
+        }
     }
 }

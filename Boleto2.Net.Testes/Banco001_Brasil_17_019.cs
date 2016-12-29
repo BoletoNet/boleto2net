@@ -5,10 +5,10 @@ using System.IO;
 namespace Boleto2Net.Testes
 {
     [TestClass]
-    public class Banco001_Brasil_17019
+    public class Banco001_Brasil_17_019
     {
         Banco banco;
-        public Banco001_Brasil_17019()
+        public Banco001_Brasil_17_019()
         {
             var contaBancaria = new ContaBancaria
             {
@@ -24,31 +24,31 @@ namespace Boleto2Net.Testes
             };
             banco = new Banco(001)
             {
-                Cedente = Utils.GerarCedente("1234567", contaBancaria)
+                Cedente = Utils.GerarCedente("1234567", "", contaBancaria)
             };
             banco.FormataCedente();
         }
 
         [TestMethod]
-        public void Banco001_Brasil_17019_REM240()
+        public void Banco001_Brasil_17_019_REM240()
         {
-            Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB240, nameof(Banco001_Brasil_17019));
+            Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB240,  nameof(Banco001_Brasil_17_019));
         }
 
         [TestMethod]
-        public void Banco001_Brasil_17019_REM400()
+        public void Banco001_Brasil_17_019_REM400()
         {
-            Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB400, nameof(Banco001_Brasil_17019));
+            Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB400, nameof(Banco001_Brasil_17_019));
         }
 
         [TestMethod]
-        public void Banco001_Brasil_17019_PDF()
+        public void Banco001_Brasil_17_019_PDF()
         {
-            Utils.TestarBoletoPDF(banco, nameof(Banco001_Brasil_17019));
+            Utils.TestarBoletoPDF(banco, nameof(Banco001_Brasil_17_019));
         }
 
         [TestMethod]
-        public void Banco001_Brasil_17019_DV1()
+        public void Banco001_Brasil_17_019_DV1()
         {
             var boleto = new Boleto
             {
@@ -56,7 +56,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)400,
                 NossoNumero = "5",
                 NumeroDocumento = "BO123456E",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -68,7 +68,7 @@ namespace Boleto2Net.Testes
         }
 
         [TestMethod]
-        public void Banco001_Brasil_17019_DV2()
+        public void Banco001_Brasil_17_019_DV2()
         {
             var boleto = new Boleto
             {
@@ -76,7 +76,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)402,
                 NossoNumero = "5",
                 NumeroDocumento = "BO123456E",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -88,7 +88,7 @@ namespace Boleto2Net.Testes
         }
 
         [TestMethod]
-        public void Banco001_Brasil_17019_DV3()
+        public void Banco001_Brasil_17_019_DV3()
         {
             var boleto = new Boleto
             {
@@ -96,7 +96,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)200,
                 NossoNumero = "3",
                 NumeroDocumento = "BO123456C",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -108,7 +108,7 @@ namespace Boleto2Net.Testes
         }
 
         [TestMethod]
-        public void Banco001_Brasil_17019_DV4()
+        public void Banco001_Brasil_17_019_DV4()
         {
             var boleto = new Boleto
             {
@@ -116,7 +116,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)1232.78,
                 NossoNumero = "1",
                 NumeroDocumento = "BO123456A",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -128,7 +128,7 @@ namespace Boleto2Net.Testes
         }
 
         [TestMethod]
-        public void Banco001_Brasil_17019_DV5()
+        public void Banco001_Brasil_17_019_DV5()
         {
             var boleto = new Boleto
             {
@@ -136,7 +136,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)800,
                 NossoNumero = "9",
                 NumeroDocumento = "BO123456I",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -150,7 +150,7 @@ namespace Boleto2Net.Testes
 
 
         [TestMethod]
-        public void Banco001_Brasil_17019_DV6()
+        public void Banco001_Brasil_17_019_DV6()
         {
             var boleto = new Boleto
             {
@@ -158,7 +158,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)306.52,
                 NossoNumero = "4",
                 NumeroDocumento = "BO123456D",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -172,7 +172,7 @@ namespace Boleto2Net.Testes
 
 
         [TestMethod]
-        public void Banco001_Brasil_17019_DV7()
+        public void Banco001_Brasil_17_019_DV7()
         {
             var boleto = new Boleto
             {
@@ -180,7 +180,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)300,
                 NossoNumero = "4",
                 NumeroDocumento = "BO123456D",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -193,7 +193,7 @@ namespace Boleto2Net.Testes
 
 
         [TestMethod]
-        public void Banco001_Brasil_17019_DV8()
+        public void Banco001_Brasil_17_019_DV8()
         {
             var boleto = new Boleto
             {
@@ -201,7 +201,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)609,
                 NossoNumero = "7",
                 NumeroDocumento = "BO123456G",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };
@@ -213,7 +213,7 @@ namespace Boleto2Net.Testes
         }
 
         [TestMethod]
-        public void Banco001_Brasil_17019_DV9()
+        public void Banco001_Brasil_17_019_DV9()
         {
             var boleto = new Boleto
             {
@@ -221,7 +221,7 @@ namespace Boleto2Net.Testes
                 ValorTitulo = (decimal)600,
                 NossoNumero = "7",
                 NumeroDocumento = "BO123456G",
-                SiglaEspecieDocumento = "DM",
+                EspecieDocumento = TipoEspecieDocumento.DM,
                 Banco = banco,
                 Sacado = Utils.GerarSacado()
             };

@@ -80,8 +80,24 @@ namespace Boleto2Net
                                       FatorVencimento,
                                       ValorDocumento,
                                       CampoLivre);
-                int Dv = Int32.Parse(Utils.Modulo11(codigoSemDv, 9, Modulo11Algoritmo.Padrao));
-                return Dv.ToString();
+
+                // Calcula Dígito Verificador do Código de Barras
+                int pesoMaximo = 9, soma = 0, peso = 2;
+                for (int i = (codigoSemDv.Length - 1); i >= 0; i--)
+                {
+                    soma = soma + (Convert.ToInt32(codigoSemDv.Substring(i, 1)) * peso);
+                    if (peso == pesoMaximo)
+                        peso = 2;
+                    else
+                        peso = peso + 1;
+                }
+                var resto = (soma % 11);
+
+                if (resto <= 1 || resto > 9)
+                    return "1";
+                
+                return (11 - resto).ToString();
+
             }
         }
     }

@@ -1,0 +1,90 @@
+﻿**************
+ATENÇÃO: Se o banco já estiver implementado, mas a carteira não, altere a própria classe do banco, adicionando os métodos especificos da nova carteira.
+**************
+
+Para implementar um novo banco:
+
+- Escolha um banco já implementado como modelo para criar a nova classe.
+	O nome do arquivo deve seguir o padrão Banco_.cs, assim como o nome da classe.
+
+- Alterar a classe BANCO.CS para identificar a classe do banco que acabou de ser criada.
+	No construtor da classe BANCO.CS, adicionar a referência para a classe no switch.
+
+- Altere no construtor da classe, os dados do banco a ser implementado.
+	A propriedade IdsRetornoCnab400RegistroDetalhe, deve conter todos os registros que o banco implementa no CNAB400.
+	Por exemplo, o Bradesco identifica o registro Detalhe como "1", mas o Banco do Brasil identifica como "7".
+	Esta propriedade só é necessária se for implementar o layout CNAB400, pois no CNAB240 parece existir um padrão entre todos os bancos.
+
+- Método FormataCedente
+	Verificar os limites (Length) que o banco utiliza para cada informação: Agência, Conta, Código do Cedente (se existir)
+	CodigoFormatado = Deve estar no padrão que o banco utiliza para impressão da informação no boleto. Alguns bancos utilizam a agência/conta, outros utilizam agência/códigocedente. Fique atento!
+	LocalPagamento = Verificar qual padrão que o banco utiliza.
+	Importante atualizar a lista das "CarteiraComVariacao" que já estão implementadas!
+
+- Método ValidaBoleto
+	Se necessário, verificar os dados do objeto boleto conforme orientação do manual do banco.
+
+- Método FormataNossoNumero
+	Responsável por preencher as propriedades NossoNumeroDV e NossoNumeroFormatado.
+	Verificar o algoritmo para cálculo do DV, pois cada banco implementa de uma forma. Este algoritmo deve ficar em um método privado da classe Ex: CalcularDVBradesco(), etc.
+	Criar um método privado para cada carteira implementada, pois nem sempre o cálculo é igual para todas as carteiras.
+
+- Método FormataCodigoBarraCampoLivre
+	O código de barras do boleto bancário possui um pedaço (posição 20 a 44) que é denominado "campo livre".
+	Este método é responsável por gerar o conteúdo deste campo.
+
+- Implementar os métodos de geração do arquivo remessa (CNAB240 e CNAB400)
+
+- Implementar os métodos de leitura do arquivo retorno (CNAB240 e CNAB400)
+
+- Método privado - CalcularDv
+	Implementar o algoritmo de calculo do Digito Verificador do banco.
+
+- Método privado - AjustaEspecieCnab400
+	Para o layout CNAB240:
+		Utilizar o próprio enum TipoEspecieDocumento.ToString para gerar o arquivo remessa.
+		Para o retorno, utilizar a função Utils.ToEnum<TipoEspecieDocumento>() para prencher o valor da propriedade.
+	Para o layout CNAB400:
+		O layout CNAB400 não segue um padrão, sendo necessário que exista um conversor do ENUM para o código específico de cada banco.
+		O método deve ter duas assinaturas:
+		private string AjustaEspecieCnab400(TipoEspecieDocumento especieDocumento) -> Responsável por converter a informação do objeto boleto no código a ser utilizado no arquivo remessa.
+		private TipoEspecieDocumento AjustaEspecieCnab400(string codigoEspecie) -> Responsável por converter a informação do arquivo RETORNO e atualizar o objeto boleto.
+
+- Método para identificar a operação no retorno:
+	Para o layout CNAB240, identificamos um padrão. Por isso, tente utilizar o método estático Cnab.OcorrenciasCnab240(). IMPORTANTE: Não se esqueça de verificar se os parâmetros deste método estão de acordo com o padrão do banco implementado.
+	Para o layout CNAB400, criar um método privado na classe do banco, OcorrenciasCnab400 que recebe o código da operação e devolve uma string com o significado da operação.
+
+- Leitura do arquivo retorno - Obrigatório popular as seguintes propriedades do objeto Boleto:
+	Controle do Participante
+		boleto.NumeroControleParticipante
+	Carteira
+		boleto.Banco.Cedente.ContaBancaria.Carteira
+		boleto.Banco.Cedente.ContaBancaria.TipoCarteira (Padrão: CarteiraCobrancaSimples)
+	Identificação do Título no Banco
+		boleto.NossoNumero (Sem o dígito)
+		boleto.NossoNumeroDV (Apenas o dígito)
+		boleto.NossoNumeroFormatado (Importante: Utilizar o mesmo (ABSOLUTAMENTE o mesmo) formato que foi utilizado no método FormataNossoNumero.)
+    Identificação de Ocorrência
+		boleto.CodigoOcorrencia
+		boleto.DescricaoOcorrencia (Para o layout CNAB240, utilizar a função Cnab.OcorrenciaCnab240() e conferir se está de acordo com o manual do banco. Se for o layout CNAB400, criar uma função DescricaoOcorrenciaCnab400() conforme manual do banco.)
+        boleto.CodigoOcorrenciaAuxiliar
+	Identificação do Título no Cedente
+        boleto.NumeroDocumento
+		boleto.EspecieDocumento (Se não houver a informação no retorno, utilizar TipoEspecieDocumento.NaoDefinido / Se houver a informação no retorno, mas não encontrar correspondente na lista do enun, utilizar TipoEspecieDocumento.OU)
+	Valores do Título
+		boleto.ValorTitulo
+        boleto.ValorTarifas
+        boleto.ValorOutrasDespesas
+        boleto.ValorIOF
+        boleto.ValorAbatimento
+        boleto.ValorDesconto
+        boleto.ValorPago (Se houver apenas um valor (CNAB400) utilizar a propriedade ValorPago)
+		boleto.ValorCredito (No layout CNAB240 costuma ter além do ValorPago, outro campo com o ValorCredito)
+        boleto.ValorJurosDia
+        boleto.ValorOutrosCreditos
+	Datas do Título 
+        boleto.DataProcessamento (Data da Ocorrência no Banco)
+		boleto.DataVencimento
+		boleto.DataCredito
+	Registro Retorno
+        boleto.RegistroArquivoRetorno (Nesta linha deve conter os registros de retorno. Nos layouts com mais de um registro para o mesmo boleto, utilizar quebra de linha.)

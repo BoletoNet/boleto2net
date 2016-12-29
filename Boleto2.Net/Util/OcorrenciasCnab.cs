@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Boleto2Net
 {
-    public static class OcorrenciasCnab
+    public static class Cnab
     {
         // Considerando o arquivo CNAB padrão 240, acredita-se que os códigos de retorno são os mesmos.
         // Neste caso, utilizar sempre essa classe, para evitar duplicar esse código em cada banco implementado.

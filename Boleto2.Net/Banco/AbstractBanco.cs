@@ -13,7 +13,7 @@ namespace Boleto2Net
 
         public virtual string Nome { get; set; } = string.Empty;
 
-        public virtual List<string> IdsRegistroDetalheCnab400 { get; set; } = new List<string>();
+        public virtual List<string> IdsRetornoCnab400RegistroDetalhe { get; set; } = new List<string>();
 
         public virtual Cedente Cedente { get; set; } = null;
 
@@ -87,7 +87,7 @@ namespace Boleto2Net
             // POSIÇÃO 20 A 24 DO CODIGO DE BARRAS
             string CCCCC = boleto.CodigoBarra.CodigoDeBarras.Substring(19, 5);
             // Calculo do Dígito
-            string D1 = Utils.Modulo10(BBB + M + CCCCC).ToString();
+            string D1 = CalcularDVModulo10(BBB + M + CCCCC).ToString();
             // Formata Grupo 1
             string Grupo1 = string.Format("{0}{1}{2}.{3}{4} ", BBB, M, CCCCC.Substring(0, 1), CCCCC.Substring(1, 4), D1);
             #endregion Campo 1
@@ -96,7 +96,7 @@ namespace Boleto2Net
             //POSIÇÃO 25 A 34 DO COD DE BARRAS
             string D2A = boleto.CodigoBarra.CodigoDeBarras.Substring(24, 10);
             // Calculo do Dígito
-            string D2B = Utils.Modulo10(D2A).ToString();
+            string D2B = CalcularDVModulo10(D2A).ToString();
             // Formata Grupo 2
             string Grupo2 = string.Format("{0}.{1}{2} ", D2A.Substring(0, 5), D2A.Substring(5, 5), D2B);
             #endregion Campo 2
@@ -105,7 +105,7 @@ namespace Boleto2Net
             //POSIÇÃO 35 A 44 DO CODIGO DE BARRAS
             string D3A = boleto.CodigoBarra.CodigoDeBarras.Substring(34, 10);
             // Calculo do Dígito
-            string D3B = Utils.Modulo10(D3A).ToString();
+            string D3B = CalcularDVModulo10(D3A).ToString();
             // Formata Grupo 3
             string Grupo3 = string.Format("{0}.{1}{2} ", D3A.Substring(0, 5), D3A.Substring(5, 5), D3B);
             #endregion Campo 3
@@ -234,7 +234,7 @@ namespace Boleto2Net
         {
             var dateBase = new DateTime(1997, 10, 7, 0, 0, 0);
 
-            //Verifica se a data esta dentro do range utilizavel
+            // Verifica se a data esta dentro do range utilizavel
             var dataAtual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             long rangeUtilizavel = Utils.DateDiff(DateInterval.Day, dataAtual, boleto.DataVencimento);
 
@@ -246,6 +246,25 @@ namespace Boleto2Net
 
             return Utils.DateDiff(DateInterval.Day, dateBase, boleto.DataVencimento);
         }
+
+        private int CalcularDVModulo10(string texto)
+        {
+            int digito, soma = 0, peso = 2, resto;
+            for (int i = texto.Length; i > 0; i--)
+            {
+                resto = (Convert.ToInt32(Microsoft.VisualBasic.Strings.Mid(texto, i, 1)) * peso);
+                if (resto > 9)
+                    resto = (resto / 10) + (resto % 10);
+                soma += resto;
+                if (peso == 2)
+                    peso = 1;
+                else
+                    peso = peso + 1;
+            }
+            digito = ((10 - (soma % 10)) % 10);
+            return digito;
+        }
+
 
     }
 }

@@ -21,7 +21,9 @@ namespace Boleto2Net
             else if (this.Cedente.Codigo.Length < 6)
                 this.Cedente.Codigo = this.Cedente.Codigo.PadLeft(6, '0');
 
-            this.Cedente.CodigoDV = Utils.Modulo11(this.Cedente.Codigo, 9, Modulo11Algoritmo.CaixaEconomicaFederal);
+            string dv = CalcularDV(this.Cedente.CodigoDV);
+            if (this.Cedente.CodigoDV == string.Empty)
+                throw new Exception("Dígito do código do cedente (" + this.Cedente.Codigo + ") não foi informado.");
 
             this.Cedente.CodigoFormatado = String.Format("{0}/{1}-{2}", this.Cedente.ContaBancaria.Agencia, this.Cedente.Codigo, this.Cedente.CodigoDV);
 
@@ -35,33 +37,13 @@ namespace Boleto2Net
 
         public override void ValidaBoleto(Boleto boleto)
         {
-
-            switch (boleto.SiglaEspecieDocumento)
-            {
-                case "DM":
-                    boleto.CodigoEspecieDocumento = "02";
-                    break;
-                case "NP":
-                    boleto.CodigoEspecieDocumento = "12";
-                    break;
-                case "ND":
-                    boleto.CodigoEspecieDocumento = "19";
-                    break;
-                case "DS":
-                    boleto.CodigoEspecieDocumento = "04";
-                    break;
-                default:
-                    throw new Exception("Espécie do documento (" + boleto.SiglaEspecieDocumento + ") inválida. Informe: DM, NP, ND ou DS.");
-            }
-
-
         }
 
         public override void FormataNossoNumero(Boleto boleto)
         {
             if (boleto.Banco.Cedente.ContaBancaria.Carteira.Equals("SIG14") & String.IsNullOrWhiteSpace(boleto.Banco.Cedente.ContaBancaria.VariacaoCarteira))
             {
-                FormataNossoNumeroSIG14(boleto);
+                FormataNossoNumero_SIG14(boleto);
             }
             else
             {
@@ -69,7 +51,7 @@ namespace Boleto2Net
             }
         }
 
-        private static void FormataNossoNumeroSIG14(Boleto boleto)
+        private void FormataNossoNumero_SIG14(Boleto boleto)
         {
             // Carteira SIG14: Dúvida: Se o Cliente SEMPRE emite o boleto, pois o nosso número começa com 14, o que significa Título Registrado emissão Empresa:
             // O nosso número não pode ser em branco.
@@ -91,7 +73,7 @@ namespace Boleto2Net
                 else
                     boleto.NossoNumero = "14" + boleto.NossoNumero.PadLeft(15, '0');
             }
-            boleto.NossoNumeroDV = Utils.Modulo11(boleto.NossoNumero, 9, Modulo11Algoritmo.CaixaEconomicaFederal);
+            boleto.NossoNumeroDV = CalcularDV(boleto.NossoNumero);
             boleto.NossoNumeroFormatado = string.Format("{0}-{1}", boleto.NossoNumero, boleto.NossoNumeroDV);
         }
 
@@ -116,7 +98,7 @@ namespace Boleto2Net
                                            boleto.NossoNumero.Substring(5, 3),
                                            "4",
                                            boleto.NossoNumero.Substring(8, 9));
-                FormataCampoLivre += Utils.Modulo11(FormataCampoLivre, 9, Modulo11Algoritmo.CaixaEconomicaFederal).ToString();
+                FormataCampoLivre += CalcularDV(FormataCampoLivre).ToString();
             }
             else
             {
@@ -240,7 +222,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0000", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 009, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, this.Cedente.Tipo1CPF2CNPJ, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, this.Cedente.TipoCPFCNPJ("0"), '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 014, 0, this.Cedente.CPFCNPJ, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0033, 020, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0053, 005, 0, this.Cedente.ContaBancaria.Agencia, '0');
@@ -282,7 +264,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0012, 002, 0, "00", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0014, 003, 0, "030", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0017, 001, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, this.Cedente.Tipo1CPF2CNPJ, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, this.Cedente.TipoCPFCNPJ("0"), '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 015, 0, this.Cedente.CPFCNPJ, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0034, 006, 0, this.Cedente.Codigo, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0040, 014, 0, "0", '0');
@@ -336,10 +318,10 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0086, 015, 2, boleto.ValorTitulo, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0101, 005, 2, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0106, 001, 0, "0", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0107, 002, 2, boleto.CodigoEspecieDocumento, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0107, 002, 2, boleto.EspecieDocumento.ToString(), '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 001, 0, boleto.Aceite, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0110, 008, 0, boleto.DataEmissao, '0');
-                if (boleto.ValorJuros == 0)
+                if (boleto.ValorJurosDia == 0)
                 {
                     // Sem Juros Mora
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0118, 001, 2, "3", '0');
@@ -350,7 +332,7 @@ namespace Boleto2Net
                     // Com Juros Mora ($)
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0118, 001, 2, "1", '0');
                     reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0119, 008, 0, boleto.DataJuros, '0');
-                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 015, 2, boleto.ValorJuros, '0');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 015, 2, boleto.ValorJurosDia, '0');
                 }
                 if (boleto.ValorDesconto == 0)
                 {
@@ -562,6 +544,18 @@ namespace Boleto2Net
 
                 //Carteira
                 boleto.Banco.Cedente.ContaBancaria.Carteira = registro.Substring(57, 1);
+                switch (boleto.Banco.Cedente.ContaBancaria.Carteira)
+                {
+                    case "3":
+                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaCaucionada;
+                        break;
+                    case "4":
+                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaDescontada;
+                        break;
+                    default:
+                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                        break;
+                }
 
                 //Identificação do Título no Banco
                 boleto.NossoNumero = registro.Substring(39, 17);
@@ -570,11 +564,12 @@ namespace Boleto2Net
 
                 //Identificação de Ocorrência
                 boleto.CodigoOcorrencia = registro.Substring(15, 2);
-                boleto.DescricaoOcorrencia = OcorrenciasCnab.OcorrenciaCnab240(boleto.CodigoOcorrencia);
+                boleto.DescricaoOcorrencia = Cnab.OcorrenciaCnab240(boleto.CodigoOcorrencia);
                 boleto.CodigoOcorrenciaAuxiliar = registro.Substring(213, 10);
 
                 //Número do Documento
                 boleto.NumeroDocumento = registro.Substring(58, 11);
+                boleto.EspecieDocumento = TipoEspecieDocumento.NaoDefinido;
 
                 //Valor do Título
                 boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(81, 15)) / 100;
@@ -591,13 +586,12 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / T.", ex);
             }
         }
-
         public override void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
         {
             try
             {
                 //Valor do Título
-                boleto.ValorJuros = Convert.ToDecimal(registro.Substring(17, 15)) / 100;
+                boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(17, 15)) / 100;
                 boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(32, 15)) / 100;
                 boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(47, 15)) / 100;
                 boleto.ValorIOF = Convert.ToDecimal(registro.Substring(62, 15)) / 100;
@@ -621,7 +615,27 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / U.", ex);
             }
         }
-
         #endregion
+
+        private string CalcularDV(string texto)
+        {
+            string digito;
+            int pesoMaximo = 9, soma = 0, peso = 2;
+            for (int i = (texto.Length - 1); i >= 0; i--)
+            {
+                soma = soma + (Convert.ToInt32(texto.Substring(i, 1)) * peso);
+                if (peso == pesoMaximo)
+                    peso = 2;
+                else
+                    peso = peso + 1;
+            }
+            int resto = (soma % 11);
+            if (resto <= 1)
+                digito = "0";
+            else
+                digito = (11 - resto).ToString();
+            return digito;
+        }
+
     }
 }

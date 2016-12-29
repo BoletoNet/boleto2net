@@ -15,17 +15,17 @@ namespace Boleto2Net
             {
                 switch (codigoBanco)
                 {
-                    //001 - Banco do Brasil
                     case 001:
                         _IBanco = new Banco_Brasil();
                         break;
-                    //104 - Caixa
                     case 104:
                         _IBanco = new Banco_Caixa();
                         break;
-                    //237 - Bradesco
                     case 237:
                         _IBanco = new Banco_Bradesco();
+                        break;
+                    case 756:
+                        _IBanco = new Banco_Sicoob();
                         break;
                     default:
                         throw new Exception("Banco não implementando: " + codigoBanco);
@@ -57,9 +57,9 @@ namespace Boleto2Net
             get { return _IBanco.Cedente; }
             set { _IBanco.Cedente = value; }
         }
-        public override List<string> IdsRegistroDetalheCnab400
+        public override List<string> IdsRetornoCnab400RegistroDetalhe
         {
-            get { return _IBanco.IdsRegistroDetalheCnab400; }
+            get { return _IBanco.IdsRetornoCnab400RegistroDetalhe; }
         }
 
         #endregion

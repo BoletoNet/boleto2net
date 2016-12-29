@@ -100,6 +100,17 @@ namespace Boleto2Net
                 return new DateTime(1, 1, 1);
             }
         }
+        public static T ToEnum<T>(string value, bool ignoreCase, T defaultValue) where T : struct
+        {
+            if (string.IsNullOrEmpty(value))
+                return defaultValue;
+
+            T result;
+            if (Enum.TryParse(value, ignoreCase, out result))
+                return result;
+
+            return defaultValue;
+        }
 
         /// <summary>
         /// Formata o CPF ou CNPJ do Cedente ou do Sacado no formato: 000.000.000-00, 00.000.000/0001-00 respectivamente.
@@ -250,80 +261,6 @@ namespace Boleto2Net
                 throw tmpEx;
             }
         }
-
-        public static int Modulo10(string texto)
-        {
-            int digito, soma = 0, peso = 2, resto;
-            for (int i = texto.Length; i > 0; i--)
-            {
-                resto = (Convert.ToInt32(Microsoft.VisualBasic.Strings.Mid(texto, i, 1)) * peso);
-                if (resto > 9)
-                    resto = (resto / 10) + (resto % 10);
-                soma += resto;
-                if (peso == 2)
-                    peso = 1;
-                else
-                    peso = peso + 1;
-            }
-            digito = ((10 - (soma % 10)) % 10);
-            return digito;
-        }
-        public static string Modulo11(string texto, int pesoMaximo, Modulo11Algoritmo algoritimo)
-        {
-            int resto = Modulo11Resto(texto, pesoMaximo);
-            string digito = (11 - resto).ToString();
-            switch (algoritimo)
-            {
-                case Modulo11Algoritmo.Padrao:
-                    if (resto <= 1 || resto >= 10)
-                    {
-                        // Se o resto da divisão for 0, 1 ou 10, o dígito será sempre 1
-                        digito = "1";
-                    }
-                    break;
-
-                case Modulo11Algoritmo.BancoBrasil:
-                    if (resto == 10)
-                        digito = "X";
-                    else if (resto == 0)
-                        digito = "0";
-                    else
-                        digito = resto.ToString();
-                    break;
-
-                case Modulo11Algoritmo.CaixaEconomicaFederal:
-                    if ((11-resto) > 9)
-                    {
-                        digito = "0";
-                    }
-                    break;
-
-                case Modulo11Algoritmo.Bradesco:
-                    if (resto == 0)
-                        digito = "0";
-                    else if (resto == 1)
-                        digito = "P";
-                    break;
-                default:
-                    throw new Exception("Modulo 11 - Algoritmo não informado.");
-            }
-            return digito;
-        }
-        public static int Modulo11Resto(string texto, int pesoMaximo)
-        {
-            int resto, soma = 0, peso = 2;
-            for (int i = texto.Length; i > 0; i--)
-            {
-                soma = soma + (Convert.ToInt32(Microsoft.VisualBasic.Strings.Mid(texto, i, 1)) * peso);
-                if (peso == pesoMaximo)
-                    peso = 2;
-                else
-                    peso = peso + 1;
-            }
-            resto = (soma % 11);
-            return resto;
-        }
-
 
         /// <summary>
         /// Converte uma imagem em array de bytes.

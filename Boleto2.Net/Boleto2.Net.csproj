@@ -64,6 +64,7 @@
     <Compile Include="Banco\Banco_Brasil.cs" />
     <Compile Include="Banco\Banco_Caixa.cs" />
     <Compile Include="Banco\Banco.cs" />
+    <Compile Include="Banco\Banco_Sicoob.cs" />
     <Compile Include="BoletoImpressao\BoletoBancarioDesigner.cs" />
     <Compile Include="Boleto\Boleto.cs">
       <SubType>Code</SubType>
@@ -71,6 +72,7 @@
     <Compile Include="Boleto\DemonstrativoValoresBoleto\GrupoDemonstrativo.cs" />
     <Compile Include="Boleto\DemonstrativoValoresBoleto\ItemDemonstrativo.cs" />
     <Compile Include="Enums\Modulo11Algoritmo.cs" />
+    <Compile Include="Enums\TipoEspecieDocumento.cs" />
     <Compile Include="Util\EDIBasicTypes.cs" />
     <Compile Include="Enums\TipoCarteira.cs" />
     <Compile Include="Enums\TipoFormaCadastramento.cs" />
@@ -182,6 +184,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Como Implementar um novo Banco ou Carteira.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

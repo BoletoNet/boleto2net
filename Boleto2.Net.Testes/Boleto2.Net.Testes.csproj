@@ -62,10 +62,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BancoDoBrasil_11019.cs" />
-    <Compile Include="BancoDoBrasil_17019.cs" />
+    <Compile Include="Banco001_Brasil_11_019.cs" />
+    <Compile Include="Banco001_Brasil_17_019.cs" />
+    <Compile Include="Banco756_Sicoob_1_01.cs" />
     <Compile Include="CaixaEconomicaFederal_SIG14.cs" />
-    <Compile Include="Bradesco_09.cs" />
+    <Compile Include="Banco237_Bradesco_09.cs" />
     <Compile Include="FatorVencimento.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExemploClasseProxy.cs" />
