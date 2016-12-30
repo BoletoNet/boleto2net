@@ -581,11 +581,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0095, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0096, 006, 0, "000000", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 004, 0, string.Empty, ' ');
-
-                if (boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto == TipoImpressaoBoleto.Banco)
-                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0106, 001, 0, "1", '0'); // Emissão Banco
-                else
-                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0106, 001, 0, "2", '0'); // Emissão Cliente
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0106, 001, 0, (int)boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto, '0');
 
                 switch (boleto.Banco.Cedente.ContaBancaria.TipoCarteira)
                 {
@@ -615,7 +611,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0159, 002, 0, boleto.CodigoInstrucao2, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0161, 006, 4, boleto.PercentualJurosDia * 30, '0'); // Multiplica por 30 dias = Taxa de juros ao mês
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0167, 006, 4, boleto.PercentualMulta, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0173, 001, 0, "2", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0173, 001, 0, (int)boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto, '0');
 
                 if (boleto.ValorDesconto == 0)
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0174, 006, 0, "000000", '0');   // Sem Desconto
