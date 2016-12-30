@@ -112,11 +112,26 @@ namespace Boleto2Net.Testes
                 MensagemInstrucoesCaixa = "Mensagem para instruções do caixa",
                 NumeroControleParticipante = "CHAVEPRIMARIA="+ proximoNossoNumero.ToString()
             };
+            // Avalista
             if (contador % 3 == 0)
             {
                 boleto.Avalista = GerarSacado();
                 boleto.Avalista.Nome = boleto.Avalista.Nome.Replace("Sacado", "Avalista");
             }
+            // Grupo Demonstrativo do Boleto
+            var grupoDemonstrativo = new GrupoDemonstrativo { Descricao = "GRUPO 1" };
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 1, Item 1", Referencia = (boleto.DataEmissao.AddMonths(-1).Month).ToString()+"/"+(boleto.DataEmissao.AddMonths(-1).Year).ToString(), Valor = boleto.ValorTitulo*(decimal)0.15 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 1, Item 2", Referencia = (boleto.DataEmissao.AddMonths(-1).Month).ToString() + "/" + (boleto.DataEmissao.AddMonths(-1).Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.05 });
+            boleto.Demonstrativos.Add(grupoDemonstrativo);
+            grupoDemonstrativo = new GrupoDemonstrativo { Descricao = "GRUPO 2" };
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 2, Item 1", Referencia = (boleto.DataEmissao.Month).ToString() + "/" + (boleto.DataEmissao.Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.20 });
+            boleto.Demonstrativos.Add(grupoDemonstrativo);
+            grupoDemonstrativo = new GrupoDemonstrativo { Descricao = "GRUPO 3" };
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 1", Referencia = (boleto.DataEmissao.AddMonths(-1).Month).ToString() + "/" + (boleto.DataEmissao.AddMonths(-1).Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.37 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 2", Referencia = (boleto.DataEmissao.Month).ToString() + "/" + (boleto.DataEmissao.Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.03 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 3", Referencia = (boleto.DataEmissao.Month).ToString() + "/" + (boleto.DataEmissao.Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.12 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 4", Referencia = (boleto.DataEmissao.AddMonths(+1).Month).ToString() + "/" + (boleto.DataEmissao.AddMonths(+1).Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.08 });
+            boleto.Demonstrativos.Add(grupoDemonstrativo);
                 
             boleto.ValidarDados();
             contador++;
@@ -151,20 +166,18 @@ namespace Boleto2Net.Testes
                 var html = new StringBuilder();
                 foreach (Boleto boletoTmp in boletos)
                 {
-                    if (html.Length != 0)
-                    {
-                        // Já existe um boleto, inclui quebra de linha.
-                        html.Append("</br></br></br></br></br></br></br></br></br></br>");
-                    }
                     using (BoletoBancario imprimeBoleto = new BoletoBancario
                     {
                         boleto = boletoTmp,
                         OcultarInstrucoes = false,
-                        MostrarComprovanteEntrega = true,
-                        MostrarEnderecoCedente = true
+                        MostrarComprovanteEntrega = false,
+                        MostrarEnderecoCedente = true,
+                        ExibirDemonstrativo = true
                     })
                     {
+                        html.Append("<div style=\"page-break-after: always;\">");
                         html.Append(imprimeBoleto.MontaHtml());
+                        html.Append("</div>");
                     }
                     var pdf = new NReco.PdfGenerator.HtmlToPdfConverter().GeneratePdf(html.ToString());
                     using (FileStream fs = new FileStream(nomeArquivo, FileMode.Create))

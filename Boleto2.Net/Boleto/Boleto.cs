@@ -55,9 +55,9 @@ namespace Boleto2Net
         public string DescricaoOcorrencia { get; set; } = string.Empty;
         public string CodigoOcorrenciaAuxiliar { get; set; } = string.Empty;
 
-        public int CodigoProtesto { get; set; } = 3; // 1-Protestar, 3-Não Protestar, 9-Cancelamento Protesto Automatico
+        public TipoCodigoProtesto CodigoProtesto { get; set; } = TipoCodigoProtesto.NaoProtestar;
         public int DiasProtesto { get; set; } = 0;
-        public int CodigoBaixaDevolucao { get; set; } = 1; // 1-Baixar/Devolver, 2-Não Baixar/Não Devolver
+        public TipoCodigoBaixaDevolucao CodigoBaixaDevolucao { get; set; } = TipoCodigoBaixaDevolucao.BaixarDevolver;
         public int DiasBaixaDevolucao { get; set; } = 60;
 
         public string CodigoInstrucao1 { get; set; } = string.Empty;

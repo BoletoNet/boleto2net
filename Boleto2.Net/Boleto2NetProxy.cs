@@ -26,8 +26,11 @@ namespace Boleto2Net
         //      github.com/BoletoNet/boleto2net
         // 1.11 - Dezembro/2016
         //      Sicoob - Carteira 1 Variação 01
+        // 1.12 - Dezembro/2016
+        //      Classe Proxy - Métodos para definir Protesto e BaixaDevolucao
+        //      Classe Proxy - Quebra de página utilizando css - page-break-after
 
-        readonly public string Versao = "1.10";
+        readonly public string Versao = "1.12";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
@@ -435,6 +438,54 @@ namespace Boleto2Net
                 return false;
             }
         }
+        public bool DefinirProtesto(int codigoProtesto, int diasProtesto, ref string mensagemErro)
+        {
+            mensagemErro = "";
+            try
+            {
+                if (!setupOk)
+                {
+                    mensagemErro = "Realize o setup da cobrança antes de executar este método.";
+                    return false;
+                }
+                boleto.CodigoProtesto = (TipoCodigoProtesto)codigoProtesto;
+                boleto.DiasProtesto = diasProtesto;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                while (ex != null)
+                {
+                    mensagemErro += ex.Message + Environment.NewLine;
+                    ex = ex.InnerException;
+                }
+                return false;
+            }
+        }
+        public bool DefinirBaixaDevolucao(int codigoBaixaDevolucao, int diasBaixaDevolucao, ref string mensagemErro)
+        {
+            mensagemErro = "";
+            try
+            {
+                if (!setupOk)
+                {
+                    mensagemErro = "Realize o setup da cobrança antes de executar este método.";
+                    return false;
+                }
+                boleto.CodigoBaixaDevolucao = (TipoCodigoBaixaDevolucao)codigoBaixaDevolucao;
+                boleto.DiasBaixaDevolucao = diasBaixaDevolucao;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                while (ex != null)
+                {
+                    mensagemErro += ex.Message + Environment.NewLine;
+                    ex = ex.InnerException;
+                }
+                return false;
+            }
+        }
         public bool FecharBoleto(ref string mensagemErro)
         {
             mensagemErro = "";
@@ -512,11 +563,11 @@ namespace Boleto2Net
                 var html = new StringBuilder();
                 foreach (Boleto boletoTmp in boletos)
                 {
-                    if (html.Length != 0)
-                    {
-                        // Já existe um boleto, inclui quebra de linha.
-                        html.Append("</br></br></br></br></br></br></br></br></br></br>");
-                    }
+                    //if (html.Length != 0)
+                    //{
+                    //    // Já existe um boleto, inclui quebra de linha.
+                    //    html.Append("</br></br></br></br></br></br></br></br></br></br>");
+                    //}
                     using (BoletoBancario imprimeBoleto = new BoletoBancario
                     {
                         //CodigoBanco = (short)boletoTmp.Banco.Codigo,
@@ -526,7 +577,9 @@ namespace Boleto2Net
                         MostrarEnderecoCedente = true
                     })
                     {
+                        html.Append("<div style=\"page-break-after: always;\">");
                         html.Append(imprimeBoleto.MontaHtml());
+                        html.Append("</div>");
                     }
                 }
                 switch (extensaoArquivo.ToUpper())

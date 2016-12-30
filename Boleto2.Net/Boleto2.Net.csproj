@@ -72,6 +72,8 @@
     <Compile Include="Boleto\DemonstrativoValoresBoleto\GrupoDemonstrativo.cs" />
     <Compile Include="Boleto\DemonstrativoValoresBoleto\ItemDemonstrativo.cs" />
     <Compile Include="Enums\Modulo11Algoritmo.cs" />
+    <Compile Include="Enums\TipoCodigoBaixa.cs" />
+    <Compile Include="Enums\TipoCodigoProtesto.cs" />
     <Compile Include="Enums\TipoEspecieDocumento.cs" />
     <Compile Include="Util\EDIBasicTypes.cs" />
     <Compile Include="Enums\TipoCarteira.cs" />
