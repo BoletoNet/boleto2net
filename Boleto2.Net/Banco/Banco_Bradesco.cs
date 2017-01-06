@@ -395,8 +395,8 @@ namespace Boleto2Net
                 //Nº Controle do Participante
                 boleto.NumeroControleParticipante = registro.Substring(37, 25);
 
-                //Carteira
-                boleto.Banco.Cedente.ContaBancaria.Carteira = registro.Substring(107, 1);
+                //Carteira (no arquivo retorno, vem com 1 caracter. Ajustamos para 2 caracteres, como no manual do Bradesco.
+                boleto.Banco.Cedente.ContaBancaria.Carteira = registro.Substring(107, 1).PadLeft(2, '0');
                 boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 //Identificação do Título no Banco
