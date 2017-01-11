@@ -23,7 +23,7 @@ namespace Boleto2Net
                     return Carteira + "/" + VariacaoCarteira;
             }
         }
-        public string CodigoBancoCorrespondente { get; set; }
+        public int CodigoBancoCorrespondente { get; set; }
         public string NossoNumeroBancoCorrespondente { get; set; }
 
     }

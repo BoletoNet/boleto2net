@@ -27,7 +27,7 @@ namespace Boleto2Net
         public string TipoCPFCNPJ(string formatoRetorno)
         {
             if (CPFCNPJ == string.Empty)
-                return "?";
+                return "0";
             switch (formatoRetorno)
             {
                 case "A":

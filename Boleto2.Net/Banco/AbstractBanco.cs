@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Boleto2Net
 {
-    public abstract class AbstractBanco
+    public abstract class AbstractBanco : IBanco
     {
 
         public virtual int Codigo { get; set; } = 0;
@@ -14,6 +14,8 @@ namespace Boleto2Net
         public virtual string Nome { get; set; } = string.Empty;
 
         public virtual List<string> IdsRetornoCnab400RegistroDetalhe { get; set; } = new List<string>();
+
+        public virtual bool RemoveAcentosArquivoRemessa { get; set; } = true;
 
         public virtual Cedente Cedente { get; set; } = null;
 

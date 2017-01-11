@@ -10,27 +10,25 @@ namespace Boleto2Net
     [ComVisible(true)]
     public class Boleto2NetProxy
     {
-        // 1.00 - Janeiro/2016
-        //      Bradesco - Carteira 09
-        // 1.01 - Julho/2016
-        //      Caixa Economica Federal - Carteira SIG14
-        // 1.02 - Julho/2016
-        //      Banco do Brasil - Carteira 17 Variação 019
-        // 1.03 - Julho/2016
-        //      Banco do Brasil - Carteira 11 Variação 019
-        // 1.04 - Agosto/2016
-        //      Refatoração completa da classe ArquivoRetorno
-        // 1.05 - Novembro/2016
-        //      Banco do Brasil - Retorno
-        // 1.10 - Dezembro/2016
-        //      github.com/BoletoNet/boleto2net
-        // 1.11 - Dezembro/2016
-        //      Sicoob - Carteira 1 Variação 01
-        // 1.12 - Dezembro/2016
-        //      Classe Proxy - Métodos para definir Protesto e BaixaDevolucao
-        //      Classe Proxy - Quebra de página utilizando css - page-break-after
+        // Esta classe é para permitir que essa DLL seja utilizada via COM, em linguagens que não usam o .NET - Por exemplo: Visual Fox Pro.
+        // Janeiro/2016
+        //      1.00 - Bradesco - Carteira 09
+        // Julho/2016
+        //      1.01 - Caixa Economica Federal - Carteira SIG14
+        //      1.02 - Banco do Brasil - Carteira 17 Variação 019
+        //      1.03 - Banco do Brasil - Carteira 11 Variação 019
+        // Agosto/2016
+        //      1.04 - Refatoração completa da classe ArquivoRetorno
+        // Novembro/2016
+        //      1.05 - Banco do Brasil - Retorno
+        // Dezembro/2016
+        //      1.10 - github.com/BoletoNet/boleto2net
+        //      1.11 - Sicoob - Carteira 1 Variação 01
+        //      1.12 - Classe Proxy - Métodos para definir Protesto e BaixaDevolucao / Quebra de página utilizando css - page-break-after
+        //      1.13 - Correção Carteira Bradesco com 2 dígitos no retorno.
+        //      1.14 - Correção Código da Espécie do Documento / Correções de Homologação do Sicoob
 
-        readonly public string Versao = "1.12";
+        readonly public string Versao = "1.14";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
@@ -116,7 +114,7 @@ namespace Boleto2Net
                             TipoCarteira = (TipoCarteira)tipoCarteira,
                             TipoFormaCadastramento = (TipoFormaCadastramento)tipoFormaCadastramento,
                             TipoImpressaoBoleto = (TipoImpressaoBoleto)tipoImpressaoBoleto
-                           },
+                        },
                         Codigo = codigoCedente,
                         CodigoDV = digitoCodigoCedente,
                         Endereco = new Endereco

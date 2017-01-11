@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Boleto2Net
 {
-    public class Banco : AbstractBanco, IBanco
+    public class Banco : AbstractBanco
     {
         private IBanco _IBanco;
 
@@ -51,6 +51,10 @@ namespace Boleto2Net
         public override string Nome
         {
             get { return _IBanco.Nome; }
+        }
+        public override bool RemoveAcentosArquivoRemessa
+        {
+            get { return _IBanco.RemoveAcentosArquivoRemessa; }
         }
         public override Cedente Cedente
         {

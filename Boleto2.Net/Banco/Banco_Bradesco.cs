@@ -5,7 +5,7 @@ using System.Web.UI;
 
 namespace Boleto2Net
 {
-    internal class Banco_Bradesco : AbstractBanco, IBanco
+    internal class Banco_Bradesco : AbstractBanco
     {
         internal Banco_Bradesco()
         {

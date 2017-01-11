@@ -110,7 +110,11 @@ namespace Boleto2Net
 
         private string FormataLinhaArquivoCNAB(string strLinha, int tamanhoRegistro)
         {
-            strLinha = Utils.SubstituiCaracteresEspeciais(strLinha).ToUpper();
+            strLinha = strLinha.ToUpper();
+            if (Banco.RemoveAcentosArquivoRemessa)
+            {
+                strLinha = Utils.SubstituiCaracteresEspeciais(strLinha);
+            }
             if (tamanhoRegistro != 0)
             {
                 string[] strLinhas = strLinha.Split('\n');

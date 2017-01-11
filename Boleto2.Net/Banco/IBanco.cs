@@ -10,8 +10,8 @@ namespace Boleto2Net
         int Codigo { get; set; }
         string Nome { get; }
         string Digito { get; }
-        // Identifica os registros que cada banco implementa no arquivo retorno, sendo que o primeiro ID da List<> identifica um novo boleto dentro do arquivo retorno.
-        List<string> IdsRetornoCnab400RegistroDetalhe { get; }
+        List<string> IdsRetornoCnab400RegistroDetalhe { get; } // Identifica os registros que cada banco implementa no arquivo retorno, sendo que o primeiro ID da List<> identifica um novo boleto dentro do arquivo retorno.
+        bool RemoveAcentosArquivoRemessa { get; }
 
         /// <summary>
         /// Formata o cedente (Agência, Conta, Código)
