@@ -30,10 +30,10 @@ namespace Boleto2Net.Testes
             };
         }
 
-        static int contador = 1;
+        static int _contador = 1;
         internal static Sacado GerarSacado()
         {
-            if (contador % 2 == 0)
+            if (_contador % 2 == 0)
             {
                 return new Sacado
                 {
@@ -71,7 +71,7 @@ namespace Boleto2Net.Testes
             }
         }
 
-        static int proximoNossoNumero = 1;
+        static int _proximoNossoNumero = 1;
         internal static Boletos GerarBoletos(Banco banco, int quantidadeBoletos)
         {
             var boletos = new Boletos
@@ -94,10 +94,10 @@ namespace Boleto2Net.Testes
                 DataProcessamento = DateTime.Now,
                 DataVencimento = DateTime.Now.AddMonths(i),
                 ValorTitulo = (decimal)100 * i,
-                NossoNumero = (223344 + proximoNossoNumero).ToString(),
-                NumeroDocumento = "BB" + proximoNossoNumero.ToString("D6") + (char)(64 + i),
+                NossoNumero = (223344 + _proximoNossoNumero).ToString(),
+                NumeroDocumento = "BB" + _proximoNossoNumero.ToString("D6") + (char)(64 + i),
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Aceite = (contador % 2) == 0 ? "N" : "A",
+                Aceite = (_contador % 2) == 0 ? "N" : "A",
                 CodigoInstrucao1 = "11",
                 CodigoInstrucao2 = "22",
                 DataDesconto = DateTime.Now.AddMonths(i),
@@ -110,10 +110,10 @@ namespace Boleto2Net.Testes
                 ValorJurosDia = (decimal)(100 * i * 0.002),
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
                 MensagemInstrucoesCaixa = "Mensagem para instruções do caixa",
-                NumeroControleParticipante = "CHAVEPRIMARIA=" + proximoNossoNumero.ToString()
+                NumeroControleParticipante = "CHAVEPRIMARIA=" + _proximoNossoNumero.ToString()
             };
             // Avalista
-            if (contador % 3 == 0)
+            if (_contador % 3 == 0)
             {
                 boleto.Avalista = GerarSacado();
                 boleto.Avalista.Nome = boleto.Avalista.Nome.Replace("Sacado", "Avalista");
@@ -134,8 +134,8 @@ namespace Boleto2Net.Testes
             boleto.Demonstrativos.Add(grupoDemonstrativo);
 
             boleto.ValidarDados();
-            contador++;
-            proximoNossoNumero++;
+            _contador++;
+            _proximoNossoNumero++;
             return boleto;
         }
 

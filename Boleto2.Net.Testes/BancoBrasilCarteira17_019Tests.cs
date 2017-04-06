@@ -3,10 +3,10 @@ using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    public class Banco001_Brasil_17_019
+    public class BancoBrasilCarteira17019Tests
     {
-        Banco banco;
-        public Banco001_Brasil_17_019()
+        readonly Banco _banco;
+        public BancoBrasilCarteira17019Tests()
         {
             var contaBancaria = new ContaBancaria
             {
@@ -20,29 +20,29 @@ namespace Boleto2Net.Testes
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
-            banco = new Banco(001)
+            _banco = new Banco(001)
             {
                 Cedente = Utils.GerarCedente("1234567", "", contaBancaria)
             };
-            banco.FormataCedente();
+            _banco.FormataCedente();
         }
 
         [Test]
         public void Banco001_Brasil_17_019_REM240()
         {
-            Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB240, nameof(Banco001_Brasil_17_019));
+            Utils.TestarArquivoRemessa(_banco, TipoArquivo.CNAB240, nameof(BancoBrasilCarteira17019Tests));
         }
 
         [Test]
         public void Banco001_Brasil_17_019_REM400()
         {
-            Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB400, nameof(Banco001_Brasil_17_019));
+            Utils.TestarArquivoRemessa(_banco, TipoArquivo.CNAB400, nameof(BancoBrasilCarteira17019Tests));
         }
 
         [Test]
         public void Banco001_Brasil_17_019_PDF()
         {
-            Utils.TestarBoletoPDF(banco, nameof(Banco001_Brasil_17_019));
+            Utils.TestarBoletoPDF(_banco, nameof(BancoBrasilCarteira17019Tests));
         }
 
         [TestCase(400d, "5", "BO123456E", "1", "12345670000000005", "00191699100000400000000001234567000000000517", "00190.00009 01234.567004 00000.005173 1 69910000040000", 2016, 11, 27)]
@@ -64,7 +64,7 @@ namespace Boleto2Net.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Banco = banco,
+                Banco = _banco,
                 Sacado = Utils.GerarSacado()
             };
 
@@ -72,10 +72,10 @@ namespace Boleto2Net.Testes
             boleto.ValidarDados();
 
             //Assertivas
-            Assert.AreEqual(digitoVerificador, boleto.CodigoBarra.DigitoVerificador, $"Dígito Verificador diferente de {digitoVerificador}");
-            Assert.AreEqual(nossoNumeroFormatado, boleto.NossoNumeroFormatado, "Nosso número inválido");
-            Assert.AreEqual(codigoDeBarras, boleto.CodigoBarra.CodigoDeBarras, "Código de Barra inválido");
-            Assert.AreEqual(linhaDigitavel, boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
+            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}");
+            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido");
+            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido");
+            Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
         }
     }
 }

@@ -3,11 +3,11 @@ using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    public class Banco104_Caixa_SIG14
+    public class BancoCaixaCarteiraSig14Tests
     {
-        Banco banco;
+        readonly Banco _banco;
 
-        public Banco104_Caixa_SIG14()
+        public BancoCaixaCarteiraSig14Tests()
         {
             var contaBancaria = new ContaBancaria
             {
@@ -20,23 +20,23 @@ namespace Boleto2Net.Testes
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
-            banco = new Banco(104)
+            _banco = new Banco(104)
             {
                 Cedente = Utils.GerarCedente("123456", "0", contaBancaria)
             };
-            banco.FormataCedente();
+            _banco.FormataCedente();
         }
 
         [Test]
         public void Banco104_Caixa_SIG14_REM240()
         {
-            Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB240, nameof(Banco104_Caixa_SIG14));
+            Utils.TestarArquivoRemessa(_banco, TipoArquivo.CNAB240, nameof(BancoCaixaCarteiraSig14Tests));
         }
 
         [Test]
         public void Banco104_Caixa_SIG14_PDF()
         {
-            Utils.TestarBoletoPDF(banco, nameof(Banco104_Caixa_SIG14));
+            Utils.TestarBoletoPDF(_banco, nameof(BancoCaixaCarteiraSig14Tests));
         }
 
         [TestCase(500, "6", "BO123456F", "1", "14000000000000006-5", "10491703000000500001234560000100040000000064", "10491.23456 60000.100044 00000.000646 1 70300000050000", 2017, 01, 05)]
@@ -58,7 +58,7 @@ namespace Boleto2Net.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Banco = banco,
+                Banco = _banco,
                 Sacado = Utils.GerarSacado()
             };
 
@@ -66,10 +66,10 @@ namespace Boleto2Net.Testes
             boleto.ValidarDados();
 
             //Assertivas
-            Assert.AreEqual(digitoVerificador, boleto.CodigoBarra.DigitoVerificador, $"Dígito Verificador diferente de {digitoVerificador}");
-            Assert.AreEqual(nossoNumeroFormatado, boleto.NossoNumeroFormatado, "Nosso número inválido");
-            Assert.AreEqual(codigoDeBarras, boleto.CodigoBarra.CodigoDeBarras, "Código de Barra inválido");
-            Assert.AreEqual(linhaDigitavel, boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
+            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}");
+            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido");
+            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido");
+            Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
         }
     }
 }

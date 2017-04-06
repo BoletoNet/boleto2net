@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    public class Boleto2Net_ExemploClasseProxy
+    public class Boleto2NetExemploClasseProxy
     {
         [Test]
         public void Boleto2Net_ExemploProxy()
