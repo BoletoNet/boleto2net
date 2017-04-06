@@ -1,12 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using NReco.PdfGenerator;
 using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    sealed class Utils
+    internal sealed class Utils
     {
+        private static int _contador = 1;
+
+        private static int _proximoNossoNumero = 1;
 
         internal static Cedente GerarCedente(string codigoCedente, string digitoCodigoCedente, ContaBancaria contaBancaria)
         {
@@ -30,11 +34,9 @@ namespace Boleto2Net.Testes
             };
         }
 
-        static int _contador = 1;
         internal static Sacado GerarSacado()
         {
             if (_contador % 2 == 0)
-            {
                 return new Sacado
                 {
                     CPFCNPJ = "123.456.789-09",
@@ -50,40 +52,34 @@ namespace Boleto2Net.Testes
                         CEP = "56789012"
                     }
                 };
-            }
-            else
+            return new Sacado
             {
-                return new Sacado
+                CPFCNPJ = "98.765.432/1098-74",
+                Nome = "Sacado Teste PJ",
+                Observacoes = "Matricula 123/4",
+                Endereco = new Endereco
                 {
-                    CPFCNPJ = "98.765.432/1098-74",
-                    Nome = "Sacado Teste PJ",
-                    Observacoes = "Matricula 123/4",
-                    Endereco = new Endereco
-                    {
-                        LogradouroEndereco = "Avenida Testando",
-                        LogradouroNumero = "123",
-                        Bairro = "Bairro",
-                        Cidade = "Cidade",
-                        UF = "SP",
-                        CEP = "12345678"
-                    }
-                };
-            }
+                    LogradouroEndereco = "Avenida Testando",
+                    LogradouroNumero = "123",
+                    Bairro = "Bairro",
+                    Cidade = "Cidade",
+                    UF = "SP",
+                    CEP = "12345678"
+                }
+            };
         }
 
-        static int _proximoNossoNumero = 1;
         internal static Boletos GerarBoletos(Banco banco, int quantidadeBoletos)
         {
             var boletos = new Boletos
             {
                 Banco = banco
             };
-            for (int i = 1; i <= quantidadeBoletos; i++)
-            {
+            for (var i = 1; i <= quantidadeBoletos; i++)
                 boletos.Add(GerarBoleto(banco, i));
-            }
             return boletos;
         }
+
         internal static Boleto GerarBoleto(Banco banco, int i)
         {
             var boleto = new Boleto
@@ -97,7 +93,7 @@ namespace Boleto2Net.Testes
                 NossoNumero = (223344 + _proximoNossoNumero).ToString(),
                 NumeroDocumento = "BB" + _proximoNossoNumero.ToString("D6") + (char)(64 + i),
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Aceite = (_contador % 2) == 0 ? "N" : "A",
+                Aceite = _contador % 2 == 0 ? "N" : "A",
                 CodigoInstrucao1 = "11",
                 CodigoInstrucao2 = "22",
                 DataDesconto = DateTime.Now.AddMonths(i),
@@ -110,7 +106,7 @@ namespace Boleto2Net.Testes
                 ValorJurosDia = (decimal)(100 * i * 0.002),
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
                 MensagemInstrucoesCaixa = "Mensagem para instruções do caixa",
-                NumeroControleParticipante = "CHAVEPRIMARIA=" + _proximoNossoNumero.ToString()
+                NumeroControleParticipante = "CHAVEPRIMARIA=" + _proximoNossoNumero
             };
             // Avalista
             if (_contador % 3 == 0)
@@ -120,17 +116,17 @@ namespace Boleto2Net.Testes
             }
             // Grupo Demonstrativo do Boleto
             var grupoDemonstrativo = new GrupoDemonstrativo { Descricao = "GRUPO 1" };
-            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 1, Item 1", Referencia = (boleto.DataEmissao.AddMonths(-1).Month).ToString() + "/" + (boleto.DataEmissao.AddMonths(-1).Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.15 });
-            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 1, Item 2", Referencia = (boleto.DataEmissao.AddMonths(-1).Month).ToString() + "/" + (boleto.DataEmissao.AddMonths(-1).Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.05 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 1, Item 1", Referencia = boleto.DataEmissao.AddMonths(-1).Month + "/" + boleto.DataEmissao.AddMonths(-1).Year, Valor = boleto.ValorTitulo * (decimal)0.15 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 1, Item 2", Referencia = boleto.DataEmissao.AddMonths(-1).Month + "/" + boleto.DataEmissao.AddMonths(-1).Year, Valor = boleto.ValorTitulo * (decimal)0.05 });
             boleto.Demonstrativos.Add(grupoDemonstrativo);
             grupoDemonstrativo = new GrupoDemonstrativo { Descricao = "GRUPO 2" };
-            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 2, Item 1", Referencia = (boleto.DataEmissao.Month).ToString() + "/" + (boleto.DataEmissao.Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.20 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 2, Item 1", Referencia = boleto.DataEmissao.Month + "/" + boleto.DataEmissao.Year, Valor = boleto.ValorTitulo * (decimal)0.20 });
             boleto.Demonstrativos.Add(grupoDemonstrativo);
             grupoDemonstrativo = new GrupoDemonstrativo { Descricao = "GRUPO 3" };
-            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 1", Referencia = (boleto.DataEmissao.AddMonths(-1).Month).ToString() + "/" + (boleto.DataEmissao.AddMonths(-1).Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.37 });
-            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 2", Referencia = (boleto.DataEmissao.Month).ToString() + "/" + (boleto.DataEmissao.Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.03 });
-            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 3", Referencia = (boleto.DataEmissao.Month).ToString() + "/" + (boleto.DataEmissao.Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.12 });
-            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 4", Referencia = (boleto.DataEmissao.AddMonths(+1).Month).ToString() + "/" + (boleto.DataEmissao.AddMonths(+1).Year).ToString(), Valor = boleto.ValorTitulo * (decimal)0.08 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 1", Referencia = boleto.DataEmissao.AddMonths(-1).Month + "/" + boleto.DataEmissao.AddMonths(-1).Year, Valor = boleto.ValorTitulo * (decimal)0.37 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 2", Referencia = boleto.DataEmissao.Month + "/" + boleto.DataEmissao.Year, Valor = boleto.ValorTitulo * (decimal)0.03 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 3", Referencia = boleto.DataEmissao.Month + "/" + boleto.DataEmissao.Year, Valor = boleto.ValorTitulo * (decimal)0.12 });
+            grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 4", Referencia = boleto.DataEmissao.AddMonths(+1).Month + "/" + boleto.DataEmissao.AddMonths(+1).Year, Valor = boleto.ValorTitulo * (decimal)0.08 });
             boleto.Demonstrativos.Add(grupoDemonstrativo);
 
             boleto.ValidarDados();
@@ -141,9 +137,9 @@ namespace Boleto2Net.Testes
 
         internal static void TestarBoletoPDF(Banco banco, string nomeCarteira)
         {
-            int quantidadeBoletosParaTeste = 3;
+            var quantidadeBoletosParaTeste = 3;
             var boletos = GerarBoletos(banco, quantidadeBoletosParaTeste);
-            Assert.AreEqual(quantidadeBoletosParaTeste, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletosParaTeste.ToString());
+            Assert.AreEqual(quantidadeBoletosParaTeste, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletosParaTeste);
 
             // Define o nome do arquivo.
             var nomeArquivo = Path.GetTempPath() + "Boleto2Net\\" + nomeCarteira + "_Arquivo.PDF";
@@ -164,9 +160,9 @@ namespace Boleto2Net.Testes
             try
             {
                 var html = new StringBuilder();
-                foreach (Boleto boletoTmp in boletos)
+                foreach (var boletoTmp in boletos)
                 {
-                    using (BoletoBancario imprimeBoleto = new BoletoBancario
+                    using (var boletoParaImpressao = new BoletoBancario
                     {
                         Boleto = boletoTmp,
                         OcultarInstrucoes = false,
@@ -176,15 +172,12 @@ namespace Boleto2Net.Testes
                     })
                     {
                         html.Append("<div style=\"page-break-after: always;\">");
-                        html.Append(imprimeBoleto.MontaHtml());
+                        html.Append(boletoParaImpressao.MontaHtml());
                         html.Append("</div>");
                     }
-                    var pdf = new NReco.PdfGenerator.HtmlToPdfConverter().GeneratePdf(html.ToString());
-                    using (FileStream fs = new FileStream(nomeArquivo, FileMode.Create))
-                    {
+                    var pdf = new HtmlToPdfConverter().GeneratePdf(html.ToString());
+                    using (var fs = new FileStream(nomeArquivo, FileMode.Create))
                         fs.Write(pdf, 0, pdf.Length);
-                        fs.Close();
-                    }
                 }
             }
             catch (Exception e)
@@ -200,33 +193,27 @@ namespace Boleto2Net.Testes
 
         internal static void TestarArquivoRemessa(Banco banco, TipoArquivo tipoArquivo, string nomeCarteira)
         {
-            int quantidadeBoletosParaTeste = 36;
+            const int quantidadeBoletosParaTeste = 36;
             var boletos = GerarBoletos(banco, quantidadeBoletosParaTeste);
-            Assert.AreEqual(quantidadeBoletosParaTeste, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletosParaTeste.ToString());
+            Assert.AreEqual(quantidadeBoletosParaTeste, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletosParaTeste);
 
             // Define o nome do arquivo.
-            var nomeArquivo = Path.GetTempPath() + "Boleto2Net\\" + nomeCarteira + "_Arquivo" + tipoArquivo.ToString() + ".REM";
+            var nomeArquivo = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_Arquivo{tipoArquivo}.REM");
 
             // Cria pasta para os arquivos
-            if (Directory.Exists(Path.GetDirectoryName(nomeArquivo)) == false)
+            if (!Directory.Exists(Path.GetDirectoryName(nomeArquivo)))
                 Directory.CreateDirectory(Path.GetDirectoryName(nomeArquivo));
 
-            // Se o arquivo já existir (testes anteriores), apaga o arquivo.
+            File.Delete(nomeArquivo);
             if (File.Exists(nomeArquivo))
-            {
-                File.Delete(nomeArquivo);
-                if (File.Exists(nomeArquivo))
-                    Assert.Fail("Arquivo Remessa não foi excluído: " + nomeArquivo);
-            }
+                Assert.Fail("Arquivo Remessa não foi excluído: " + nomeArquivo);
 
             // Gera o arquivo remessa.
             try
             {
                 var arquivoRemessa = new ArquivoRemessa(boletos.Banco, tipoArquivo, 1);
                 using (var fileStream = new FileStream(nomeArquivo, FileMode.Create))
-                {
                     arquivoRemessa.GerarArquivoRemessa(boletos, fileStream);
-                }
             }
             catch (Exception e)
             {
@@ -238,6 +225,5 @@ namespace Boleto2Net.Testes
             // Se o arquivo existir, considera o teste OK
             Assert.IsTrue(File.Exists(nomeArquivo), "Arquivo Remessa não encontrado: " + nomeArquivo);
         }
-
     }
-};
+}
