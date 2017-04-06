@@ -1,9 +1,8 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    [TestClass]
     public class Banco237_Bradesco_09
     {
         Banco banco;
@@ -27,20 +26,20 @@ namespace Boleto2Net.Testes
             banco.FormataCedente();
         }
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_REM400()
         {
             Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB400, nameof(Banco237_Bradesco_09));
         }
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_PDF()
         {
             Utils.TestarBoletoPDF(banco, nameof(Banco237_Bradesco_09));
         }
 
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_DV1()
         {
             var boleto = new Boleto
@@ -60,7 +59,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("23791.23405 90000.000043 53012.345608 1 69040000014150", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_DV2()
         {
             var boleto = new Boleto
@@ -80,7 +79,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("23791.23405 90000.000043 56012.345601 2 69340000271716", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_DV3()
         {
             var boleto = new Boleto
@@ -100,7 +99,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("23791.23405 90000.000043 44012.345607 3 69050000029721", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_DV4()
         {
             var boleto = new Boleto
@@ -121,7 +120,7 @@ namespace Boleto2Net.Testes
         }
 
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_DV5()
         {
             var boleto = new Boleto
@@ -142,7 +141,7 @@ namespace Boleto2Net.Testes
         }
 
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_DV6()
         {
             var boleto = new Boleto
@@ -162,7 +161,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("23791.23405 90000.000043 14012.345600 6 68730000064939", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_DV7()
         {
             var boleto = new Boleto
@@ -183,7 +182,7 @@ namespace Boleto2Net.Testes
         }
 
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_DV8()
         {
             var boleto = new Boleto
@@ -203,7 +202,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("23791.23405 90000.000043 45012.345604 8 69050000292411", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco237_Bradesco_09_DV9()
         {
             var boleto = new Boleto

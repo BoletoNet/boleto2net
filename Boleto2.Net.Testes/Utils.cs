@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
+using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {

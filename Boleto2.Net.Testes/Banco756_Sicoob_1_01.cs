@@ -1,9 +1,8 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    [TestClass]
     public class Banco756_Sicoob_1_01
     {
         Banco banco;
@@ -28,24 +27,24 @@ namespace Boleto2Net.Testes
             banco.FormataCedente();
         }
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_REM240()
         {
             Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB240, nameof(Banco756_Sicoob_1_01));
         }
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_REM400()
         {
             Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB400, nameof(Banco756_Sicoob_1_01));
         }
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_PDF()
         {
             Utils.TestarBoletoPDF(banco, nameof(Banco756_Sicoob_1_01));
         }
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_DV1()
         {
             var boleto = new Boleto
@@ -65,7 +64,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("75691.42776 01017.227800 00000.400010 1 69740000030000", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_DV2()
         {
             var boleto = new Boleto
@@ -85,7 +84,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("75691.42776 01017.227800 00000.330019 2 71110000030000", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_DV3()
         {
             var boleto = new Boleto
@@ -105,7 +104,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("75691.42776 01017.227800 00000.400010 3 71420000040000", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_DV4()
         {
             var boleto = new Boleto
@@ -127,7 +126,7 @@ namespace Boleto2Net.Testes
 
 
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_DV5()
         {
             var boleto = new Boleto
@@ -148,7 +147,7 @@ namespace Boleto2Net.Testes
         }
 
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_DV6()
         {
             var boleto = new Boleto
@@ -168,7 +167,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("75691.42776 01017.227800 00000.720011 6 70630000060000", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_DV7()
         {
             var boleto = new Boleto
@@ -189,7 +188,7 @@ namespace Boleto2Net.Testes
         }
 
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_DV8()
         {
             var boleto = new Boleto
@@ -210,7 +209,7 @@ namespace Boleto2Net.Testes
         }
 
 
-        [TestMethod]
+        [Test]
         public void Banco756_Sicoob_1_01_DV9()
         {
             var boleto = new Boleto

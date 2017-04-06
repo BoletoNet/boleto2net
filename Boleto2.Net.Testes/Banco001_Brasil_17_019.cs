@@ -1,10 +1,8 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
+using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    [TestClass]
     public class Banco001_Brasil_17_019
     {
         Banco banco;
@@ -29,25 +27,25 @@ namespace Boleto2Net.Testes
             banco.FormataCedente();
         }
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_REM240()
         {
             Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB240,  nameof(Banco001_Brasil_17_019));
         }
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_REM400()
         {
             Utils.TestarArquivoRemessa(banco, TipoArquivo.CNAB400, nameof(Banco001_Brasil_17_019));
         }
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_PDF()
         {
             Utils.TestarBoletoPDF(banco, nameof(Banco001_Brasil_17_019));
         }
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_DV1()
         {
             var boleto = new Boleto
@@ -67,7 +65,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("00190.00009 01234.567004 00000.005173 1 69910000040000", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_DV2()
         {
             var boleto = new Boleto
@@ -87,7 +85,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("00190.00009 01234.567004 00000.005173 2 69910000040200", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_DV3()
         {
             var boleto = new Boleto
@@ -107,7 +105,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("00190.00009 01234.567004 00000.003178 3 69290000020000", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_DV4()
         {
             var boleto = new Boleto
@@ -127,7 +125,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("00190.00009 01234.567004 00000.001172 4 68890000123278", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_DV5()
         {
             var boleto = new Boleto
@@ -149,7 +147,7 @@ namespace Boleto2Net.Testes
 
 
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_DV6()
         {
             var boleto = new Boleto
@@ -171,7 +169,7 @@ namespace Boleto2Net.Testes
 
 
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_DV7()
         {
             var boleto = new Boleto
@@ -192,7 +190,7 @@ namespace Boleto2Net.Testes
         }
 
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_DV8()
         {
             var boleto = new Boleto
@@ -212,7 +210,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual("00190.00009 01234.567004 00000.007179 8 70520000060900", boleto.CodigoBarra.LinhaDigitavel, "Linha digitável inválida");
         }
 
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_17_019_DV9()
         {
             var boleto = new Boleto

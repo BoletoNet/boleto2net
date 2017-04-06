@@ -1,12 +1,11 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    [TestClass]
     public class Boleto2Net_FatorVencimento
     {
-        [TestMethod]
+        [Test]
         public void Boleto2Net_FatorVencimentos()
         {
             Assert.AreEqual(1000, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2025, 02, 22, 0, 0, 0) }));

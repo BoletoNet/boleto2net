@@ -1,13 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
+using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    [TestClass]
     public class Boleto2Net_ExemploClasseProxy
     {
-        [TestMethod]
+        [Test]
         public void Boleto2Net_ExemploProxy()
         {
             var mensagemErro = "";
