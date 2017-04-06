@@ -569,7 +569,7 @@ namespace Boleto2Net
                     using (BoletoBancario imprimeBoleto = new BoletoBancario
                     {
                         //CodigoBanco = (short)boletoTmp.Banco.Codigo,
-                        boleto = boletoTmp,
+                        Boleto = boletoTmp,
                         OcultarInstrucoes = false,
                         MostrarComprovanteEntrega = true,
                         MostrarEnderecoCedente = true

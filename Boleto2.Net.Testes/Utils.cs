@@ -168,7 +168,7 @@ namespace Boleto2Net.Testes
                 {
                     using (BoletoBancario imprimeBoleto = new BoletoBancario
                     {
-                        boleto = boletoTmp,
+                        Boleto = boletoTmp,
                         OcultarInstrucoes = false,
                         MostrarComprovanteEntrega = false,
                         MostrarEnderecoCedente = true,

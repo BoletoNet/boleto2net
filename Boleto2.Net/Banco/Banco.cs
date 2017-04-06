@@ -7,7 +7,7 @@ namespace Boleto2Net
 {
     public class Banco : AbstractBanco
     {
-        private IBanco _IBanco;
+        private readonly IBanco _banco;
 
         public Banco(int codigoBanco)
         {
@@ -16,16 +16,16 @@ namespace Boleto2Net
                 switch (codigoBanco)
                 {
                     case 001:
-                        _IBanco = new Banco_Brasil();
+                        _banco = new BancoBrasil();
                         break;
                     case 104:
-                        _IBanco = new Banco_Caixa();
+                        _banco = new BancoCaixa();
                         break;
                     case 237:
-                        _IBanco = new Banco_Bradesco();
+                        _banco = new BancoBradesco();
                         break;
                     case 756:
-                        _IBanco = new Banco_Sicoob();
+                        _banco = new BancoSicoob();
                         break;
                     default:
                         throw new Exception("Banco não implementando: " + codigoBanco);
@@ -41,30 +41,21 @@ namespace Boleto2Net
 
         public override int Codigo
         {
-            get { return _IBanco.Codigo; }
-            set { _IBanco.Codigo = value; }
+            get { return _banco.Codigo; }
+            set { _banco.Codigo = value; }
         }
-        public override string Digito
-        {
-            get { return _IBanco.Digito; }
-        }
-        public override string Nome
-        {
-            get { return _IBanco.Nome; }
-        }
-        public override bool RemoveAcentosArquivoRemessa
-        {
-            get { return _IBanco.RemoveAcentosArquivoRemessa; }
-        }
+        public override string Digito => _banco.Digito;
+
+        public override string Nome => _banco.Nome;
+
+        public override bool RemoveAcentosArquivoRemessa => _banco.RemoveAcentosArquivoRemessa;
+
         public override Cedente Cedente
         {
-            get { return _IBanco.Cedente; }
-            set { _IBanco.Cedente = value; }
+            get { return _banco.Cedente; }
+            set { _banco.Cedente = value; }
         }
-        public override List<string> IdsRetornoCnab400RegistroDetalhe
-        {
-            get { return _IBanco.IdsRetornoCnab400RegistroDetalhe; }
-        }
+        public override List<string> IdsRetornoCnab400RegistroDetalhe => _banco.IdsRetornoCnab400RegistroDetalhe;
 
         #endregion
 
@@ -72,7 +63,7 @@ namespace Boleto2Net
         {
             try
             {
-                _IBanco.FormataCedente();
+                _banco.FormataCedente();
             }
             catch (Exception ex)
             {
@@ -83,7 +74,7 @@ namespace Boleto2Net
         {
             try
             {
-                return _IBanco.FormataCodigoBarraCampoLivre(boleto);
+                return _banco.FormataCodigoBarraCampoLivre(boleto);
             }
             catch (Exception ex)
             {
@@ -94,7 +85,7 @@ namespace Boleto2Net
         {
             try
             {
-                _IBanco.FormataNossoNumero(boleto);
+                _banco.FormataNossoNumero(boleto);
             }
             catch (Exception ex)
             {
@@ -106,7 +97,7 @@ namespace Boleto2Net
             try
             {
                 // Valida os dados do Boleto na classe do banco responsável
-                _IBanco.ValidaBoleto(boleto);
+                _banco.ValidaBoleto(boleto);
                 // Formata nosso número (Classe Abstrata)
                 FormataNossoNumero(boleto);
                 // Formata o código de Barras (Classe Abstrata)
@@ -125,7 +116,7 @@ namespace Boleto2Net
         {
             try
             {
-                return _IBanco.GerarHeaderRemessa(tipoArquivo, numeroArquivoRemessa, ref numeroRegistroGeral);
+                return _banco.GerarHeaderRemessa(tipoArquivo, numeroArquivoRemessa, ref numeroRegistroGeral);
             }
             catch (Exception ex)
             {
@@ -136,7 +127,7 @@ namespace Boleto2Net
         {
             try
             {
-                return _IBanco.GerarDetalheRemessa(tipoArquivo, boleto, ref numeroRegistro);
+                return _banco.GerarDetalheRemessa(tipoArquivo, boleto, ref numeroRegistro);
             }
             catch (Exception ex)
             {
@@ -152,7 +143,7 @@ namespace Boleto2Net
         {
             try
             {
-                return _IBanco.GerarTrailerRemessa(tipoArquivo, numeroArquivoRemessa,
+                return _banco.GerarTrailerRemessa(tipoArquivo, numeroArquivoRemessa,
                                             ref numeroRegistroGeral, valorBoletoGeral,
                                             numeroRegistroCobrancaSimples, valorCobrancaSimples,
                                             numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
@@ -170,27 +161,32 @@ namespace Boleto2Net
 
         public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
-            _IBanco.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
+            _banco.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
         }
+
         public override void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
         {
-            _IBanco.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
+            _banco.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
         }
+
         public override void LerHeaderRetornoCNAB400(string registro)
         {
-            _IBanco.LerHeaderRetornoCNAB400(registro);
+            _banco.LerHeaderRetornoCNAB400(registro);
         }
+
         public override void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
-            _IBanco.LerDetalheRetornoCNAB400Segmento1(ref boleto, registro);
+            _banco.LerDetalheRetornoCNAB400Segmento1(ref boleto, registro);
         }
+
         public override void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
         {
-            _IBanco.LerDetalheRetornoCNAB400Segmento7(ref boleto, registro);
+            _banco.LerDetalheRetornoCNAB400Segmento7(ref boleto, registro);
         }
+
         public override void LerTrailerRetornoCNAB400(string registro)
         {
-            _IBanco.LerTrailerRetornoCNAB400(registro);
+            _banco.LerTrailerRetornoCNAB400(registro);
         }
 
         #endregion

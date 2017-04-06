@@ -75,6 +75,7 @@
     <Compile Include="Enums\TipoCodigoBaixa.cs" />
     <Compile Include="Enums\TipoCodigoProtesto.cs" />
     <Compile Include="Enums\TipoEspecieDocumento.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Util\EDIBasicTypes.cs" />
     <Compile Include="Enums\TipoCarteira.cs" />
     <Compile Include="Enums\TipoFormaCadastramento.cs" />
