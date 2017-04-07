@@ -6,11 +6,11 @@ namespace Boleto2Net
     public class BarCode2of5i : BarCodeBase
     {
         #region variables
-        private string[] cPattern = new string[100];
+        private readonly string[] _cPattern = new string[100];
         private const string START = "0000";
         private const string STOP = "1000";
-        private Bitmap bitmap;
-        private Graphics g;
+        private Bitmap _bitmap;
+        private Graphics _g;
         #endregion
 
         #region Constructor
@@ -20,28 +20,28 @@ namespace Boleto2Net
         /// <summary>
         /// Code 2 of 5 intrelaced Constructor
         /// </summary>
-        /// <param name="Code">The string that contents the numeric code</param>
-        /// <param name="BarWidth">The Width of each bar</param>
-        /// <param name="Height">The Height of each bar</param>
-        public BarCode2of5i(string Code, int BarWidth, int Height)
+        /// <param name="code">The string that contents the numeric code</param>
+        /// <param name="barWidth">The Width of each bar</param>
+        /// <param name="height">The Height of each bar</param>
+        public BarCode2of5i(string code, int barWidth, int height)
         {
-            this.Code = Code;
-            this.Height = Height;
-            this.Width = BarWidth;
+            Code = code;
+            Height = height;
+            Width = barWidth;
         }
         /// <summary>
         /// Code 2 of 5 intrelaced Constructor
         /// </summary>
-        /// <param name="Code">The string that contents the numeric code</param>
-        /// <param name="BarWidth">The Width of each bar</param>
-        /// <param name="Height">The Height of each bar</param>
-        /// <param name="Digits">Number of digits of code</param>
-        public BarCode2of5i(string Code, int BarWidth, int Height, int Digits)
+        /// <param name="code">The string that contents the numeric code</param>
+        /// <param name="barWidth">The Width of each bar</param>
+        /// <param name="height">The Height of each bar</param>
+        /// <param name="digits">Number of digits of code</param>
+        public BarCode2of5i(string code, int barWidth, int height, int digits)
         {
-            this.Code = Code;
-            this.Height = Height;
-            this.Width = BarWidth;
-            this.Digits = Digits;
+            Code = code;
+            Height = height;
+            Width = barWidth;
+            Digits = digits;
         }
         #endregion
 
@@ -50,18 +50,18 @@ namespace Boleto2Net
             int f;
             string strTemp;
 
-            if (cPattern[0] == null)
+            if (_cPattern[0] == null)
             {
-                cPattern[0] = "00110";
-                cPattern[1] = "10001";
-                cPattern[2] = "01001";
-                cPattern[3] = "11000";
-                cPattern[4] = "00101";
-                cPattern[5] = "10100";
-                cPattern[6] = "01100";
-                cPattern[7] = "00011";
-                cPattern[8] = "10010";
-                cPattern[9] = "01010";
+                _cPattern[0] = "00110";
+                _cPattern[1] = "10001";
+                _cPattern[2] = "01001";
+                _cPattern[3] = "11000";
+                _cPattern[4] = "00101";
+                _cPattern[5] = "10100";
+                _cPattern[6] = "01100";
+                _cPattern[7] = "00011";
+                _cPattern[8] = "10010";
+                _cPattern[9] = "01010";
                 //Create a draw pattern for each char from 0 to 99
                 for (int f1 = 9; f1 >= 0; f1--)
                 {
@@ -71,10 +71,10 @@ namespace Boleto2Net
                         var builder = new System.Text.StringBuilder();
                         for (int i = 0; i < 5; i++)
                         {
-                            builder.Append(cPattern[f1][i].ToString() + cPattern[f2][i].ToString());
+                            builder.Append(_cPattern[f1][i] + _cPattern[f2][i].ToString());
                         }
                         strTemp = builder.ToString();
-                        cPattern[f] = strTemp;
+                        _cPattern[f] = strTemp;
                     }
                 }
             }
@@ -85,49 +85,45 @@ namespace Boleto2Net
         /// <returns>Return System.Drawing.Bitmap</returns>
         public Bitmap ToBitmap()
         {
-            int i;
-            string ftemp;
+            XPos = 0;
+            YPos = 0;
 
-            xPos = 0;
-            yPos = 0;
-
-            if (this.Digits == 0)
+            if (Digits == 0)
             {
-                this.Digits = this.Code.Length;
+                Digits = Code.Length;
             }
 
-            if (this.Digits % 2 > 0) this.Digits++;
+            if (Digits % 2 > 0) Digits++;
 
-            while (this.Code.Length < this.Digits || this.Code.Length % 2 > 0)
+            while (Code.Length < Digits || Code.Length % 2 > 0)
             {
-                this.Code = "0" + this.Code;
+                Code = "0" + Code;
             }
 
-            int _width = (2 * Full + 3 * Thin) * (Digits) + 7 * Thin + Full;
+            int width = (2 * Full + 3 * Thin) * (Digits) + 7 * Thin + Full;
 
-            bitmap = new Bitmap(_width, Height);
-            g = Graphics.FromImage(bitmap);
+            _bitmap = new Bitmap(width, Height);
+            _g = Graphics.FromImage(_bitmap);
 
             //Start Pattern
-            DrawPattern(ref g, START);
+            DrawPattern(ref _g, START);
 
             //Draw code
-            this.FillPatern();
-            while (this.Code.Length > 0)
+            FillPatern();
+            while (Code.Length > 0)
             {
-                i = Convert.ToInt32(this.Code.Substring(0, 2));
-                if (this.Code.Length > 2)
-                    this.Code = this.Code.Substring(2, this.Code.Length - 2);
+                var i = Convert.ToInt32(Code.Substring(0, 2));
+                if (Code.Length > 2)
+                    Code = Code.Substring(2, Code.Length - 2);
                 else
-                    this.Code = "";
-                ftemp = cPattern[i];
-                DrawPattern(ref g, ftemp);
+                    Code = "";
+                DrawPattern(ref _g, _cPattern[i]);
             }
 
             //Stop Patern
-            DrawPattern(ref g, STOP);
+            DrawPattern(ref _g, STOP);
 
-            return bitmap;
+            return _bitmap;
         }
         /// <summary>
         /// Returns the byte array of Barcode
@@ -135,7 +131,7 @@ namespace Boleto2Net
         /// <returns>byte[]</returns>
         public byte[] ToByte()
         {
-            return base.toByte(ToBitmap());
+            return base.ToByte(ToBitmap());
         }
     }
 }

@@ -1,50 +1,15 @@
 using System;
-using System.Globalization;
-using System.Drawing;
 using System.ComponentModel;
+using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 
 namespace Boleto2Net
 {
     sealed class Utils
     {
-        internal static long DateDiff(DateInterval Interval, System.DateTime StartDate, System.DateTime EndDate)
-        {
-            long lngDateDiffValue = 0;
-            System.TimeSpan TS = new System.TimeSpan(EndDate.Ticks - StartDate.Ticks);
-            switch (Interval)
-            {
-                case DateInterval.Day:
-                    lngDateDiffValue = (long)TS.Days;
-                    break;
-                case DateInterval.Hour:
-                    lngDateDiffValue = (long)TS.TotalHours;
-                    break;
-                case DateInterval.Minute:
-                    lngDateDiffValue = (long)TS.TotalMinutes;
-                    break;
-                case DateInterval.Month:
-                    lngDateDiffValue = (long)(TS.Days / 30);
-                    break;
-                case DateInterval.Quarter:
-                    lngDateDiffValue = (long)((TS.Days / 30) / 3);
-                    break;
-                case DateInterval.Second:
-                    lngDateDiffValue = (long)TS.TotalSeconds;
-                    break;
-                case DateInterval.Week:
-                    lngDateDiffValue = (long)(TS.Days / 7);
-                    break;
-                case DateInterval.Year:
-                    lngDateDiffValue = (long)(TS.Days / 365);
-                    break;
-            }
-            return (lngDateDiffValue);
-        }
-        internal static string FormatCode(string text, int length)
-        {
-            return text.PadLeft(length, '0');
-        }
+        internal static string FormatCode(string text, int length) => text.PadLeft(length, '0');
+
         internal static bool ToBool(object value)
         {
             try
@@ -56,6 +21,7 @@ namespace Boleto2Net
                 return false;
             }
         }
+
         internal static int ToInt32(string value)
         {
             try
@@ -67,6 +33,7 @@ namespace Boleto2Net
                 return 0;
             }
         }
+
         internal static long ToInt64(string value)
         {
             try
@@ -78,6 +45,7 @@ namespace Boleto2Net
                 return 0;
             }
         }
+
         internal static string ToString(object value)
         {
             try
@@ -89,6 +57,7 @@ namespace Boleto2Net
                 return string.Empty;
             }
         }
+
         internal static DateTime ToDateTime(object value)
         {
             try
@@ -100,6 +69,7 @@ namespace Boleto2Net
                 return new DateTime(1, 1, 1);
             }
         }
+
         public static T ToEnum<T>(string value, bool ignoreCase, T defaultValue) where T : struct
         {
             if (string.IsNullOrEmpty(value))
@@ -121,10 +91,10 @@ namespace Boleto2Net
         {
             if (value.Trim().Length == 11)
                 return FormataCPF(value);
-            else if (value.Trim().Length == 14)
+            if (value.Trim().Length == 14)
                 return FormataCNPJ(value);
 
-            throw new Exception(string.Format("O CPF ou CNPJ: {0} é inválido.", value));
+            throw new Exception($"O CPF ou CNPJ: {value} é inválido.");
         }
 
         /// <summary>
@@ -136,7 +106,7 @@ namespace Boleto2Net
         {
             try
             {
-                return string.Format("{0}.{1}.{2}-{3}", cpf.Substring(0, 3), cpf.Substring(3, 3), cpf.Substring(6, 3), cpf.Substring(9, 2));
+                return $"{cpf.Substring(0, 3)}.{cpf.Substring(3, 3)}.{cpf.Substring(6, 3)}-{cpf.Substring(9, 2)}";
             }
             catch (Exception ex)
             {
@@ -153,7 +123,7 @@ namespace Boleto2Net
         {
             try
             {
-                return string.Format("{0}.{1}.{2}/{3}-{4}", cnpj.Substring(0, 2), cnpj.Substring(2, 3), cnpj.Substring(5, 3), cnpj.Substring(8, 4), cnpj.Substring(12, 2));
+                return $"{cnpj.Substring(0, 2)}.{cnpj.Substring(2, 3)}.{cnpj.Substring(5, 3)}/{cnpj.Substring(8, 4)}-{cnpj.Substring(12, 2)}";
             }
             catch (Exception ex)
             {
@@ -170,7 +140,7 @@ namespace Boleto2Net
         {
             try
             {
-                return string.Format("{0}{1}-{2}", cep.Substring(0, 2), cep.Substring(2, 3), cep.Substring(5, 3));
+                return $"{cep.Substring(0, 2)}{cep.Substring(2, 3)}-{cep.Substring(5, 3)}";
             }
             catch (Exception ex)
             {
@@ -181,7 +151,7 @@ namespace Boleto2Net
         /// <summary>
         /// Formata o campo de acordo com o tipo e o tamanho 
         /// </summary>        
-        public static string FitStringLength(string SringToBeFit, int maxLength, int minLength, char FitChar, int maxStartPosition, bool maxTest, bool minTest, bool isNumber)
+        public static string FitStringLength(string sringToBeFit, int maxLength, int minLength, char fitChar, int maxStartPosition, bool maxTest, bool minTest, bool isNumber)
         {
             try
             {
@@ -190,24 +160,24 @@ namespace Boleto2Net
                 if (maxTest == true)
                 {
                     // max
-                    if (SringToBeFit.Length > maxLength)
+                    if (sringToBeFit.Length > maxLength)
                     {
-                        result += SringToBeFit.Substring(maxStartPosition, maxLength);
+                        result += sringToBeFit.Substring(maxStartPosition, maxLength);
                     }
                 }
 
                 if (minTest == true)
                 {
                     // min
-                    if (SringToBeFit.Length <= minLength)
+                    if (sringToBeFit.Length <= minLength)
                     {
                         if (isNumber == true)
                         {
-                            result += (string)(new string(FitChar, (minLength - SringToBeFit.Length)) + SringToBeFit);
+                            result += (string)(new string(fitChar, (minLength - sringToBeFit.Length)) + sringToBeFit);
                         }
                         else
                         {
-                            result += (string)(SringToBeFit + new string(FitChar, (minLength - SringToBeFit.Length)));
+                            result += (string)(sringToBeFit + new string(fitChar, (minLength - sringToBeFit.Length)));
                         }
                     }
                 }
@@ -215,10 +185,11 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                Exception tmpEx = new Exception("Problemas ao Formatar a string. String = " + SringToBeFit, ex);
+                Exception tmpEx = new Exception("Problemas ao Formatar a string. String = " + sringToBeFit, ex);
                 throw tmpEx;
             }
         }
+
         public static string SubstituiCaracteresEspeciais(string strline)
         {
             try
@@ -287,6 +258,7 @@ namespace Boleto2Net
             else
                 throw new NotImplementedException("ConvertImageToByte invalid type " + image.GetType().ToString());
         }
+
         internal static Image DrawText(string text, Font font, Color textColor, Color backColor)
         {
             //first, create a dummy bitmap just to get a graphics object
@@ -320,6 +292,5 @@ namespace Boleto2Net
 
             return img;
         }
-
     }
 }

@@ -15,13 +15,13 @@ namespace Boleto2Net
         private int _thin;
         private int _full;
 
-        protected int xPos = 0;
-        protected int yPos = 0;
+        protected int XPos = 0;
+        protected int YPos = 0;
 
         private string _contenttype;
 
-        protected Brush BLACK = Brushes.Black;
-        protected Brush WHITE = Brushes.White;
+        protected Brush Black = Brushes.Black;
+        protected Brush White = Brushes.White;
 
         #endregion
 
@@ -203,7 +203,7 @@ namespace Boleto2Net
             }
         }
         #endregion
-        protected virtual byte[] toByte(Bitmap bitmap)
+        protected virtual byte[] ToByte(Bitmap bitmap)
         {
             MemoryStream mstream = new MemoryStream();
             ImageCodecInfo myImageCodecInfo = GetEncoderInfo(ContentType);
@@ -228,23 +228,23 @@ namespace Boleto2Net
             }
             return null;
         }
-        protected virtual void DrawPattern(ref Graphics g, string Pattern)
+        protected virtual void DrawPattern(ref Graphics g, string pattern)
         {
             int tempWidth;
 
-            for (int i = 0; i < Pattern.Length; i++)
+            for (int i = 0; i < pattern.Length; i++)
             {
-                if (Pattern[i] == '0')
+                if (pattern[i] == '0')
                     tempWidth = _thin;
                 else
                     tempWidth = _full;
 
                 if (i % 2 == 0)
-                    g.FillRectangle(BLACK, xPos, yPos, tempWidth, _height);
+                    g.FillRectangle(Black, XPos, YPos, tempWidth, _height);
                 else
-                    g.FillRectangle(WHITE, xPos, yPos, tempWidth, _height);
+                    g.FillRectangle(White, XPos, YPos, tempWidth, _height);
 
-                xPos += tempWidth;
+                XPos += tempWidth;
             }
         }
     }

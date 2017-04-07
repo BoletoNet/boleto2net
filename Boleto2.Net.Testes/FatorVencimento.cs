@@ -1,20 +1,24 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Boleto2Net.Extensions;
+using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    [TestClass]
-    public class Boleto2Net_FatorVencimento
+    public class DateTimeExtensionsTest
     {
-        [TestMethod]
-        public void Boleto2Net_FatorVencimentos()
+        [Test]
+        public void GeracaoCorretaDeFatorVencimento()
         {
-            Assert.AreEqual(1000, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2025, 02, 22, 0, 0, 0) }));
-            Assert.AreEqual(1001, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2025, 02, 23, 0, 0, 0) }));
-            Assert.AreEqual(5947, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2014, 01, 18, 0, 0, 0) } ));
-            Assert.AreEqual(6000, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2014, 03, 12, 0, 0, 0) }));
-            Assert.AreEqual(7046, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2017, 01, 21, 0, 0, 0) }));
-            Assert.AreEqual(9999, AbstractBanco.FatorVencimento(new Boleto2Net.Boleto { DataVencimento = new DateTime(2025, 02, 21, 0, 0, 0) }));
+            var inicio = new DateTime(2010, 01, 31, 0, 0, 0);
+            var fim = new DateTime(2025, 02, 21, 0, 0, 0);
+            var totalDays = (fim - inicio).TotalDays;
+            for (int i = 0; i < totalDays; i++)
+            {
+                var dateTime = inicio.AddDays(i);
+                Assert.AreEqual(4499 + i, dateTime.FatorVencimento());
+            }
+            Assert.AreEqual(1000, fim.AddDays(1).FatorVencimento());
+            Assert.AreEqual(1001, fim.AddDays(2).FatorVencimento());
         }
     }
 }

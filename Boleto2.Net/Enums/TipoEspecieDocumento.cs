@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Boleto2Net
+﻿namespace Boleto2Net
 {
     public enum TipoEspecieDocumento
     {

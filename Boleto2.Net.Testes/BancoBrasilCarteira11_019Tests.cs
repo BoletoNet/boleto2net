@@ -1,13 +1,12 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
-    [TestClass]
-    public class Banco001_Brasil_11_019
+    [TestFixture]
+    public class BancoBrasilCarteira11019Tests
     {
-        Banco banco;
-        public Banco001_Brasil_11_019()
+        readonly Banco _banco;
+        public BancoBrasilCarteira11019Tests()
         {
             var contaBancaria = new ContaBancaria
             {
@@ -21,15 +20,15 @@ namespace Boleto2Net.Testes
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
-            banco = new Banco(001)
+            _banco = new Banco(001)
             {
                 Cedente = Utils.GerarCedente("1234567", "", contaBancaria)
             };
-            banco.FormataCedente();
+            _banco.FormataCedente();
 
 
         }
-        [TestMethod]
+        [Test]
         public void Banco001_Brasil_11_019_TestePendente()
         {
             Assert.Inconclusive("Aguardando boletos de exemplo (gerados pelo banco - segunda via) para implementar os testes:/n" +
