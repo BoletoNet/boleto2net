@@ -18,9 +18,7 @@ namespace Boleto2Net
         private readonly IBanco _banco;
 
         public Banco(int codigoBanco)
-        {
-            _banco = (Bancos.ContainsKey(codigoBanco) ? Bancos[codigoBanco] : throw new Exception("Banco não implementando: " + codigoBanco)).Value;
-        }
+            => _banco = (Bancos.ContainsKey(codigoBanco) ? Bancos[codigoBanco] : throw new Exception($"Banco não implementando: {codigoBanco}")).Value;
 
         public int Codigo => _banco.Codigo;
 
@@ -152,69 +150,71 @@ namespace Boleto2Net
         /// </summary>
         public void FormataLinhaDigitavel(Boleto boleto)
         {
-            if (string.IsNullOrWhiteSpace(boleto.CodigoBarra.CampoLivre))
+            var codigoBarra = boleto.CodigoBarra;
+            if (string.IsNullOrWhiteSpace(codigoBarra.CampoLivre))
             {
-                boleto.CodigoBarra.LinhaDigitavel = "";
+                codigoBarra.LinhaDigitavel = "";
                 return;
             }
             //BBBMC.CCCCD1 CCCCC.CCCCCD2 CCCCC.CCCCCD3 D4 FFFFVVVVVVVVVV
 
+            var codigoDeBarras = codigoBarra.CodigoDeBarras;
             #region Campo 1
 
             // POSIÇÃO 1 A 3 DO CODIGO DE BARRAS
-            var bbb = boleto.CodigoBarra.CodigoDeBarras.Substring(0, 3);
+            var bbb = codigoDeBarras.Substring(0, 3);
             // POSIÇÃO 4 DO CODIGO DE BARRAS
-            var m = boleto.CodigoBarra.CodigoDeBarras.Substring(3, 1);
+            var m = codigoDeBarras.Substring(3, 1);
             // POSIÇÃO 20 A 24 DO CODIGO DE BARRAS
-            var ccccc = boleto.CodigoBarra.CodigoDeBarras.Substring(19, 5);
+            var ccccc = codigoDeBarras.Substring(19, 5);
             // Calculo do Dígito
-            var d1 = CalcularDvModulo10(bbb + m + ccccc).ToString();
+            var d1 = CalcularDvModulo10(bbb + m + ccccc);
             // Formata Grupo 1
-            var grupo1 = string.Format("{0}{1}{2}.{3}{4} ", bbb, m, ccccc.Substring(0, 1), ccccc.Substring(1, 4), d1);
+            var grupo1 = $"{bbb}{m}{ccccc.Substring(0, 1)}.{ccccc.Substring(1, 4)}{d1} ";
 
             #endregion Campo 1
 
             #region Campo 2
 
             //POSIÇÃO 25 A 34 DO COD DE BARRAS
-            var d2A = boleto.CodigoBarra.CodigoDeBarras.Substring(24, 10);
+            var d2A = codigoDeBarras.Substring(24, 10);
             // Calculo do Dígito
             var d2B = CalcularDvModulo10(d2A).ToString();
             // Formata Grupo 2
-            var grupo2 = string.Format("{0}.{1}{2} ", d2A.Substring(0, 5), d2A.Substring(5, 5), d2B);
+            var grupo2 = $"{d2A.Substring(0, 5)}.{d2A.Substring(5, 5)}{d2B} ";
 
             #endregion Campo 2
 
             #region Campo 3
 
             //POSIÇÃO 35 A 44 DO CODIGO DE BARRAS
-            var d3A = boleto.CodigoBarra.CodigoDeBarras.Substring(34, 10);
+            var d3A = codigoDeBarras.Substring(34, 10);
             // Calculo do Dígito
             var d3B = CalcularDvModulo10(d3A).ToString();
             // Formata Grupo 3
-            var grupo3 = string.Format("{0}.{1}{2} ", d3A.Substring(0, 5), d3A.Substring(5, 5), d3B);
+            var grupo3 = $"{d3A.Substring(0, 5)}.{d3A.Substring(5, 5)}{d3B} ";
 
             #endregion Campo 3
 
             #region Campo 4
 
             // Dígito Verificador do Código de Barras
-            var grupo4 = string.Format("{0} ", boleto.CodigoBarra.DigitoVerificador);
+            var grupo4 = $"{codigoBarra.DigitoVerificador} ";
 
             #endregion Campo 4
 
             #region Campo 5
 
             //POSICAO 6 A 9 DO CODIGO DE BARRAS
-            var d5A = boleto.CodigoBarra.CodigoDeBarras.Substring(5, 4);
+            var d5A = codigoDeBarras.Substring(5, 4);
             //POSICAO 10 A 19 DO CODIGO DE BARRAS
-            var d5B = boleto.CodigoBarra.CodigoDeBarras.Substring(9, 10);
+            var d5B = codigoDeBarras.Substring(9, 10);
             // Formata Grupo 5
-            var grupo5 = string.Format("{0}{1}", d5A, d5B);
+            var grupo5 = $"{d5A}{d5B}";
 
             #endregion Campo 5
 
-            boleto.CodigoBarra.LinhaDigitavel = grupo1 + grupo2 + grupo3 + grupo4 + grupo5;
+            codigoBarra.LinhaDigitavel = $"{grupo1}{grupo2}{grupo3}{grupo4}{grupo5}";
         }
 
         private static int CalcularDvModulo10(string texto)
@@ -297,34 +297,22 @@ namespace Boleto2Net
         #region Leitura do Arquivo Retorno
 
         public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
-        {
-            _banco.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
-        }
+            => _banco.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
 
         public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
-        {
-            _banco.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
-        }
+            => _banco.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
 
         public void LerHeaderRetornoCNAB400(string registro)
-        {
-            _banco.LerHeaderRetornoCNAB400(registro);
-        }
+            => _banco.LerHeaderRetornoCNAB400(registro);
 
         public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
-        {
-            _banco.LerDetalheRetornoCNAB400Segmento1(ref boleto, registro);
-        }
+            => _banco.LerDetalheRetornoCNAB400Segmento1(ref boleto, registro);
 
         public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
-        {
-            _banco.LerDetalheRetornoCNAB400Segmento7(ref boleto, registro);
-        }
+            => _banco.LerDetalheRetornoCNAB400Segmento7(ref boleto, registro);
 
         public void LerTrailerRetornoCNAB400(string registro)
-        {
-            _banco.LerTrailerRetornoCNAB400(registro);
-        }
+            => _banco.LerTrailerRetornoCNAB400(registro);
 
         #endregion
     }
