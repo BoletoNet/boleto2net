@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.UI;
 using static System.String;
 
@@ -6,17 +7,25 @@ using static System.String;
 
 namespace Boleto2Net
 {
-    internal sealed class BancoSicoob : AbstractBanco
+    internal sealed class BancoSicoob : IBanco
     {
-        internal BancoSicoob()
+        internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoSicoob());
+
+        private BancoSicoob()
         {
-            Codigo = 756;
-            Digito = "0";
-            Nome = "Sicoob";
             RemoveAcentosArquivoRemessa = false;
             IdsRetornoCnab400RegistroDetalhe.Add("1");
         }
-        public override void FormataCedente()
+
+        public Cedente Cedente { get; set; }
+
+        public int Codigo { get; } = 756;
+        public string Nome { get; } = "Sicoob";
+        public string Digito { get; } = "0";
+        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
+        public bool RemoveAcentosArquivoRemessa { get; }
+
+        public void FormataCedente()
         {
             var contaBancaria = Cedente.ContaBancaria;
             if (contaBancaria.Agencia.Length > 4)
@@ -47,10 +56,10 @@ namespace Boleto2Net
             }
 
         }
-        public override void ValidaBoleto(Boleto boleto)
+        public void ValidaBoleto(Boleto boleto)
         {
         }
-        public override void FormataNossoNumero(Boleto boleto)
+        public void FormataNossoNumero(Boleto boleto)
         {
             if (boleto.Banco.Cedente.ContaBancaria.Carteira == "1")
             {
@@ -78,14 +87,14 @@ namespace Boleto2Net
             boleto.NossoNumeroDV = CalcularDV(boleto.Banco.Cedente.ContaBancaria.Agencia + boleto.Banco.Cedente.Codigo.PadLeft(9, '0') + boleto.Banco.Cedente.CodigoDV + boleto.NossoNumero);
             boleto.NossoNumeroFormatado = $"{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
         }
-        public override string FormataCodigoBarraCampoLivre(Boleto boleto)
+        public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
             string formataCampoLivre =
                 $"{boleto.Banco.Cedente.ContaBancaria.Carteira}{boleto.Banco.Cedente.ContaBancaria.Agencia}{boleto.Banco.Cedente.ContaBancaria.VariacaoCarteira}{boleto.Banco.Cedente.Codigo}{boleto.Banco.Cedente.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}{"001"}";
             return formataCampoLivre;
         }
 
-        public override string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
@@ -113,7 +122,7 @@ namespace Boleto2Net
             }
         }
 
-        public override string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        public string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
         {
             try
             {
@@ -156,7 +165,7 @@ namespace Boleto2Net
             }
         }
 
-        public override string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
+        public string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
                                             ref int numeroRegistroGeral, decimal valorBoletoGeral,
                                             int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
                                             int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
@@ -665,7 +674,7 @@ namespace Boleto2Net
         #endregion
 
         #region Retorno - CNAB240
-        public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
+        public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             try
             {
@@ -718,7 +727,7 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / T.", ex);
             }
         }
-        public override void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
+        public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
         {
             try
             {
@@ -750,7 +759,7 @@ namespace Boleto2Net
         #endregion
 
         #region Retorno - CNAB400
-        public override void LerHeaderRetornoCNAB400(string registro)
+        public void LerHeaderRetornoCNAB400(string registro)
         {
             try
             {
@@ -764,7 +773,7 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler HEADER do arquivo de RETORNO / CNAB 400.", ex);
             }
         }
-        public override void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
+        public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
             try
             {
@@ -834,7 +843,13 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
             }
         }
-        public override void LerTrailerRetornoCNAB400(string registro)
+
+        public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LerTrailerRetornoCNAB400(string registro)
         {
         }
         #endregion

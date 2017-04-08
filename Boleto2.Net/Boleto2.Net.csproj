@@ -60,7 +60,6 @@
   <ItemGroup>
     <Compile Include="Arquivo\ArquivoRetorno.cs" />
     <Compile Include="Arquivo\ArquivoRemessa.cs" />
-    <Compile Include="Banco\AbstractBanco.cs" />
     <Compile Include="Banco\BancoBrasil.cs" />
     <Compile Include="Banco\BancoCaixa.cs" />
     <Compile Include="Banco\Banco.cs" />
