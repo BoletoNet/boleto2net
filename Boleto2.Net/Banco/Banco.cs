@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Boleto2Net.Exceptions;
 using Boleto2Net.Extensions;
 using Microsoft.VisualBasic;
 
@@ -18,7 +19,7 @@ namespace Boleto2Net
         private readonly IBanco _banco;
 
         public Banco(int codigoBanco)
-            => _banco = (Bancos.ContainsKey(codigoBanco) ? Bancos[codigoBanco] : throw new Exception($"Banco não implementando: {codigoBanco}")).Value;
+            => _banco = (Bancos.ContainsKey(codigoBanco) ? Bancos[codigoBanco] : throw Boleto2NetException.BancoNaoImplementado(codigoBanco)).Value;
 
         public int Codigo => _banco.Codigo;
 
@@ -47,7 +48,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a formatação do cedente.", ex);
+                throw Boleto2NetException.ErroAoFormatarCedente(ex);
             }
         }
 
@@ -62,7 +63,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a formatação do código de barra.", ex);
+                throw Boleto2NetException.ErroAoFormatarCodigoDeBarra(ex);
             }
         }
 
@@ -77,7 +78,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a formatação do nosso número.", ex);
+                throw Boleto2NetException.ErroAoFormatarNossoNumero(ex);
             }
         }
 
@@ -99,7 +100,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a validação do boleto.", ex);
+                throw Boleto2NetException.ErroAoValidarBoleto(ex);
             }
         }
 
@@ -248,7 +249,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do registro HEADER do arquivo de REMESSA.", ex);
+                throw Boleto2NetException.ErroAoGerarRegistroHeaderDoArquivoRemessa(ex);
             }
         }
 
@@ -263,7 +264,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração dos registros de DETALHE do arquivo de REMESSA.", ex);
+                throw Boleto2NetException.ErroAoGerarRegistroDetalheDoArquivoRemessa(ex);
             }
         }
 
@@ -288,7 +289,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do registro TRAILER do arquivo de REMESSA.", ex);
+                throw Boleto2NetException.ErroAoGerrarRegistroTrailerDoArquivoRemessa(ex);
             }
         }
 

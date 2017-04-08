@@ -37,7 +37,7 @@ namespace Boleto2Net
                 {
                     return _code;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return "";
                 }
@@ -48,7 +48,7 @@ namespace Boleto2Net
                 {
                     _code = value;
                 }
-                catch (Exception ex)
+                catch
                 {
                     _code = null;
                 }
@@ -65,7 +65,7 @@ namespace Boleto2Net
                 {
                     return _thin;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return 1;
                 }
@@ -79,7 +79,7 @@ namespace Boleto2Net
                     //					_half = temp * 2;
                     _full = temp * 3;
                 }
-                catch (Exception ex)
+                catch
                 {
                     int temp = 1;
                     _thin = temp;
@@ -99,7 +99,7 @@ namespace Boleto2Net
                 {
                     return _height;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return 15;
                 }
@@ -110,7 +110,7 @@ namespace Boleto2Net
                 {
                     _height = value;
                 }
-                catch (Exception ex)
+                catch
                 {
                     _height = 1;
                 }
@@ -127,7 +127,7 @@ namespace Boleto2Net
                 {
                     return _digits;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return 0;
                 }
@@ -138,7 +138,7 @@ namespace Boleto2Net
                 {
                     _digits = value;
                 }
-                catch (Exception ex)
+                catch
                 {
                     _digits = 0;
                 }
@@ -157,7 +157,7 @@ namespace Boleto2Net
                         return "image/jpeg";
                     return _contenttype;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return "image/jpeg";
                 }
@@ -168,7 +168,7 @@ namespace Boleto2Net
                 {
                     _contenttype = value;
                 }
-                catch (Exception ex)
+                catch
                 {
                     _contenttype = "image/jpeg";
                 }
@@ -182,7 +182,7 @@ namespace Boleto2Net
                 {
                     return _thin;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return 1;
                 }
@@ -196,7 +196,7 @@ namespace Boleto2Net
                 {
                     return _full;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return 3;
                 }

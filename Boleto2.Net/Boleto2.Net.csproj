@@ -74,6 +74,7 @@
     <Compile Include="Enums\TipoCodigoBaixaDevolucao.cs" />
     <Compile Include="Enums\TipoCodigoProtesto.cs" />
     <Compile Include="Enums\TipoEspecieDocumento.cs" />
+    <Compile Include="Exceptions\Boleto2NetException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Util\OrdenacaoPorPosEDI.cs" />
     <Compile Include="Enums\TipoCarteira.cs" />
