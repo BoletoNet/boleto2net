@@ -61,10 +61,10 @@
     <Compile Include="Arquivo\ArquivoRetorno.cs" />
     <Compile Include="Arquivo\ArquivoRemessa.cs" />
     <Compile Include="Banco\AbstractBanco.cs" />
-    <Compile Include="Banco\Banco_Brasil.cs" />
-    <Compile Include="Banco\Banco_Caixa.cs" />
+    <Compile Include="Banco\BancoBrasil.cs" />
+    <Compile Include="Banco\BancoCaixa.cs" />
     <Compile Include="Banco\Banco.cs" />
-    <Compile Include="Banco\Banco_Sicoob.cs" />
+    <Compile Include="Banco\BancoSicoob.cs" />
     <Compile Include="BoletoImpressao\BoletoBancarioDesigner.cs" />
     <Compile Include="Boleto\Boleto.cs">
       <SubType>Code</SubType>
@@ -72,18 +72,18 @@
     <Compile Include="Boleto\DemonstrativoValoresBoleto\GrupoDemonstrativo.cs" />
     <Compile Include="Boleto\DemonstrativoValoresBoleto\ItemDemonstrativo.cs" />
     <Compile Include="Enums\Modulo11Algoritmo.cs" />
-    <Compile Include="Enums\TipoCodigoBaixa.cs" />
+    <Compile Include="Enums\TipoCodigoBaixaDevolucao.cs" />
     <Compile Include="Enums\TipoCodigoProtesto.cs" />
     <Compile Include="Enums\TipoEspecieDocumento.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Util\EDIBasicTypes.cs" />
+    <Compile Include="Util\OrdenacaoPorPosEDI.cs" />
     <Compile Include="Enums\TipoCarteira.cs" />
     <Compile Include="Enums\TipoFormaCadastramento.cs" />
     <Compile Include="Enums\TipoImpressaoBoleto.cs" />
     <Compile Include="Boleto2NetProxy.cs" />
     <Compile Include="Util\BarCodeBase.cs" />
     <Compile Include="BoletoImpressao\BoletoBancario.cs" />
-    <Compile Include="Banco\Banco_Bradesco.cs" />
+    <Compile Include="Banco\BancoBradesco.cs" />
     <Compile Include="Util\BarCode2of5i.cs" />
     <Compile Include="Boleto\Cedente.cs" />
     <Compile Include="Boleto\CodigoBarra.cs" />
@@ -102,7 +102,11 @@
     <Compile Include="Enums\TipoArquivo.cs" />
     <Compile Include="Boleto\Boletos.cs" />
     <Compile Include="Util\Extensions.cs" />
-    <Compile Include="Util\OcorrenciasCnab.cs" />
+    <Compile Include="Util\Cnab.cs" />
+    <Compile Include="Util\TCampoRegistroEDI.cs" />
+    <Compile Include="Util\TRegistroEDI.cs" />
+    <Compile Include="Util\TTipoRegistroEDI.cs" />
+    <Compile Include="Util\TTiposDadoEDI.cs" />
     <Compile Include="Util\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
