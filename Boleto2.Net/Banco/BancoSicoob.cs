@@ -30,7 +30,7 @@ namespace Boleto2Net
         {
             var contaBancaria = Cedente.ContaBancaria;
 
-            if (contaBancaria.CarteiraComVariacao != "1/01")
+            if (!CarteiraFactory<BancoSicoob>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
                 throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
 
             var codigoCedente = Cedente.Codigo;
@@ -43,42 +43,22 @@ namespace Boleto2Net
 
             Cedente.CodigoFormatado = $"{contaBancaria.Agencia}/{codigoCedente}-{Cedente.CodigoDV}";
         }
+
         public void ValidaBoleto(Boleto boleto)
         {
         }
+
         public void FormataNossoNumero(Boleto boleto)
         {
-            if (boleto.Banco.Cedente.ContaBancaria.Carteira == "1")
-            {
-                FormataNossoNumeroCarteira1(boleto);
-            }
-            else
-            {
-                throw new NotImplementedException("Não foi possível formatar o nosso número do boleto.");
-            }
+            var carteira = CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            carteira.FormataNossoNumero(boleto);
         }
-        private void FormataNossoNumeroCarteira1(Boleto boleto)
-        {
-            if (boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto == TipoImpressaoBoleto.Empresa & boleto.NossoNumero == Empty)
-            {
-                throw new Exception("Nosso Número não informado.");
-            }
-            // Nosso número não pode ter mais de 7 dígitos
-            if (boleto.NossoNumero.Length > 7)
-                throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve conter 7 dígitos.");
-            boleto.NossoNumero = boleto.NossoNumero.PadLeft(7, '0');
-            // Base para calcular DV:
-            // Agencia (4 caracteres)
-            // Código do Cedente com dígito (10 caracteres)
-            // Nosso Número (7 caracteres)
-            boleto.NossoNumeroDV = CalcularDV(boleto.Banco.Cedente.ContaBancaria.Agencia + boleto.Banco.Cedente.Codigo.PadLeft(9, '0') + boleto.Banco.Cedente.CodigoDV + boleto.NossoNumero);
-            boleto.NossoNumeroFormatado = $"{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
-        }
+
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            string formataCampoLivre =
-                $"{boleto.Banco.Cedente.ContaBancaria.Carteira}{boleto.Banco.Cedente.ContaBancaria.Agencia}{boleto.Banco.Cedente.ContaBancaria.VariacaoCarteira}{boleto.Banco.Cedente.Codigo}{boleto.Banco.Cedente.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}{"001"}";
-            return formataCampoLivre;
+            var cedente = boleto.Banco.Cedente;
+            var contaBancaria = cedente.ContaBancaria;
+            return $"{contaBancaria.Carteira}{contaBancaria.Agencia}{contaBancaria.VariacaoCarteira}{cedente.Codigo}{cedente.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}001";
         }
 
         public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
@@ -951,22 +931,5 @@ namespace Boleto2Net
                     return "99";
             }
         }
-
-        private string CalcularDV(string texto)
-        {
-            string digito, fatorMultiplicacao = "319731973197319731973";
-            int soma = 0;
-            for (int i = 0; i < 21; i++)
-            {
-                soma += Convert.ToInt16(texto.Substring(i, 1)) * Convert.ToInt16(fatorMultiplicacao.Substring(i, 1));
-            }
-            int resto = (soma % 11);
-            if (resto <= 1)
-                digito = "0";
-            else
-                digito = (11 - resto).ToString();
-            return digito;
-        }
-
     }
 }

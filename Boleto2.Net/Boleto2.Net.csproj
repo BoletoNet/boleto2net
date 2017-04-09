@@ -70,6 +70,7 @@
     <Compile Include="Banco\BancoSicoob.cs" />
     <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira11_019.cs" />
     <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira17_019.cs" />
+    <Compile Include="Banco\Carteiras\BancoSicoob\BancoSincoobCarteira1.cs" />
     <Compile Include="Banco\Carteiras\CarteiraCodigoAttribute.cs" />
     <Compile Include="Banco\Carteiras\CarteiraFactory.cs" />
     <Compile Include="Banco\Carteiras\ICarteira.cs" />

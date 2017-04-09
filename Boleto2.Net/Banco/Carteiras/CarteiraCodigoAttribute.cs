@@ -5,11 +5,11 @@ namespace Boleto2Net
     [AttributeUsage(AttributeTargets.Class)]
     internal sealed class CarteiraCodigoAttribute : Attribute
     {
-        public CarteiraCodigoAttribute(string codigo)
+        internal CarteiraCodigoAttribute(string codigo)
         {
             Codigo = codigo;
         }
 
-        public string Codigo { get; }
+        internal string Codigo { get; }
     }
 }
