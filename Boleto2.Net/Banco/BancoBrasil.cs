@@ -22,19 +22,13 @@ namespace Boleto2Net
         {
             var contaBancaria = Cedente.ContaBancaria;
 
-            if (!BancoBrasilCarteiraFactory.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
+            if (!CarteiraFactory<BancoBrasil>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
                 throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
 
-            var agencia = contaBancaria.Agencia;
-            contaBancaria.Agencia = agencia.Length <= 4 ? agencia.PadLeft(4, '0') : throw Boleto2NetException.AgenciaInvalida(agencia, 4);
-
-            var conta = contaBancaria.Conta;
-            contaBancaria.Conta = conta.Length <= 8 ? conta.PadLeft(8, '0') : throw Boleto2NetException.ContaInvalida(conta, 8);
+            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO. APÓS, ATUALIZE O BOLETO NO SITE BB.COM.BR");
 
             var codigoCedente = Cedente.Codigo;
-            Cedente.CodigoFormatado = codigoCedente.Length == 7 ? $"{agencia}/{codigoCedente}" : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
-
-            contaBancaria.LocalPagamento = "PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO. APÓS, ATUALIZE O BOLETO NO SITE BB.COM.BR";
+            Cedente.CodigoFormatado = codigoCedente.Length == 7 ? $"{contaBancaria.Agencia}/{codigoCedente}" : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
         }
 
         public void ValidaBoleto(Boleto boleto)
@@ -43,7 +37,7 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var carteira = BancoBrasilCarteiraFactory.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoBrasil>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
             carteira.FormataNossoNumero(boleto);
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.UI;
+using Boleto2Net.Exceptions;
 using static System.String;
 
 [assembly: WebResource("BoletoNet.Imagens.001.jpg", "image/jpg")]
@@ -28,33 +29,19 @@ namespace Boleto2Net
         public void FormataCedente()
         {
             var contaBancaria = Cedente.ContaBancaria;
-            if (contaBancaria.Agencia.Length > 4)
-                throw new Exception("O número da agência (" + contaBancaria.Agencia + ") deve conter 4 dígitos.");
-            if (contaBancaria.Agencia.Length < 4)
-                contaBancaria.Agencia = contaBancaria.Agencia.PadLeft(4, '0');
-
-            if (contaBancaria.Conta.Length > 8)
-                throw new Exception("O número da conta (" + contaBancaria.Conta + ") deve conter 8 dígitos.");
-            if (contaBancaria.Conta.Length < 8)
-                contaBancaria.Conta = contaBancaria.Conta.PadLeft(8, '0');
-
-            if (Cedente.Codigo.Length > 6)
-                throw new Exception("O código do cedente (" + Cedente.Codigo + ") deve conter 6 dígitos.");
-            if (Cedente.Codigo.Length < 6)
-                Cedente.Codigo = Cedente.Codigo.PadLeft(6, '0');
-
-            if (Cedente.CodigoDV == Empty)
-                throw new Exception("Dígito do código do cedente (" + Cedente.Codigo + ") não foi informado.");
-
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}/{Cedente.Codigo}-{Cedente.CodigoDV}";
-
-            contaBancaria.LocalPagamento = "PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.";
 
             if (contaBancaria.CarteiraComVariacao != "1/01")
-            {
-                throw new NotImplementedException("Carteira não implementada: " + contaBancaria.CarteiraComVariacao);
-            }
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
 
+            var codigoCedente = Cedente.Codigo;
+            if (Cedente.CodigoDV == Empty)
+                throw new Exception($"Dígito do código do cedente ({codigoCedente}) não foi informado.");
+
+            contaBancaria.FormatarDados();
+
+            Cedente.Codigo = codigoCedente.Length <= 6 ? codigoCedente.PadLeft(6, '0'): throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente);
+
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}/{codigoCedente}-{Cedente.CodigoDV}";
         }
         public void ValidaBoleto(Boleto boleto)
         {

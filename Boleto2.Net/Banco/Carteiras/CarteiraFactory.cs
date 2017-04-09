@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Boleto2Net.Exceptions;
+
+namespace Boleto2Net
+{
+    internal static class CarteiraFactory<T>
+        where T : IBanco
+    {
+        private static readonly Dictionary<string, Lazy<ICarteira<T>>> Carteiras;
+        private static readonly Type CarteiraType = typeof(ICarteira<T>);
+
+        static CarteiraFactory()
+        {
+            const string propName = nameof(BancoBrasilCarteira11_019.Instance);
+            string ObterCodigo(Type type) => type.GetCustomAttributes(false).OfType<CarteiraCodigoAttribute>().First().Codigo;
+            Lazy<ICarteira<T>> ObterInstancia(Type type) => (Lazy<ICarteira<T>>)type.GetProperty(propName, BindingFlags.NonPublic | BindingFlags.Static).GetValue(null, null);
+
+            Carteiras = typeof(CarteiraFactory<>).Assembly.GetTypes()
+                .Where(type => CarteiraType.IsAssignableFrom(type))
+                .ToDictionary(ObterCodigo, ObterInstancia);
+        }
+
+        internal static ICarteira<T> ObterCarteira(string identificacao)
+            => Carteiras.ContainsKey(identificacao) ? Carteiras[identificacao].Value : throw Boleto2NetException.CarteiraNaoImplementada(identificacao);
+
+        public static bool CarteiraEstaImplementada(string identificacao)
+            => Carteiras.ContainsKey(identificacao);
+    }
+}

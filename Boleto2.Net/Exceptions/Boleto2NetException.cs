@@ -40,13 +40,13 @@ namespace Boleto2Net.Exceptions
         public static Exception ErroAoGerrarRegistroTrailerDoArquivoRemessa(Exception ex)
             => new Boleto2NetException("Erro durante a geração do registro TRAILER do arquivo de REMESSA.", ex);
 
-        public static Exception AgenciaInvalida(string agencia, int digitos)
+        public static Exception AgenciaInvalida(string agencia, int digitos = 4)
             => new Boleto2NetException($"O número da agência ({agencia}) deve conter {digitos} dígitos.");
 
-        public static Exception ContaInvalida(string conta, int digitos)
+        public static Exception ContaInvalida(string conta, int digitos = 8)
             => new Boleto2NetException($"O número da conta ({conta}) deve conter {digitos} dígitos.");
 
-        public static Exception CodigoCedenteInvalido(string codigoCedente, int digitos)
+        public static Exception CodigoCedenteInvalido(string codigoCedente, int digitos = 6)
             => new Boleto2NetException($"O código do cedente ({codigoCedente}) deve conter {digitos} dígitos.");
 
         public static Exception CarteiraNaoImplementada(string carteiraComVariacao)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Web.UI;
+using Boleto2Net.Exceptions;
 using static System.String;
 
 [assembly: WebResource("BoletoNet.Imagens.237.jpg", "image/jpg")]
@@ -15,34 +16,22 @@ namespace Boleto2Net
         public int Codigo { get; } = 237;
         public string Nome { get; } = "Bradesco";
         public string Digito { get; } = "2";
-        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> {"1"};
+        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
         public bool RemoveAcentosArquivoRemessa { get; } = false;
 
         public void FormataCedente()
         {
             var contaBancaria = Cedente.ContaBancaria;
 
-            if (contaBancaria.Agencia.Length > 4)
-                throw new Exception($"O número da agência ({contaBancaria.Agencia}) deve conter 4 dígitos.");
-            if (contaBancaria.Agencia.Length < 4)
-                contaBancaria.Agencia = contaBancaria.Agencia.PadLeft(4, '0');
+            if (contaBancaria.CarteiraComVariacao != "09")
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
 
-            if (contaBancaria.Conta.Length > 7)
-                throw new Exception($"O número da conta ({contaBancaria.Conta}) deve conter 7 dígitos.");
-            if (contaBancaria.Conta.Length < 7)
-                contaBancaria.Conta = contaBancaria.Conta.PadLeft(7, '0');
+            contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO BRADESCO.", digitosConta: 7);
 
-            if (Cedente.Codigo.Length > 20)
-                throw new Exception($"O código do Cedente ({Cedente.Codigo}) deve conter 20 dígitos.");
-            if (Cedente.Codigo.Length < 20)
-                Cedente.Codigo = Cedente.Codigo.PadLeft(20, '0');
+            var codigoCedente = Cedente.Codigo;
+            Cedente.Codigo = codigoCedente.Length < 20 ? codigoCedente.PadLeft(20, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 20);
 
             Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia}/{contaBancaria.Conta}-{contaBancaria.DigitoConta}";
-
-            contaBancaria.LocalPagamento = "ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO BRADESCO.";
-
-            if (contaBancaria.CarteiraComVariacao != "09")
-                throw new NotImplementedException($"Carteira não implementada: {contaBancaria.CarteiraComVariacao}");
         }
 
         public void ValidaBoleto(Boleto boleto)

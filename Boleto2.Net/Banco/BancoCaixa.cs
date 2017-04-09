@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Web.UI;
+using Boleto2Net.Exceptions;
 using static System.String;
 
 [assembly: WebResource("BoletoNet.Imagens.104.jpg", "image/jpg")]
@@ -20,21 +21,19 @@ namespace Boleto2Net
 
         public void FormataCedente()
         {
-            if (Cedente.Codigo.Length > 6)
-                throw new Exception($"O código do cedente ({Cedente.Codigo}) deve conter 6 dígitos.");
-            if (Cedente.Codigo.Length < 6)
-                Cedente.Codigo = Cedente.Codigo.PadLeft(6, '0');
+            var contaBancaria = Cedente.ContaBancaria;
+            if (contaBancaria.CarteiraComVariacao != "SIG14")
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
 
-            var dv = CalcularDV(Cedente.CodigoDV);
+            var codigoCedente = Cedente.Codigo;
+            Cedente.Codigo = codigoCedente.Length <= 6 ? codigoCedente.PadLeft(6, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente);
+
             if (Cedente.CodigoDV == Empty)
-                throw new Exception($"Dígito do código do cedente ({Cedente.Codigo}) não foi informado.");
+                throw new Exception($"Dígito do código do cedente ({codigoCedente}) não foi informado.");
 
-            Cedente.CodigoFormatado = $"{Cedente.ContaBancaria.Agencia}/{Cedente.Codigo}-{Cedente.CodigoDV}";
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}/{codigoCedente}-{Cedente.CodigoDV}";
 
-            Cedente.ContaBancaria.LocalPagamento = "ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NA CAIXA ECONÔMICA FEDERAL.";
-
-            if (Cedente.ContaBancaria.CarteiraComVariacao != "SIG14")
-                throw new NotImplementedException("Carteira não implementada: " + Cedente.ContaBancaria.CarteiraComVariacao);
+            contaBancaria.LocalPagamento = "ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NA CAIXA ECONÔMICA FEDERAL.";
         }
 
         public void ValidaBoleto(Boleto boleto)
@@ -324,10 +323,10 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0030, 008, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0038, 003, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0041, 017, 0, boleto.NossoNumero, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0058, 001, 0, (int) boleto.Banco.Cedente.ContaBancaria.TipoCarteira, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0059, 001, 0, (int) boleto.Banco.Cedente.ContaBancaria.TipoFormaCadastramento, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0058, 001, 0, (int)boleto.Banco.Cedente.ContaBancaria.TipoCarteira, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0059, 001, 0, (int)boleto.Banco.Cedente.ContaBancaria.TipoFormaCadastramento, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0060, 001, 0, "2", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0061, 001, 0, (int) boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0061, 001, 0, (int)boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0062, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0063, 011, 0, boleto.NumeroDocumento, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0074, 004, 0, Empty, ' ');
@@ -335,7 +334,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0086, 015, 2, boleto.ValorTitulo, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0101, 005, 2, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0106, 001, 0, "0", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0107, 002, 0, (int) boleto.EspecieDocumento, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0107, 002, 0, (int)boleto.EspecieDocumento, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 001, 0, boleto.Aceite, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0110, 008, 0, boleto.DataEmissao, '0');
                 if (boleto.ValorJurosDia == 0)
@@ -369,9 +368,9 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0166, 015, 2, boleto.ValorIOF, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0181, 015, 2, boleto.ValorAbatimento, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0196, 025, 0, boleto.NumeroControleParticipante, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, (int) boleto.CodigoProtesto, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, (int)boleto.CodigoProtesto, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0222, 002, 0, boleto.DiasProtesto, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, (int) boleto.CodigoBaixaDevolucao, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, (int)boleto.CodigoBaixaDevolucao, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0225, 003, 0, boleto.DiasBaixaDevolucao, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0228, 002, 0, "09", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0230, 010, 2, "0", '0');
