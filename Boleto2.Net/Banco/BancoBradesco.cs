@@ -23,7 +23,7 @@ namespace Boleto2Net
         {
             var contaBancaria = Cedente.ContaBancaria;
 
-            if (contaBancaria.CarteiraComVariacao != "09")
+            if (!CarteiraFactory<BancoBradesco>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
                 throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
 
             contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO BRADESCO.", digitosConta: 7);
@@ -40,10 +40,8 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            if (boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao == "09")
-                FormataNossoNumero_09(boleto);
-            else
-                throw new NotImplementedException("Não foi possível formatar o nosso número do boleto.");
+            var carteira = CarteiraFactory<BancoBradesco>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            carteira.FormataNossoNumero(boleto);
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
@@ -216,21 +214,6 @@ namespace Boleto2Net
 
         public void LerTrailerRetornoCNAB400(string registro)
         {
-        }
-
-        private void FormataNossoNumero_09(Boleto boleto)
-        {
-            // Carteira 09: Dúvida: Não sei se na carteira 09, o banco também emite o boleto. Se emitir, será necessário tirar a trava do nosso número em branco:
-            // Se for só a empresa, devemos tratar aqui, que o nosso número não
-            // O nosso número não pode ser em branco.
-            if (IsNullOrWhiteSpace(boleto.NossoNumero))
-                throw new Exception("Nosso Número não informado.");
-            // Nosso número não pode ter mais de 11 dígitos
-            if (boleto.NossoNumero.Length > 11)
-                throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter 11 dígitos.");
-            boleto.NossoNumero = boleto.NossoNumero.PadLeft(11, '0');
-            boleto.NossoNumeroDV = CalcularDV(boleto.Banco.Cedente.ContaBancaria.Carteira + boleto.NossoNumero);
-            boleto.NossoNumeroFormatado = $"{boleto.Banco.Cedente.ContaBancaria.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
         }
 
         private string GerarHeaderRemessaCNAB400(int numeroArquivoRemessa, ref int numeroRegistroGeral)
@@ -484,34 +467,6 @@ namespace Boleto2Net
                 default:
                     return "";
             }
-        }
-
-        private string CalcularDV(string texto)
-        {
-            string digito;
-            int pesoMaximo = 7, soma = 0, peso = 2;
-            for (var i = texto.Length - 1; i >= 0; i--)
-            {
-                soma = soma + Convert.ToInt32(texto.Substring(i, 1)) * peso;
-                if (peso == pesoMaximo)
-                    peso = 2;
-                else
-                    peso = peso + 1;
-            }
-            var resto = soma % 11;
-            switch (resto)
-            {
-                case 0:
-                    digito = "0";
-                    break;
-                case 1:
-                    digito = "P";
-                    break;
-                default:
-                    digito = (11 - resto).ToString();
-                    break;
-            }
-            return digito;
         }
 
         private TipoEspecieDocumento AjustaEspecieCnab400(string codigoEspecie)
