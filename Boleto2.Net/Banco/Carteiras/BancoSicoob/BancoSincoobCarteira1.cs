@@ -1,4 +1,5 @@
 ﻿using System;
+using Boleto2Net.Extensions;
 using static System.String;
 
 namespace Boleto2Net
@@ -15,7 +16,8 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            if (boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto == TipoImpressaoBoleto.Empresa & boleto.NossoNumero == Empty)
+            var cedente = boleto.Banco.Cedente;
+            if (cedente.ContaBancaria.TipoImpressaoBoleto == TipoImpressaoBoleto.Empresa & boleto.NossoNumero == Empty)
                 throw new Exception("Nosso Número não informado.");
             // Nosso número não pode ter mais de 7 dígitos
             if (boleto.NossoNumero.Length > 7)
@@ -25,24 +27,8 @@ namespace Boleto2Net
             // Agencia (4 caracteres)
             // Código do Cedente com dígito (10 caracteres)
             // Nosso Número (7 caracteres)
-            boleto.NossoNumeroDV = CalcularDV(boleto.Banco.Cedente.ContaBancaria.Agencia + boleto.Banco.Cedente.Codigo.PadLeft(9, '0') + boleto.Banco.Cedente.CodigoDV + boleto.NossoNumero);
+            boleto.NossoNumeroDV = $"{cedente.ContaBancaria.Agencia}{cedente.Codigo.PadLeft(9, '0')}{cedente.CodigoDV}{boleto.NossoNumero}".CalcularDVSicoob();
             boleto.NossoNumeroFormatado = $"{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
-        }
-
-        private static string CalcularDV(string texto)
-        {
-            string digito, fatorMultiplicacao = "319731973197319731973";
-            int soma = 0;
-            for (int i = 0; i < 21; i++)
-            {
-                soma += Convert.ToInt16(texto.Substring(i, 1)) * Convert.ToInt16(fatorMultiplicacao.Substring(i, 1));
-            }
-            int resto = (soma % 11);
-            if (resto <= 1)
-                digito = "0";
-            else
-                digito = (11 - resto).ToString();
-            return digito;
         }
     }
 }

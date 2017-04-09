@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.UI;
 using Boleto2Net.Exceptions;
+using Boleto2Net.Extensions;
 using static System.String;
 
 [assembly: WebResource("BoletoNet.Imagens.104.jpg", "image/jpg")]
@@ -23,7 +24,7 @@ namespace Boleto2Net
         {
             var contaBancaria = Cedente.ContaBancaria;
             if (contaBancaria.CarteiraComVariacao != "SIG14")
-                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.Carteira);
 
             var codigoCedente = Cedente.Codigo;
             Cedente.Codigo = codigoCedente.Length <= 6 ? codigoCedente.PadLeft(6, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente);
@@ -42,10 +43,8 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            if (boleto.Banco.Cedente.ContaBancaria.Carteira.Equals("SIG14") & IsNullOrWhiteSpace(boleto.Banco.Cedente.ContaBancaria.VariacaoCarteira))
-                FormataNossoNumero_SIG14(boleto);
-            else
-                throw new NotImplementedException("Não foi possível formatar o nosso número do boleto.");
+            var carteira = CarteiraFactory<BancoCaixa>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.Carteira);
+            carteira.FormataNossoNumero(boleto);
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
@@ -69,7 +68,7 @@ namespace Boleto2Net
                     boleto.NossoNumero.Substring(5, 3),
                     "4",
                     boleto.NossoNumero.Substring(8, 9));
-                formataCampoLivre += CalcularDV(formataCampoLivre);
+                formataCampoLivre += formataCampoLivre.CalcularDVCaixa();
             }
             else
             {
@@ -201,28 +200,8 @@ namespace Boleto2Net
                     throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve iniciar com \"14\" e conter 17 dígitos.");
                 boleto.NossoNumero = "14" + boleto.NossoNumero.PadLeft(15, '0');
             }
-            boleto.NossoNumeroDV = CalcularDV(boleto.NossoNumero);
+            boleto.NossoNumeroDV = boleto.NossoNumero.CalcularDVCaixa();
             boleto.NossoNumeroFormatado = Format("{0}-{1}", boleto.NossoNumero, boleto.NossoNumeroDV);
-        }
-
-        private string CalcularDV(string texto)
-        {
-            string digito;
-            int pesoMaximo = 9, soma = 0, peso = 2;
-            for (var i = texto.Length - 1; i >= 0; i--)
-            {
-                soma = soma + Convert.ToInt32(texto.Substring(i, 1)) * peso;
-                if (peso == pesoMaximo)
-                    peso = 2;
-                else
-                    peso = peso + 1;
-            }
-            var resto = soma % 11;
-            if (resto <= 1)
-                digito = "0";
-            else
-                digito = (11 - resto).ToString();
-            return digito;
         }
 
         #region SIG14 - Funções de apoio
