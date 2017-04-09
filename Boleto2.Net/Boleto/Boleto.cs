@@ -1,10 +1,11 @@
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+
 namespace Boleto2Net
 {
-    using System;
-    using System.ComponentModel;
-    using System.Collections.ObjectModel;
-    using System.Collections.Generic;
-    [Serializable, Browsable(false)]
+    [Serializable]
+    [Browsable(false)]
     public class Boleto
     {
         public int CodigoMoeda { get; set; } = 9;
@@ -30,6 +31,7 @@ namespace Boleto2Net
 
         // Valores do Boleto
         public decimal ValorTitulo { get; set; }
+
         public decimal ValorPago { get; set; }
         public decimal ValorCredito { get; set; }
         public decimal ValorJurosDia { get; set; }
@@ -43,10 +45,14 @@ namespace Boleto2Net
 
         // Juros
         public decimal PercentualJurosDia { get; set; }
+
         public DateTime DataJuros { get; set; }
+
         // Multa
         public decimal PercentualMulta { get; set; }
+
         public DateTime DataMulta { get; set; }
+
         // Desconto
         public DateTime DataDesconto { get; set; }
 
@@ -80,34 +86,34 @@ namespace Boleto2Net
         public void ValidarDados()
         {
             // Banco Obrigatório
-            if (this.Banco == null)
+            if (Banco == null)
                 throw new Exception("Boleto não possui Banco.");
 
             // Cedente Obrigatório
-            if (this.Banco.Cedente == null)
+            if (Banco.Cedente == null)
                 throw new Exception("Boleto não possui cedente.");
 
             // Conta Bancária Obrigatória
-            if (this.Banco.Cedente.ContaBancaria == null)
+            if (Banco.Cedente.ContaBancaria == null)
                 throw new Exception("Boleto não possui conta bancária.");
 
             // Sacado Obrigatório
-            if (this.Sacado == null)
+            if (Sacado == null)
                 throw new Exception("Boleto não possui sacado.");
 
             // Verifica se data do processamento é valida
-            if (this.DataProcessamento == DateTime.MinValue)
-                this.DataProcessamento = DateTime.Now;
+            if (DataProcessamento == DateTime.MinValue)
+                DataProcessamento = DateTime.Now;
 
             // Verifica se data de emissão é valida
-            if (this.DataEmissao == DateTime.MinValue)
-                this.DataEmissao = DateTime.Now;
+            if (DataEmissao == DateTime.MinValue)
+                DataEmissao = DateTime.Now;
 
             // Aceite
-            if (this.Aceite != "A" & this.Aceite != "N")
+            if ((Aceite != "A") & (Aceite != "N"))
                 throw new Exception("Aceite do Boleto deve ser definido com A ou N");
 
-            this.Banco.ValidaBoleto(this);
+            Banco.ValidaBoleto(this);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.UI;
+using Boleto2Net.Exceptions;
 
 [assembly: WebResource("BoletoNet.Imagens.001.jpg", "image/jpg")]
 
@@ -20,25 +21,20 @@ namespace Boleto2Net
         public void FormataCedente()
         {
             var contaBancaria = Cedente.ContaBancaria;
-            if (contaBancaria.Agencia.Length > 4)
-                throw new Exception($"O número da agência ({contaBancaria.Agencia}) deve conter 4 dígitos.");
-            if (contaBancaria.Agencia.Length < 4)
-                contaBancaria.Agencia = contaBancaria.Agencia.PadLeft(4, '0');
 
-            if (contaBancaria.Conta.Length > 8)
-                throw new Exception($"O número da conta ({contaBancaria.Conta}) deve conter 8 dígitos.");
-            if (contaBancaria.Conta.Length < 8)
-                contaBancaria.Conta = contaBancaria.Conta.PadLeft(8, '0');
+            if (!BancoBrasilCarteiraFactory.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
 
-            if (Cedente.Codigo.Length != 7)
-                throw new Exception($"O código do cedente ({Cedente.Codigo}) deve conter 7 dígitos.");
+            var agencia = contaBancaria.Agencia;
+            contaBancaria.Agencia = agencia.Length <= 4 ? agencia.PadLeft(4, '0') : throw Boleto2NetException.AgenciaInvalida(agencia, 4);
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}/{Cedente.Codigo}";
+            var conta = contaBancaria.Conta;
+            contaBancaria.Conta = conta.Length <= 8 ? conta.PadLeft(8, '0') : throw Boleto2NetException.ContaInvalida(conta, 8);
+
+            var codigoCedente = Cedente.Codigo;
+            Cedente.CodigoFormatado = codigoCedente.Length == 7 ? $"{agencia}/{codigoCedente}" : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
 
             contaBancaria.LocalPagamento = "PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO. APÓS, ATUALIZE O BOLETO NO SITE BB.COM.BR";
-
-            if ((contaBancaria.CarteiraComVariacao != "11/019") & (contaBancaria.CarteiraComVariacao != "17/019"))
-                throw new NotImplementedException("Carteira não implementada: " + contaBancaria.CarteiraComVariacao);
         }
 
         public void ValidaBoleto(Boleto boleto)
@@ -47,28 +43,20 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            if (boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao == "11/019")
-                FormataNossoNumeroCarteira_11_019(boleto);
-            else if (boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao == "17/019")
-                FormataNossoNumeroCarteira_17_019(boleto);
-            else
-                throw new NotImplementedException("Não foi possível formatar o nosso número do boleto.");
+            var carteira = BancoBrasilCarteiraFactory.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            carteira.FormataNossoNumero(boleto);
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var formataCampoLivre = "";
-            if (boleto.Banco.Cedente.Codigo.Length == 7)
-                if (string.IsNullOrWhiteSpace(boleto.NossoNumero) || string.IsNullOrWhiteSpace(boleto.Banco.Cedente.ContaBancaria.Carteira))
-                    formataCampoLivre = "";
-                else
-                    formataCampoLivre = string.Format("{0}{1}{2}",
-                        "000000",
-                        boleto.NossoNumero,
-                        boleto.Banco.Cedente.ContaBancaria.Carteira);
-            else
+            var cedente = boleto.Banco.Cedente;
+            var carteira = cedente.ContaBancaria.Carteira;
+            if (cedente.Codigo.Length != 7)
                 throw new NotImplementedException("Não foi possível formatar o campo livre do código de barras do boleto.");
-            return formataCampoLivre;
+
+            if (string.IsNullOrWhiteSpace(boleto.NossoNumero) || string.IsNullOrWhiteSpace(carteira))
+                return "";
+            return $"000000{boleto.NossoNumero}{carteira}";
         }
 
         public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
@@ -192,57 +180,6 @@ namespace Boleto2Net
         public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
-        }
-
-        private static void FormataNossoNumeroCarteira_11_019(Boleto boleto)
-        {
-            if (boleto.Banco.Cedente.Codigo.Length == 7)
-            {
-                // Carteira 11 - Variação 019: Convênio de 7 dígitos
-                // Ou deve estar em branco (o banco irá gerar)
-                // Ou deve estar com 17 posições, iniciando com o código do convênio
-                if (!string.IsNullOrWhiteSpace(boleto.NossoNumero) & (boleto.NossoNumero.Length != 17 || !boleto.NossoNumero.StartsWith(boleto.Banco.Cedente.Codigo)))
-                    throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve iniciar com \"" + boleto.Banco.Cedente.Codigo + "\" e conter 17 dígitos.");
-                // Para convênios com 7 dígitos, não existe dígito de verificação do nosso número
-                boleto.NossoNumeroDV = "";
-                boleto.NossoNumeroFormatado = boleto.NossoNumero;
-            }
-            else
-            {
-                throw new Exception("Não foi possível formatar o nosso número.");
-            }
-        }
-
-        private static void FormataNossoNumeroCarteira_17_019(Boleto boleto)
-        {
-            // Carteira 17 - Variação 019: Cliente emite o boleto
-            // O nosso número não pode ser em branco.
-            if (string.IsNullOrWhiteSpace(boleto.NossoNumero))
-                throw new Exception("Nosso Número não informado.");
-            if (boleto.Banco.Cedente.Codigo.Length == 7)
-            {
-                // Se o convênio for de 7 dígitos,
-                // o nosso número deve estar formatado corretamente (com 17 dígitos e iniciando com o código do convênio),
-                if (boleto.NossoNumero.Length == 17)
-                {
-                    if (!boleto.NossoNumero.StartsWith(boleto.Banco.Cedente.Codigo))
-                        throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve iniciar com \"" + boleto.Banco.Cedente.Codigo + "\" e conter 17 dígitos.");
-                }
-                else
-                {
-                    // ou deve ser informado com até 10 posições (será formatado para 17 dígitos pelo Boleto.Net).
-                    if (boleto.NossoNumero.Length > 10)
-                        throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve iniciar com \"" + boleto.Banco.Cedente.Codigo + "\" e conter 17 dígitos.");
-                    boleto.NossoNumero = string.Format("{0}{1}", boleto.Banco.Cedente.Codigo, boleto.NossoNumero.PadLeft(10, '0'));
-                }
-                // Para convênios com 7 dígitos, não existe dígito de verificação do nosso número
-                boleto.NossoNumeroDV = "";
-                boleto.NossoNumeroFormatado = boleto.NossoNumero;
-            }
-            else
-            {
-                throw new NotImplementedException("Não foi possível formatar o nosso número.");
-            }
         }
 
         private static TipoEspecieDocumento AjustaEspecieCnab400(string codigoEspecie)
