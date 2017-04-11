@@ -38,7 +38,7 @@ namespace Boleto2Net
         public List<string> IdsRetornoCnab400RegistroDetalhe => _banco.IdsRetornoCnab400RegistroDetalhe;
 
         /// <summary>
-        ///     Formata campo livre - Cada banco implementa de uma maneira diferente...
+        ///     Formata Cedente
         /// </summary>
         public void FormataCedente()
         {
@@ -53,7 +53,7 @@ namespace Boleto2Net
         }
 
         /// <summary>
-        ///     Formata campo livre - Cada banco implementa de uma maneira diferente...
+        ///     Formata Campo Livre
         /// </summary>
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
