@@ -1,13 +1,11 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Boleto2Net
 {
     public interface IBanco
     {
-        Cedente Cedente { get; set;  }
-        int Codigo { get; set; }
+        Cedente Cedente { get; set; }
+        int Codigo { get; }
         string Nome { get; }
         string Digito { get; }
         List<string> IdsRetornoCnab400RegistroDetalhe { get; } // Identifica os registros que cada banco implementa no arquivo retorno, sendo que o primeiro ID da List<> identifica um novo boleto dentro do arquivo retorno.

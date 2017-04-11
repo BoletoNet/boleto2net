@@ -1,91 +1,67 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.UI;
+using Boleto2Net.Exceptions;
 using static System.String;
 
 [assembly: WebResource("BoletoNet.Imagens.001.jpg", "image/jpg")]
 
 namespace Boleto2Net
 {
-    internal sealed class BancoSicoob : AbstractBanco
+    internal sealed class BancoSicoob : IBanco
     {
-        internal BancoSicoob()
+        internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoSicoob());
+
+        private BancoSicoob()
         {
-            Codigo = 756;
-            Digito = "0";
-            Nome = "Sicoob";
             RemoveAcentosArquivoRemessa = false;
             IdsRetornoCnab400RegistroDetalhe.Add("1");
         }
-        public override void FormataCedente()
+
+        public Cedente Cedente { get; set; }
+
+        public int Codigo { get; } = 756;
+        public string Nome { get; } = "Sicoob";
+        public string Digito { get; } = "0";
+        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
+        public bool RemoveAcentosArquivoRemessa { get; }
+
+        public void FormataCedente()
         {
             var contaBancaria = Cedente.ContaBancaria;
-            if (contaBancaria.Agencia.Length > 4)
-                throw new Exception("O número da agência (" + contaBancaria.Agencia + ") deve conter 4 dígitos.");
-            if (contaBancaria.Agencia.Length < 4)
-                contaBancaria.Agencia = contaBancaria.Agencia.PadLeft(4, '0');
 
-            if (contaBancaria.Conta.Length > 8)
-                throw new Exception("O número da conta (" + contaBancaria.Conta + ") deve conter 8 dígitos.");
-            if (contaBancaria.Conta.Length < 8)
-                contaBancaria.Conta = contaBancaria.Conta.PadLeft(8, '0');
+            if (!CarteiraFactory<BancoSicoob>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
 
-            if (Cedente.Codigo.Length > 6)
-                throw new Exception("O código do cedente (" + Cedente.Codigo + ") deve conter 6 dígitos.");
-            if (Cedente.Codigo.Length < 6)
-                Cedente.Codigo = Cedente.Codigo.PadLeft(6, '0');
-
+            var codigoCedente = Cedente.Codigo;
             if (Cedente.CodigoDV == Empty)
-                throw new Exception("Dígito do código do cedente (" + Cedente.Codigo + ") não foi informado.");
+                throw new Exception($"Dígito do código do cedente ({codigoCedente}) não foi informado.");
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}/{Cedente.Codigo}-{Cedente.CodigoDV}";
+            contaBancaria.FormatarDados();
 
-            contaBancaria.LocalPagamento = "PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.";
+            Cedente.Codigo = codigoCedente.Length <= 6 ? codigoCedente.PadLeft(6, '0'): throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente);
 
-            if (contaBancaria.CarteiraComVariacao != "1/01")
-            {
-                throw new NotImplementedException("Carteira não implementada: " + contaBancaria.CarteiraComVariacao);
-            }
-
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}/{codigoCedente}-{Cedente.CodigoDV}";
         }
-        public override void ValidaBoleto(Boleto boleto)
+
+        public void ValidaBoleto(Boleto boleto)
         {
         }
-        public override void FormataNossoNumero(Boleto boleto)
+
+        public void FormataNossoNumero(Boleto boleto)
         {
-            if (boleto.Banco.Cedente.ContaBancaria.Carteira == "1")
-            {
-                FormataNossoNumeroCarteira1(boleto);
-            }
-            else
-            {
-                throw new NotImplementedException("Não foi possível formatar o nosso número do boleto.");
-            }
-        }
-        private void FormataNossoNumeroCarteira1(Boleto boleto)
-        {
-            if (boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto == TipoImpressaoBoleto.Empresa & boleto.NossoNumero == Empty)
-            {
-                throw new Exception("Nosso Número não informado.");
-            }
-            // Nosso número não pode ter mais de 7 dígitos
-            if (boleto.NossoNumero.Length > 7)
-                throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve conter 7 dígitos.");
-            boleto.NossoNumero = boleto.NossoNumero.PadLeft(7, '0');
-            // Base para calcular DV:
-            // Agencia (4 caracteres)
-            // Código do Cedente com dígito (10 caracteres)
-            // Nosso Número (7 caracteres)
-            boleto.NossoNumeroDV = CalcularDV(boleto.Banco.Cedente.ContaBancaria.Agencia + boleto.Banco.Cedente.Codigo.PadLeft(9, '0') + boleto.Banco.Cedente.CodigoDV + boleto.NossoNumero);
-            boleto.NossoNumeroFormatado = $"{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
-        }
-        public override string FormataCodigoBarraCampoLivre(Boleto boleto)
-        {
-            string formataCampoLivre =
-                $"{boleto.Banco.Cedente.ContaBancaria.Carteira}{boleto.Banco.Cedente.ContaBancaria.Agencia}{boleto.Banco.Cedente.ContaBancaria.VariacaoCarteira}{boleto.Banco.Cedente.Codigo}{boleto.Banco.Cedente.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}{"001"}";
-            return formataCampoLivre;
+            var carteira = CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            carteira.FormataNossoNumero(boleto);
         }
 
-        public override string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        public string FormataCodigoBarraCampoLivre(Boleto boleto)
+        {
+            var cedente = boleto.Banco.Cedente;
+            var contaBancaria = cedente.ContaBancaria;
+            return $"{contaBancaria.Carteira}{contaBancaria.Agencia}{contaBancaria.VariacaoCarteira}{cedente.Codigo}{cedente.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}001";
+        }
+
+        public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
@@ -113,7 +89,7 @@ namespace Boleto2Net
             }
         }
 
-        public override string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        public string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
         {
             try
             {
@@ -156,7 +132,7 @@ namespace Boleto2Net
             }
         }
 
-        public override string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
+        public string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
                                             ref int numeroRegistroGeral, decimal valorBoletoGeral,
                                             int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
                                             int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
@@ -665,7 +641,7 @@ namespace Boleto2Net
         #endregion
 
         #region Retorno - CNAB240
-        public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
+        public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             try
             {
@@ -718,7 +694,7 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / T.", ex);
             }
         }
-        public override void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
+        public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
         {
             try
             {
@@ -750,7 +726,7 @@ namespace Boleto2Net
         #endregion
 
         #region Retorno - CNAB400
-        public override void LerHeaderRetornoCNAB400(string registro)
+        public void LerHeaderRetornoCNAB400(string registro)
         {
             try
             {
@@ -764,7 +740,7 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler HEADER do arquivo de RETORNO / CNAB 400.", ex);
             }
         }
-        public override void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
+        public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
             try
             {
@@ -834,7 +810,13 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
             }
         }
-        public override void LerTrailerRetornoCNAB400(string registro)
+
+        public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LerTrailerRetornoCNAB400(string registro)
         {
         }
         #endregion
@@ -949,22 +931,5 @@ namespace Boleto2Net
                     return "99";
             }
         }
-
-        private string CalcularDV(string texto)
-        {
-            string digito, fatorMultiplicacao = "319731973197319731973";
-            int soma = 0;
-            for (int i = 0; i < 21; i++)
-            {
-                soma += Convert.ToInt16(texto.Substring(i, 1)) * Convert.ToInt16(fatorMultiplicacao.Substring(i, 1));
-            }
-            int resto = (soma % 11);
-            if (resto <= 1)
-                digito = "0";
-            else
-                digito = (11 - resto).ToString();
-            return digito;
-        }
-
     }
 }

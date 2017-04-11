@@ -16,7 +16,7 @@ namespace Boleto2Net
             {
                 return Convert.ToBoolean(value);
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -28,7 +28,7 @@ namespace Boleto2Net
             {
                 return Convert.ToInt32(value);
             }
-            catch (Exception ex)
+            catch
             {
                 return 0;
             }
@@ -40,7 +40,7 @@ namespace Boleto2Net
             {
                 return Convert.ToInt64(value);
             }
-            catch (Exception ex)
+            catch
             {
                 return 0;
             }
@@ -52,7 +52,7 @@ namespace Boleto2Net
             {
                 return Convert.ToString(value).Trim();
             }
-            catch (Exception ex)
+            catch
             {
                 return string.Empty;
             }
@@ -64,7 +64,7 @@ namespace Boleto2Net
             {
                 return Convert.ToDateTime(value, CultureInfo.GetCultureInfo("pt-BR"));
             }
-            catch (Exception ex)
+            catch
             {
                 return new DateTime(1, 1, 1);
             }
@@ -108,7 +108,7 @@ namespace Boleto2Net
             {
                 return $"{cpf.Substring(0, 3)}.{cpf.Substring(3, 3)}.{cpf.Substring(6, 3)}-{cpf.Substring(9, 2)}";
             }
-            catch (Exception ex)
+            catch
             {
                 return string.Empty;
             }
@@ -125,7 +125,7 @@ namespace Boleto2Net
             {
                 return $"{cnpj.Substring(0, 2)}.{cnpj.Substring(2, 3)}.{cnpj.Substring(5, 3)}/{cnpj.Substring(8, 4)}-{cnpj.Substring(12, 2)}";
             }
-            catch (Exception ex)
+            catch
             {
                 return string.Empty;
             }
@@ -142,7 +142,7 @@ namespace Boleto2Net
             {
                 return $"{cep.Substring(0, 2)}{cep.Substring(2, 3)}-{cep.Substring(5, 3)}";
             }
-            catch (Exception ex)
+            catch
             {
                 return string.Empty;
             }
@@ -183,7 +183,7 @@ namespace Boleto2Net
                 }
                 return result;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Exception tmpEx = new Exception("Problemas ao Formatar a string. String = " + sringToBeFit, ex);
                 throw tmpEx;
@@ -226,7 +226,7 @@ namespace Boleto2Net
                 strline = strline.Replace('&', 'e');
                 return strline;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Exception tmpEx = new Exception("Erro ao formatar string.", ex);
                 throw tmpEx;

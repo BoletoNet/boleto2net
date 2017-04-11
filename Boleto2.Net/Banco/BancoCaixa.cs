@@ -1,85 +1,55 @@
 using System;
+using System.Collections.Generic;
 using System.Web.UI;
+using Boleto2Net.Exceptions;
+using Boleto2Net.Extensions;
 using static System.String;
 
 [assembly: WebResource("BoletoNet.Imagens.104.jpg", "image/jpg")]
 
 namespace Boleto2Net
 {
-    internal sealed class BancoCaixa : AbstractBanco
+    internal sealed class BancoCaixa : IBanco
     {
-        internal BancoCaixa()
-        {
-            Codigo = 104;
-            Digito = "0";
-            Nome = "Caixa Econômica Federal";
-        }
+        internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoCaixa());
 
-        public override void FormataCedente()
-        {
-            if (Cedente.Codigo.Length > 6)
-                throw new Exception($"O código do cedente ({Cedente.Codigo}) deve conter 6 dígitos.");
-            if (Cedente.Codigo.Length < 6)
-                Cedente.Codigo = Cedente.Codigo.PadLeft(6, '0');
+        public Cedente Cedente { get; set; }
+        public int Codigo { get; } = 104;
+        public string Nome { get; } = "Caixa Econômica Federal";
+        public string Digito { get; } = "0";
+        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string>();
+        public bool RemoveAcentosArquivoRemessa { get; }
 
-            string dv = CalcularDV(Cedente.CodigoDV);
+        public void FormataCedente()
+        {
+            var contaBancaria = Cedente.ContaBancaria;
+            if (contaBancaria.CarteiraComVariacao != "SIG14")
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.Carteira);
+
+            var codigoCedente = Cedente.Codigo;
+            Cedente.Codigo = codigoCedente.Length <= 6 ? codigoCedente.PadLeft(6, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente);
+
             if (Cedente.CodigoDV == Empty)
-                throw new Exception($"Dígito do código do cedente ({Cedente.Codigo}) não foi informado.");
+                throw new Exception($"Dígito do código do cedente ({codigoCedente}) não foi informado.");
 
-            Cedente.CodigoFormatado = $"{Cedente.ContaBancaria.Agencia}/{Cedente.Codigo}-{Cedente.CodigoDV}";
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}/{codigoCedente}-{Cedente.CodigoDV}";
 
-            Cedente.ContaBancaria.LocalPagamento = "ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NA CAIXA ECONÔMICA FEDERAL.";
-
-            if (Cedente.ContaBancaria.CarteiraComVariacao != "SIG14")
-            {
-                throw new NotImplementedException("Carteira não implementada: " + Cedente.ContaBancaria.CarteiraComVariacao);
-            }
+            contaBancaria.LocalPagamento = "ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NA CAIXA ECONÔMICA FEDERAL.";
         }
 
-        public override void ValidaBoleto(Boleto boleto)
+        public void ValidaBoleto(Boleto boleto)
         {
         }
 
-        public override void FormataNossoNumero(Boleto boleto)
+        public void FormataNossoNumero(Boleto boleto)
         {
-            if (boleto.Banco.Cedente.ContaBancaria.Carteira.Equals("SIG14") & IsNullOrWhiteSpace(boleto.Banco.Cedente.ContaBancaria.VariacaoCarteira))
-            {
-                FormataNossoNumero_SIG14(boleto);
-            }
-            else
-            {
-                throw new NotImplementedException("Não foi possível formatar o nosso número do boleto.");
-            }
+            var carteira = CarteiraFactory<BancoCaixa>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.Carteira);
+            carteira.FormataNossoNumero(boleto);
         }
 
-        private void FormataNossoNumero_SIG14(Boleto boleto)
+        public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            // Carteira SIG14: Dúvida: Se o Cliente SEMPRE emite o boleto, pois o nosso número começa com 14, o que significa Título Registrado emissão Empresa:
-            // O nosso número não pode ser em branco.
-            if (IsNullOrWhiteSpace(boleto.NossoNumero))
-            {
-                throw new Exception("Nosso Número não informado.");
-            }
-            if (boleto.NossoNumero.Length == 17)
-            {
-                // O nosso número deve estar formatado corretamente (com 17 dígitos e iniciando com o "14"),
-                if (!boleto.NossoNumero.StartsWith("14"))
-                    throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve iniciar com \"14\" e conter 17 dígitos.");
-            }
-            else
-            {
-                // Ou deve ser informado com até 15 posições (será formatado para 17 dígitos pelo Boleto.Net).
-                if (boleto.NossoNumero.Length > 15)
-                    throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve iniciar com \"14\" e conter 17 dígitos.");
-                boleto.NossoNumero = "14" + boleto.NossoNumero.PadLeft(15, '0');
-            }
-            boleto.NossoNumeroDV = CalcularDV(boleto.NossoNumero);
-            boleto.NossoNumeroFormatado = Format("{0}-{1}", boleto.NossoNumero, boleto.NossoNumeroDV);
-        }
-
-        public override string FormataCodigoBarraCampoLivre(Boleto boleto)
-        {
-            string formataCampoLivre = "";
+            var formataCampoLivre = "";
             if (boleto.Banco.Cedente.ContaBancaria.Carteira == "SIG14")
             {
                 // Posição 20 - 25 - Código do Cedente
@@ -91,14 +61,14 @@ namespace Boleto2Net
                 // Posição 35 - 43 - De acordo com documentaçao, posição 9 a 17 do nosso numero
                 // Posição 44 - Dígito Verificador
                 formataCampoLivre = Format("{0}{1}{2}{3}{4}{5}{6}",
-                                           boleto.Banco.Cedente.Codigo,
-                                           boleto.Banco.Cedente.CodigoDV,
-                                           boleto.NossoNumero.Substring(2, 3),
-                                           "1",
-                                           boleto.NossoNumero.Substring(5, 3),
-                                           "4",
-                                           boleto.NossoNumero.Substring(8, 9));
-                formataCampoLivre += CalcularDV(formataCampoLivre).ToString();
+                    boleto.Banco.Cedente.Codigo,
+                    boleto.Banco.Cedente.CodigoDV,
+                    boleto.NossoNumero.Substring(2, 3),
+                    "1",
+                    boleto.NossoNumero.Substring(5, 3),
+                    "4",
+                    boleto.NossoNumero.Substring(8, 9));
+                formataCampoLivre += formataCampoLivre.CalcularDVCaixa();
             }
             else
             {
@@ -107,11 +77,11 @@ namespace Boleto2Net
             return formataCampoLivre;
         }
 
-        public override string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
-                string header = Empty;
+                var header = Empty;
                 switch (tipoArquivo)
                 {
                     case TipoArquivo.CNAB240:
@@ -132,12 +102,12 @@ namespace Boleto2Net
             }
         }
 
-        public override string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        public string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
         {
             try
             {
-                string detalhe = Empty;
-                string strline = "";
+                var detalhe = Empty;
+                var strline = "";
                 //base.GerarDetalheRemessa(boleto, numeroRegistro, tipoArquivo);
                 switch (tipoArquivo)
                 {
@@ -171,7 +141,6 @@ namespace Boleto2Net
                 }
 
                 return detalhe;
-
             }
             catch (Exception ex)
             {
@@ -179,24 +148,24 @@ namespace Boleto2Net
             }
         }
 
-        public override string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
-                                            ref int numeroRegistroGeral, decimal valorBoletoGeral,
-                                            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
-                                            int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
-                                            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
-                                            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
+        public string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
+            ref int numeroRegistroGeral, decimal valorBoletoGeral,
+            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
+            int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
+            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
+            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
         {
             try
             {
-                string trailler = Empty;
+                var trailler = Empty;
                 switch (tipoArquivo)
                 {
                     case TipoArquivo.CNAB240:
                         // Trailler do Lote
                         trailler += GerarTrailerLoteRemessaCNAC240SIGCB(ref numeroRegistroGeral,
-                                                                                numeroRegistroCobrancaSimples, valorCobrancaSimples,
-                                                                                numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
-                                                                                numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
+                            numeroRegistroCobrancaSimples, valorCobrancaSimples,
+                            numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
+                            numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
                         // Trailler do Arquivo
                         trailler += Environment.NewLine;
                         trailler += GerarTrailerRemessaCNAB240SIGCB(ref numeroRegistroGeral);
@@ -212,12 +181,36 @@ namespace Boleto2Net
             }
         }
 
+        private void FormataNossoNumero_SIG14(Boleto boleto)
+        {
+            // Carteira SIG14: Dúvida: Se o Cliente SEMPRE emite o boleto, pois o nosso número começa com 14, o que significa Título Registrado emissão Empresa:
+            // O nosso número não pode ser em branco.
+            if (IsNullOrWhiteSpace(boleto.NossoNumero))
+                throw new Exception("Nosso Número não informado.");
+            if (boleto.NossoNumero.Length == 17)
+            {
+                // O nosso número deve estar formatado corretamente (com 17 dígitos e iniciando com o "14"),
+                if (!boleto.NossoNumero.StartsWith("14"))
+                    throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve iniciar com \"14\" e conter 17 dígitos.");
+            }
+            else
+            {
+                // Ou deve ser informado com até 15 posições (será formatado para 17 dígitos pelo Boleto.Net).
+                if (boleto.NossoNumero.Length > 15)
+                    throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve iniciar com \"14\" e conter 17 dígitos.");
+                boleto.NossoNumero = "14" + boleto.NossoNumero.PadLeft(15, '0');
+            }
+            boleto.NossoNumeroDV = boleto.NossoNumero.CalcularDVCaixa();
+            boleto.NossoNumeroFormatado = Format("{0}-{1}", boleto.NossoNumero, boleto.NossoNumeroDV);
+        }
+
         #region SIG14 - Funções de apoio
+
         private string GerarHeaderRemessaCNAB240SIGCB(int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
-                TRegistroEDI reg = new TRegistroEDI();
+                var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "104", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0000", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "0", '0');
@@ -251,11 +244,12 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB240 SIGCB.", ex);
             }
         }
+
         private string GerarHeaderLoteRemessaCNAB240SIGCB(int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
-                TRegistroEDI reg = new TRegistroEDI();
+                var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "104", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0001", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "1", '0');
@@ -288,12 +282,13 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar HEADER do lote no arquivo de remessa do CNAB240 SIGCB.", ex);
             }
         }
+
         private string GerarDetalheSegmentoPRemessaCNAB240SIGCB(Boleto boleto, ref int numeroRegistroGeral)
         {
             try
             {
                 numeroRegistroGeral++;
-                TRegistroEDI reg = new TRegistroEDI();
+                var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "104", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0001", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "3", '0');
@@ -360,21 +355,21 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0230, 010, 2, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0240, 001, 0, Empty, ' ');
                 reg.CodificarLinha();
-                string vLinha = reg.LinhaRegistro;
+                var vLinha = reg.LinhaRegistro;
                 return vLinha;
             }
             catch (Exception ex)
             {
                 throw new Exception("Erro ao gerar DETALHE do Segmento P no arquivo de remessa do CNAB240 SIGCB.", ex);
             }
-
         }
+
         private string GerarDetalheSegmentoQRemessaCNAB240SIGCB(Boleto boleto, ref int numeroRegistroGeral)
         {
             try
             {
                 numeroRegistroGeral++;
-                TRegistroEDI reg = new TRegistroEDI();
+                var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "104", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0001", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "3", '0');
@@ -397,7 +392,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0213, 020, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0233, 008, 0, Empty, ' ');
                 reg.CodificarLinha();
-                string vLinha = reg.LinhaRegistro;
+                var vLinha = reg.LinhaRegistro;
                 return vLinha;
             }
             catch (Exception ex)
@@ -405,6 +400,7 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar DETALHE do Segmento Q no arquivo de remessa do CNAB240 SIGCB.", ex);
             }
         }
+
         private string GerarDetalheSegmentoRRemessaCNAB240SIGCB(Boleto boleto, ref int numeroRegistroGeral)
         {
             try
@@ -414,13 +410,13 @@ namespace Boleto2Net
                     codMulta = "1";
                 else
                     codMulta = "0";
-                string msg3 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(00, 40), 40, 40, ' ', 0, true, true, false);
-                string msg4 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(40, 40), 40, 40, ' ', 0, true, true, false);
-                if (codMulta == "0" & IsNullOrWhiteSpace(msg3) & IsNullOrWhiteSpace(msg4))
+                var msg3 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(00, 40), 40, 40, ' ', 0, true, true, false);
+                var msg4 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(40, 40), 40, 40, ' ', 0, true, true, false);
+                if ((codMulta == "0") & IsNullOrWhiteSpace(msg3) & IsNullOrWhiteSpace(msg4))
                     return "";
 
                 numeroRegistroGeral++;
-                TRegistroEDI reg = new TRegistroEDI();
+                var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "104", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0001", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "3", '0');
@@ -443,7 +439,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0180, 050, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0230, 011, 0, Empty, ' ');
                 reg.CodificarLinha();
-                string vLinha = reg.LinhaRegistro;
+                var vLinha = reg.LinhaRegistro;
                 return vLinha;
             }
             catch (Exception ex)
@@ -451,16 +447,17 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar DETALHE do Segmento Q no arquivo de remessa do CNAB240 SIGCB.", ex);
             }
         }
+
         private string GerarDetalheSegmentoSRemessaCNAB240SIGCB(Boleto boleto, ref int numeroRegistroGeral)
         {
             try
             {
-                string msg5A9 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(80, 200), 200, 200, ' ', 0, true, true, false);
+                var msg5A9 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(80, 200), 200, 200, ' ', 0, true, true, false);
                 if (IsNullOrWhiteSpace(msg5A9))
                     return "";
 
                 numeroRegistroGeral++;
-                TRegistroEDI reg = new TRegistroEDI();
+                var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "104", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0001", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "3", '0');
@@ -479,16 +476,17 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar DETALHE do Segmento Q no arquivo de remessa do CNAB240 SIGCB.", ex);
             }
         }
+
         private string GerarTrailerLoteRemessaCNAC240SIGCB(ref int numeroRegistroGeral,
-                                                            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
-                                                            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
-                                                            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
+            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
+            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
+            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
         {
             try
             {
                 // O número de registros no lote é igual ao número de registros gerados + 2 (header e trailler do lote)
-                int numeroRegistrosNoLote = numeroRegistroGeral + 2;
-                TRegistroEDI reg = new TRegistroEDI();
+                var numeroRegistrosNoLote = numeroRegistroGeral + 2;
+                var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "104", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0001", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "5", '0');
@@ -510,13 +508,14 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar HEADER do lote no arquivo de remessa do CNAB400.", ex);
             }
         }
+
         private string GerarTrailerRemessaCNAB240SIGCB(ref int numeroRegistroGeral)
         {
             try
             {
                 // O número de registros no arquivo é igual ao número de registros gerados + 4 (header e trailler do lote / header e trailler do arquivo)
-                int numeroRegistrosNoArquivo = numeroRegistroGeral + 4;
-                TRegistroEDI reg = new TRegistroEDI();
+                var numeroRegistrosNoArquivo = numeroRegistroGeral + 4;
+                var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "104", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "9999", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "9", '0');
@@ -533,10 +532,12 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
             }
         }
+
         #endregion
 
         #region SIG14 - Retorno
-        public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
+
+        public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             try
             {
@@ -587,7 +588,8 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / T.", ex);
             }
         }
-        public override void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
+
+        public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
         {
             try
             {
@@ -616,27 +618,27 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / U.", ex);
             }
         }
-        #endregion
 
-        private string CalcularDV(string texto)
+        public void LerHeaderRetornoCNAB400(string registro)
         {
-            string digito;
-            int pesoMaximo = 9, soma = 0, peso = 2;
-            for (int i = (texto.Length - 1); i >= 0; i--)
-            {
-                soma = soma + (Convert.ToInt32(texto.Substring(i, 1)) * peso);
-                if (peso == pesoMaximo)
-                    peso = 2;
-                else
-                    peso = peso + 1;
-            }
-            int resto = (soma % 11);
-            if (resto <= 1)
-                digito = "0";
-            else
-                digito = (11 - resto).ToString();
-            return digito;
+            throw new NotImplementedException();
         }
 
+        public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LerTrailerRetornoCNAB400(string registro)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
