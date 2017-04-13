@@ -56,9 +56,8 @@ namespace Boleto2Net
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var cedente = boleto.Banco.Cedente;
-            var contaBancaria = cedente.ContaBancaria;
-            return $"{contaBancaria.Carteira}{contaBancaria.Agencia}{contaBancaria.VariacaoCarteira}{cedente.Codigo}{cedente.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}001";
+            var carteira = CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
         public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)

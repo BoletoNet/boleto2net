@@ -1,36 +1,36 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Web.UI;
 using Boleto2Net.Exceptions;
 using static System.String;
 
-[assembly: WebResource("BoletoNet.Imagens.237.jpg", "image/jpg")]
+[assembly: WebResource("BoletoNet.Imagens.033.jpg", "image/jpg")]
 
 namespace Boleto2Net
 {
-    internal sealed class BancoBradesco : IBanco
+    internal sealed class BancoSantander : IBanco
     {
-        internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoBradesco());
+        internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoSantander());
 
         public Cedente Cedente { get; set; }
-        public int Codigo { get; } = 237;
-        public string Nome { get; } = "Bradesco";
-        public string Digito { get; } = "2";
-        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
+        public int Codigo { get; } = 033;
+        public string Nome { get; } = "Santander";
+        public string Digito { get; } = "7";
+        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> {};
         public bool RemoveAcentosArquivoRemessa { get; } = false;
 
         public void FormataCedente()
         {
             var contaBancaria = Cedente.ContaBancaria;
 
-            if (!CarteiraFactory<BancoBradesco>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
+            if (!CarteiraFactory<BancoSantander>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
                 throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
 
-            contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO BRADESCO.", digitosConta: 7);
+            contaBancaria.FormatarDados("ATÃ‰ O VENCIMENTO EM QUALQUER BANCO. APÃ“S O VENCIMENTO SOMENTE NO SANTANDER.", digitosConta: 9);
 
             var codigoCedente = Cedente.Codigo;
-            Cedente.Codigo = codigoCedente.Length <= 20 ? codigoCedente.PadLeft(20, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 20);
-
+            Cedente.Codigo = codigoCedente.Length <= 7 ? codigoCedente.PadLeft(7, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
+            
             Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia}/{contaBancaria.Conta}-{contaBancaria.DigitoConta}";
         }
 
@@ -40,13 +40,13 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoBradesco>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoSantander>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
             carteira.FormataNossoNumero(boleto);
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoBradesco>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoSantander>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
             return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
@@ -67,7 +67,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do HEADER do arquivo de REMESSA.", ex);
+                throw new Exception("Erro durante a geraÃ§Ã£o do HEADER do arquivo de REMESSA.", ex);
             }
         }
 
@@ -95,7 +95,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do DETALHE arquivo de REMESSA.", ex);
+                throw new Exception("Erro durante a geraÃ§Ã£o do DETALHE arquivo de REMESSA.", ex);
             }
         }
 
@@ -140,7 +140,7 @@ namespace Boleto2Net
             try
             {
                 if (registro.Substring(0, 9) != "02RETORNO")
-                    throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+                    throw new Exception("O arquivo nÃ£o Ã© do tipo \"02RETORNO\"");
             }
             catch (Exception ex)
             {
@@ -152,7 +152,7 @@ namespace Boleto2Net
         {
             try
             {
-                //Nº Controle do Participante
+                //NÂº Controle do Participante
                 boleto.NumeroControleParticipante = registro.Substring(37, 25);
 
                 //Carteira (no arquivo retorno, vem com 1 caracter. Ajustamos para 2 caracteres, como no manual do Bradesco.
@@ -160,21 +160,21 @@ namespace Boleto2Net
                 contaBancaria.Carteira = registro.Substring(107, 1).PadLeft(2, '0');
                 contaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
-                //Identificação do Título no Banco
+                //IdentificaÃ§Ã£o do TÃ­tulo no Banco
                 boleto.NossoNumero = registro.Substring(70, 11); //Sem o DV
                 boleto.NossoNumeroDV = registro.Substring(81, 1); //DV
                 boleto.NossoNumeroFormatado = $"{contaBancaria.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
 
-                //Identificação de Ocorrência
+                //IdentificaÃ§Ã£o de OcorrÃªncia
                 boleto.CodigoOcorrencia = registro.Substring(108, 2);
                 boleto.DescricaoOcorrencia = DescricaoOcorrenciaCnab400(boleto.CodigoOcorrencia);
                 boleto.CodigoOcorrenciaAuxiliar = registro.Substring(318, 10);
 
-                //Número do Documento
+                //NÃºmero do Documento
                 boleto.NumeroDocumento = registro.Substring(116, 10);
                 boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(173, 2));
 
-                //Valores do Título
+                //Valores do TÃ­tulo
                 boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
                 boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
                 boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(188, 13)) / 100;
@@ -185,13 +185,13 @@ namespace Boleto2Net
                 boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
                 boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(279, 13)) / 100;
 
-                //Data Ocorrência no Banco
+                //Data OcorrÃªncia no Banco
                 boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
 
-                //Data Vencimento do Título
+                //Data Vencimento do TÃ­tulo
                 boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
 
-                // Data do Crédito
+                // Data do CrÃ©dito
                 boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(295, 6)).ToString("##-##-##"));
 
                 // Registro Retorno
@@ -325,12 +325,12 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0327, 008, 0, boleto.Sacado.Endereco.CEP.Replace("-", ""), '0');
                 if (IsNullOrEmpty(boleto.Avalista.Nome))
                 {
-                    // Não tem avalista.
+                    // NÃ£o tem avalista.
                     reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0335, 060, 0, Empty, ' ');
                 }
                 else if (boleto.Avalista.TipoCPFCNPJ("A") == "F")
                 {
-                    // Avalista Pessoa Física
+                    // Avalista Pessoa FÃ­sica
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0335, 009, 0, boleto.Avalista.CPFCNPJ.Substring(0, 9), '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0344, 004, 0, "0", '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0348, 002, 0, boleto.Avalista.CPFCNPJ.Substring(9, 2), '0');
@@ -400,7 +400,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do registro TRAILER do arquivo de REMESSA.", ex);
+                throw new Exception("Erro durante a geraÃ§Ã£o do registro TRAILER do arquivo de REMESSA.", ex);
             }
         }
 
@@ -413,13 +413,13 @@ namespace Boleto2Net
                 case "03":
                     return "Entrada Rejeitada";
                 case "06":
-                    return "Liquidação normal";
+                    return "LiquidaÃ§Ã£o normal";
                 case "09":
                     return "Baixado Automaticamente via Arquivo";
                 case "10":
-                    return "Baixado conforme instruções da Agência";
+                    return "Baixado conforme instruÃ§Ãµes da AgÃªncia";
                 case "11":
-                    return "Em Ser - Arquivo de Títulos pendentes";
+                    return "Em Ser - Arquivo de TÃ­tulos pendentes";
                 case "12":
                     return "Abatimento Concedido";
                 case "13":
@@ -427,37 +427,37 @@ namespace Boleto2Net
                 case "14":
                     return "Vencimento Alterado";
                 case "15":
-                    return "Liquidação em Cartório";
+                    return "LiquidaÃ§Ã£o em CartÃ³rio";
                 case "17":
-                    return "Liquidação após baixa ou Título não registrado";
+                    return "LiquidaÃ§Ã£o apÃ³s baixa ou TÃ­tulo nÃ£o registrado";
                 case "18":
-                    return "Acerto de Depositária";
+                    return "Acerto de DepositÃ¡ria";
                 case "19":
-                    return "Confirmação Recebimento Instrução de Protesto";
+                    return "ConfirmaÃ§Ã£o Recebimento InstruÃ§Ã£o de Protesto";
                 case "20":
-                    return "Confirmação Recebimento Instrução Sustação de Protesto";
+                    return "ConfirmaÃ§Ã£o Recebimento InstruÃ§Ã£o SustaÃ§Ã£o de Protesto";
                 case "21":
                     return "Acerto do Controle do Participante";
                 case "23":
-                    return "Entrada do Título em Cartório";
+                    return "Entrada do TÃ­tulo em CartÃ³rio";
                 case "24":
                     return "Entrada rejeitada por CEP Irregular";
                 case "27":
                     return "Baixa Rejeitada";
                 case "28":
-                    return "Débito de tarifas/custas";
+                    return "DÃ©bito de tarifas/custas";
                 case "30":
-                    return "Alteração de Outros Dados Rejeitados";
+                    return "AlteraÃ§Ã£o de Outros Dados Rejeitados";
                 case "32":
-                    return "Instrução Rejeitada";
+                    return "InstruÃ§Ã£o Rejeitada";
                 case "33":
-                    return "Confirmação Pedido Alteração Outros Dados";
+                    return "ConfirmaÃ§Ã£o Pedido AlteraÃ§Ã£o Outros Dados";
                 case "34":
-                    return "Retirado de Cartório e Manutenção Carteira";
+                    return "Retirado de CartÃ³rio e ManutenÃ§Ã£o Carteira";
                 case "35":
-                    return "Desagendamento ) débito automático";
+                    return "Desagendamento ) dÃ©bito automÃ¡tico";
                 case "68":
-                    return "Acerto dos dados ) rateio de Crédito";
+                    return "Acerto dos dados ) rateio de CrÃ©dito";
                 case "69":
                     return "Cancelamento dos dados ) rateio";
                 default:

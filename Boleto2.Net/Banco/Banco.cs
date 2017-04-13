@@ -11,6 +11,7 @@ namespace Boleto2Net
         private static readonly Dictionary<int, Lazy<IBanco>> Bancos = new Dictionary<int, Lazy<IBanco>>
         {
             [001] = BancoBrasil.Instance,
+            [033] = BancoSantander.Instance,
             [104] = BancoCaixa.Instance,
             [237] = BancoBradesco.Instance,
             [756] = BancoSicoob.Instance
@@ -59,7 +60,10 @@ namespace Boleto2Net
         {
             try
             {
-                return _banco.FormataCodigoBarraCampoLivre(boleto);
+                var campoLivre = _banco.FormataCodigoBarraCampoLivre(boleto);
+                if (campoLivre.Length != 25)
+                    throw new Exception("Campo Livre deve ter 25 posições");
+                return campoLivre;
             }
             catch (Exception ex)
             {
@@ -116,20 +120,21 @@ namespace Boleto2Net
         /// </summary>
         public void FormataCodigoBarra(Boleto boleto)
         {
-            boleto.CodigoBarra.CampoLivre = FormataCodigoBarraCampoLivre(boleto);
-            if (string.IsNullOrWhiteSpace(boleto.CodigoBarra.CampoLivre))
+            var codigoBarra = boleto.CodigoBarra;
+            codigoBarra.CampoLivre = FormataCodigoBarraCampoLivre(boleto);
+            if (string.IsNullOrWhiteSpace(codigoBarra.CampoLivre))
             {
-                boleto.CodigoBarra.CodigoBanco = string.Empty;
-                boleto.CodigoBarra.Moeda = 0;
-                boleto.CodigoBarra.FatorVencimento = 0;
-                boleto.CodigoBarra.ValorDocumento = string.Empty;
+                codigoBarra.CodigoBanco = string.Empty;
+                codigoBarra.Moeda = 0;
+                codigoBarra.FatorVencimento = 0;
+                codigoBarra.ValorDocumento = string.Empty;
             }
             else
             {
-                boleto.CodigoBarra.CodigoBanco = Utils.FitStringLength(Codigo.ToString(), 3, 3, '0', 0, true, true, true);
-                boleto.CodigoBarra.Moeda = boleto.CodigoMoeda;
-                boleto.CodigoBarra.FatorVencimento = boleto.DataVencimento.FatorVencimento();
-                boleto.CodigoBarra.ValorDocumento = boleto.ValorTitulo.ToString("N2").Replace(",", "").Replace(".", "").PadLeft(10, '0');
+                codigoBarra.CodigoBanco = Utils.FitStringLength(Codigo.ToString(), 3, 3, '0', 0, true, true, true);
+                codigoBarra.Moeda = boleto.CodigoMoeda;
+                codigoBarra.FatorVencimento = boleto.DataVencimento.FatorVencimento();
+                codigoBarra.ValorDocumento = boleto.ValorTitulo.ToString("N2").Replace(",", "").Replace(".", "").PadLeft(10, '0');
             }
         }
 

@@ -49,32 +49,8 @@ namespace Boleto2Net
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var formataCampoLivre = "";
-            if (boleto.Banco.Cedente.ContaBancaria.Carteira == "SIG14")
-            {
-                // Posição 20 - 25 - Código do Cedente
-                // Posição 26 - Dígito do Código do Cedente
-                // Posição 27 - 29 - De acordo com documentação, posição 3 a 5 do nosso numero
-                // Posição 30 - Código 1 - Título Registrado
-                // Posição 31 - 33 - DE acordo com documentação, posição 6 a 8 do nosso numero
-                // Posição 34 - Código 4 - Emissão do boleto pelo cedente
-                // Posição 35 - 43 - De acordo com documentaçao, posição 9 a 17 do nosso numero
-                // Posição 44 - Dígito Verificador
-                formataCampoLivre = Format("{0}{1}{2}{3}{4}{5}{6}",
-                    boleto.Banco.Cedente.Codigo,
-                    boleto.Banco.Cedente.CodigoDV,
-                    boleto.NossoNumero.Substring(2, 3),
-                    "1",
-                    boleto.NossoNumero.Substring(5, 3),
-                    "4",
-                    boleto.NossoNumero.Substring(8, 9));
-                formataCampoLivre += formataCampoLivre.CalcularDVCaixa();
-            }
-            else
-            {
-                throw new NotImplementedException("Não foi possível formatar o campo livre do código de barras do boleto.");
-            }
-            return formataCampoLivre;
+            var carteira = CarteiraFactory<BancoCaixa>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.Carteira);
+            return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
         public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)

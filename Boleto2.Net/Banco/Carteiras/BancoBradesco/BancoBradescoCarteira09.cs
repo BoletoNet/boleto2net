@@ -30,5 +30,11 @@ namespace Boleto2Net
             boleto.NossoNumeroDV = (contaBancaria.Carteira + nossoNumero).CalcularDVBradesco();
             boleto.NossoNumeroFormatado = $"{contaBancaria.Carteira}/{nossoNumero}-{boleto.NossoNumeroDV}";
         }
+
+        public string FormataCodigoBarraCampoLivre(Boleto boleto)
+        {
+            var contaBancaria = boleto.Banco.Cedente.ContaBancaria;
+            return $"{contaBancaria.Agencia}{contaBancaria.Carteira}{boleto.NossoNumero}{contaBancaria.Conta}{"0"}";
+        }
     }
 }

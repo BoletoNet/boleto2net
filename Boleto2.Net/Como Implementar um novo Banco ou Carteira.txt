@@ -1,41 +1,60 @@
-﻿**************
-ATENÇÃO: Se o banco já estiver implementado, mas a carteira não, altere a própria classe do banco, adicionando os métodos especificos da nova carteira.
-**************
+﻿Pendencias:
+	1 - Documentar melhor IdsRetornoCnab400RegistroDetalhe (A ordem dos registros importa. O primeiro deles, cria um novo boleto)
+	2 - Motivo do atributo CODIGO na carteira. (para fazer a QUERY e trazer todas as classes possíveis e montar o dicionario de classes automaticamente?)
 
-Para implementar um novo banco:
 
-- Escolha um banco já implementado como modelo para criar a nova classe.
-	O nome do arquivo deve seguir o padrão Banco_.cs, assim como o nome da classe.
+1 - Na classe Banco.CS:
+	Incluir no dicionario, o código do banco e classe que será implementada.
+	Se o banco já existir (pule os passos do item 2, e vá direto ao passo 3)
 
-- Alterar a classe BANCO.CS para identificar a classe do banco que acabou de ser criada.
-	No construtor da classe BANCO.CS, adicionar a referência para a classe no switch.
 
-- Altere no construtor da classe, os dados do banco a ser implementado.
-	A propriedade IdsRetornoCnab400RegistroDetalhe, deve conter todos os registros que o banco implementa no CNAB400.
-	Por exemplo, o Bradesco identifica o registro Detalhe como "1", mas o Banco do Brasil identifica como "7".
-	Esta propriedade só é necessária se for implementar o layout CNAB400, pois no CNAB240 parece existir um padrão entre todos os bancos.
+2 - Criar a classe Banco:
+		Na pasta BANCO, escolha um banco já implementado como modelo para criar a nova classe.
+		O nome do arquivo e da classe deve seguir o padrão BancoXXXXXXXXXX.cs. (Siga o exemplo dos bancos já existentes)
 
-- Método FormataCedente
-	Verificar os limites (Length) que o banco utiliza para cada informação: Agência, Conta, Código do Cedente (se existir)
-	CodigoFormatado = Deve estar no padrão que o banco utiliza para impressão da informação no boleto. Alguns bancos utilizam a agência/conta, outros utilizam agência/códigocedente. Fique atento!
-	LocalPagamento = Verificar qual padrão que o banco utiliza.
-	Importante atualizar a lista das "CarteiraComVariacao" que já estão implementadas!
+2.1 - Construtor da classe:
+		- Ajuste os dados do banco que está sendo implementado.
+		- A propriedade IdsRetornoCnab400RegistroDetalhe, deve conter todos os registros que o banco implementa no CNAB400.
+			Por exemplo, o Bradesco identifica o registro Detalhe como "1", mas o Banco do Brasil identifica como "7".
+			Esta propriedade só é necessária se for implementar o layout CNAB400, pois no CNAB240 parece existir um padrão entre todos os bancos.
+			Inclua os valores na ordem correta, pois o primeiro item da lista, identifica um novo boleto. Os demais registros, aproveitam o último boleto criado.
+
+2.2 - Método FormataCedente
+		O método FormatarDados, ajusta a informação de Local de Pagamento, e verifica se a agência tem 4 dígitos e se a conta respeito o tamanho de caracteres do banco.
+		Verificar os limites (Length) que o banco utiliza para cada informação: Código do Cedente (se existir)
+		CodigoFormatado = Deve estar no padrão que o banco utiliza para impressão da informação no boleto. Alguns bancos utilizam a agência/conta, outros utilizam agência/códigocedente. Fique atento!
+		
+
 
 - Método ValidaBoleto
 	Se necessário, verificar os dados do objeto boleto conforme orientação do manual do banco.
 
-- Método FormataNossoNumero
-	Responsável por preencher as propriedades NossoNumeroDV e NossoNumeroFormatado.
-	Verificar o algoritmo para cálculo do DV, pois cada banco implementa de uma forma. Este algoritmo deve ficar em um método privado da classe Ex: CalcularDVBradesco(), etc.
-	Criar um método privado para cada carteira implementada, pois nem sempre o cálculo é igual para todas as carteiras.
+3 - Criar a classe Carteira:
+		Dentro da pasta Banco\Carteira\BancoXXXXXXXXXX (criar se não existir), e criar a classe da carteira que está sendo implementada.
+		O nome do arquivo e da classe deve seguir o padrão BancoXXXXXXXXXXCarteiraZZZZZ.cs. (Siga o exemplo das carteiras já existentes)
 
-- Método FormataCodigoBarraCampoLivre
-	O código de barras do boleto bancário possui um pedaço (posição 20 a 44) que é denominado "campo livre".
-	Este método é responsável por gerar o conteúdo deste campo.
+3.1 - Método FormataNossoNumero
+		Ajustar o algoritimo do método FormataNossoNumero, preenchendo as propriedades NossoNumeroDV e NossoNumeroFormatado.
+		Em alguns bancos, é necessário o cálculo do digito verificador. Se não existir o método para cálculo, implemente na classe de extensão "StringExtensions.cs" mantendo o padrão no nome do método CalcularDVXXXXXXXXXX
 
-- Implementar os métodos de geração do arquivo remessa (CNAB240 e CNAB400)
+3.2 - Método FormataCodigoBarraCampoLivre
+		O código de barras do boleto bancário possui um pedaço (posição 20 a 44) que é denominado "campo livre".
+		Este método é responsável por gerar o conteúdo deste campo.
 
-- Implementar os métodos de leitura do arquivo retorno (CNAB240 e CNAB400)
+
+
+
+
+
+
+
+
+
+4 - Arquivo Remessa
+
+4.1 - Implementar os métodos de geração do arquivo remessa (CNAB240 e CNAB400)
+
+4.2 - Implementar os métodos de leitura do arquivo retorno (CNAB240 e CNAB400)
 
 - Método privado - CalcularDv
 	Implementar o algoritmo de calculo do Digito Verificador do banco.
