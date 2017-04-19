@@ -21,7 +21,7 @@ namespace Boleto2Net.Testes
             };
             _banco = new Banco(237)
             {
-                Cedente = Utils.GerarCedente("1213141", "", contaBancaria)
+                Cedente = Utils.GerarCedente("1213141", "", "", contaBancaria)
             };
             _banco.FormataCedente();
         }

@@ -27,8 +27,11 @@ namespace Boleto2Net
         //      1.12 - Classe Proxy - Métodos para definir Protesto e BaixaDevolucao / Quebra de página utilizando css - page-break-after
         //      1.13 - Correção Carteira Bradesco com 2 dígitos no retorno.
         //      1.14 - Correção Código da Espécie do Documento / Correções de Homologação do Sicoob
+        // Abril/2017
+        //      1.20 - Santander - Carteira 101
 
-        readonly public string Versao = "1.14";
+
+        readonly public string Versao = "1.20";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
@@ -38,7 +41,8 @@ namespace Boleto2Net
         public bool SetupCobranca(string cnpj, string razaoSocial,
                                     string enderecoLogradouro, string enderecoNumero, string enderecoComplemento, string enderecoBairro, string enderecoCidade, string enderecoEstado, string enderecoCep, string observacoes,
                                     int numeroBanco, string agencia, string digitoAgencia, string operacaoConta, string conta, string digitoConta,
-                                    string codigoCedente, string digitoCodigoCedente, string carteira, string variacaoCarteira,
+                                    string codigoCedente, string digitoCodigoCedente, string codigoTransmissao,
+                                    string carteira, string variacaoCarteira,
                                     int tipoCarteira, int tipoFormaCadastramento, int tipoImpressaoBoleto,
                                     ref string mensagemErro)
         {
@@ -117,6 +121,7 @@ namespace Boleto2Net
                         },
                         Codigo = codigoCedente,
                         CodigoDV = digitoCodigoCedente,
+                        CodigoTransmissao = codigoTransmissao,
                         Endereco = new Endereco
                         {
                             LogradouroEndereco = enderecoLogradouro,

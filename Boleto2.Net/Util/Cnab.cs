@@ -26,9 +26,9 @@ namespace Boleto2Net
                 case "06":
                     return "Liquidação";
                 case "07":
-                    return "Confrmação do Recebimento da Instrução de Desconto";
+                    return "Confirmação do Recebimento da Instrução de Desconto";
                 case "08":
-                    return "Confrmação do Recebimento do Cancelamento do Desconto";
+                    return "Confirmação do Recebimento do Cancelamento do Desconto";
                 case "09":
                     return "Baixa";
                 case "12":
@@ -37,6 +37,8 @@ namespace Boleto2Net
                     return "Confirmação Recebimento Instrução de Cancelamento Abatimento";
                 case "14":
                     return "Confirmação Recebimento Instrução Alteração de Vencimento";
+                case "17":
+                    return "Liquidação Após Baixa ou Liquidação Título Não Registrado";
                 case "19":
                     return "Confirmação Recebimento Instrução de Protesto";
                 case "20":
@@ -55,6 +57,10 @@ namespace Boleto2Net
                     return "Débito de Tarifas/Custas";
                 case "30":
                     return "Alteração de Dados Rejeitada";
+                case "33":
+                    return "Confirmação da Alteração dos Dados do Rateio de Crédito";
+                case "34":
+                    return "Confirmação do Cancelamento dos Dados do Rateio de Crédito";
                 case "35":
                     return "Confirmação de Inclusão Banco de Pagador";
                 case "36":

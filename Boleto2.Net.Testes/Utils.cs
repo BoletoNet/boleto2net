@@ -12,8 +12,27 @@ namespace Boleto2Net.Testes
 
         private static int _proximoNossoNumero = 1;
 
-        internal static Cedente GerarCedente(string codigoCedente, string digitoCodigoCedente, ContaBancaria contaBancaria)
+        internal static Cedente GerarCedente(string codigoCedente, string digitoCodigoCedente, string codigoTransmissao, ContaBancaria contaBancaria)
         {
+            return new Cedente
+            {
+                CPFCNPJ = "08.367.311/0001-03",
+                Nome = "Vagalume Acessorios e Rastreadores de Ve",
+                Codigo = codigoCedente,
+                CodigoDV = digitoCodigoCedente,
+                CodigoTransmissao = codigoTransmissao,
+                Endereco = new Endereco
+                {
+                    LogradouroEndereco = "Rua Silveira Martins",
+                    LogradouroNumero = "224",
+                    LogradouroComplemento = "",
+                    Bairro = "Campos Eliseos",
+                    Cidade = "Ribeirão Preto",
+                    UF = "SP",
+                    CEP = "14080110"
+                },
+                ContaBancaria = contaBancaria
+            };
             return new Cedente
             {
                 CPFCNPJ = "12.123.123/1234-46",
@@ -193,7 +212,7 @@ namespace Boleto2Net.Testes
 
         internal static void TestarArquivoRemessa(Banco banco, TipoArquivo tipoArquivo, string nomeCarteira)
         {
-            const int quantidadeBoletosParaTeste = 36;
+            const int quantidadeBoletosParaTeste = 3;
             var boletos = GerarBoletos(banco, quantidadeBoletosParaTeste);
             Assert.AreEqual(quantidadeBoletosParaTeste, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletosParaTeste);
 

@@ -157,29 +157,6 @@ namespace Boleto2Net
             }
         }
 
-        private void FormataNossoNumero_SIG14(Boleto boleto)
-        {
-            // Carteira SIG14: Dúvida: Se o Cliente SEMPRE emite o boleto, pois o nosso número começa com 14, o que significa Título Registrado emissão Empresa:
-            // O nosso número não pode ser em branco.
-            if (IsNullOrWhiteSpace(boleto.NossoNumero))
-                throw new Exception("Nosso Número não informado.");
-            if (boleto.NossoNumero.Length == 17)
-            {
-                // O nosso número deve estar formatado corretamente (com 17 dígitos e iniciando com o "14"),
-                if (!boleto.NossoNumero.StartsWith("14"))
-                    throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve iniciar com \"14\" e conter 17 dígitos.");
-            }
-            else
-            {
-                // Ou deve ser informado com até 15 posições (será formatado para 17 dígitos pelo Boleto.Net).
-                if (boleto.NossoNumero.Length > 15)
-                    throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve iniciar com \"14\" e conter 17 dígitos.");
-                boleto.NossoNumero = "14" + boleto.NossoNumero.PadLeft(15, '0');
-            }
-            boleto.NossoNumeroDV = boleto.NossoNumero.CalcularDVCaixa();
-            boleto.NossoNumeroFormatado = Format("{0}-{1}", boleto.NossoNumero, boleto.NossoNumeroDV);
-        }
-
         #region SIG14 - Funções de apoio
 
         private string GerarHeaderRemessaCNAB240SIGCB(int numeroArquivoRemessa, ref int numeroRegistroGeral)

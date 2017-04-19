@@ -10,10 +10,10 @@ namespace Boleto2Net.Testes
         {
             var contaBancaria = new ContaBancaria
             {
-                Agencia = "1234",
-                DigitoAgencia = "X",
-                Conta = "123456",
-                DigitoConta = "X",
+                Agencia = "4598",
+                DigitoAgencia = "5",
+                Conta = "13002448",
+                DigitoConta = "4",
                 Carteira = "101",
                 TipoCarteira = TipoCarteira.CarteiraCobrancaSimples,
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
@@ -21,7 +21,7 @@ namespace Boleto2Net.Testes
             };
             _banco = new Banco(033)
             {
-                Cedente = Utils.GerarCedente("1213141", "", contaBancaria)
+                Cedente = Utils.GerarCedente("6209467", "", "459800006209467", contaBancaria)
             };
             _banco.FormataCedente();
         }
