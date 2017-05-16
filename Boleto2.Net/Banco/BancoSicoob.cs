@@ -41,7 +41,7 @@ namespace Boleto2Net
 
             Cedente.Codigo = codigoCedente.Length <= 6 ? codigoCedente.PadLeft(6, '0'): throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente);
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}/{codigoCedente}-{Cedente.CodigoDV}";
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoCedente}-{Cedente.CodigoDV}";
         }
 
         public void ValidaBoleto(Boleto boleto)
@@ -56,9 +56,8 @@ namespace Boleto2Net
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var cedente = boleto.Banco.Cedente;
-            var contaBancaria = cedente.ContaBancaria;
-            return $"{contaBancaria.Carteira}{contaBancaria.Agencia}{contaBancaria.VariacaoCarteira}{cedente.Codigo}{cedente.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}001";
+            var carteira = CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
         public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)

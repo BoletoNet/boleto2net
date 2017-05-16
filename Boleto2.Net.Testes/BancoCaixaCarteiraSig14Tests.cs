@@ -22,7 +22,7 @@ namespace Boleto2Net.Testes
             };
             _banco = new Banco(104)
             {
-                Cedente = Utils.GerarCedente("123456", "0", contaBancaria)
+                Cedente = Utils.GerarCedente("123456", "0", "", contaBancaria)
             };
             _banco.FormataCedente();
         }
@@ -30,14 +30,9 @@ namespace Boleto2Net.Testes
         [Test]
         public void Banco104_Caixa_SIG14_REM240()
         {
-            Utils.TestarArquivoRemessa(_banco, TipoArquivo.CNAB240, nameof(BancoCaixaCarteiraSig14Tests));
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoCaixaCarteiraSig14Tests), 5, true, "?");
         }
 
-        [Test]
-        public void Banco104_Caixa_SIG14_PDF()
-        {
-            Utils.TestarBoletoPDF(_banco, nameof(BancoCaixaCarteiraSig14Tests));
-        }
 
         [TestCase(500, "6", "BO123456F", "1", "14000000000000006-5", "10491703000000500001234560000100040000000064", "10491.23456 60000.100044 00000.000646 1 70300000050000", 2017, 01, 05)]
         [TestCase(300, "4", "BO123456D", "2", "14000000000000004-9", "10492697400000300001234560000100040000000048", "10491.23456 60000.100044 00000.000489 2 69740000030000", 2016, 11, 10)]

@@ -67,11 +67,13 @@
     <Compile Include="Banco\BancoBrasil.cs" />
     <Compile Include="Banco\BancoCaixa.cs" />
     <Compile Include="Banco\Banco.cs" />
+    <Compile Include="Banco\BancoSantander.cs" />
     <Compile Include="Banco\BancoSicoob.cs" />
     <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira11_019.cs" />
     <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira17_019.cs" />
     <Compile Include="Banco\Carteiras\BancoBradesco\BancoBradescoCarteira09.cs" />
     <Compile Include="Banco\Carteiras\BancoCaixa\BancoCaixaCarteiraSIG14.cs" />
+    <Compile Include="Banco\Carteiras\BancoSantander\BancoSantanderCarteira101.cs" />
     <Compile Include="Banco\Carteiras\BancoSicoob\BancoSincoobCarteira1.cs" />
     <Compile Include="Banco\Carteiras\CarteiraCodigoAttribute.cs" />
     <Compile Include="Banco\Carteiras\CarteiraFactory.cs" />
@@ -82,6 +84,7 @@
     </Compile>
     <Compile Include="Boleto\DemonstrativoValoresBoleto\GrupoDemonstrativo.cs" />
     <Compile Include="Boleto\DemonstrativoValoresBoleto\ItemDemonstrativo.cs" />
+    <Compile Include="Enums\TipoDocumento.cs" />
     <Compile Include="Enums\Modulo11Algoritmo.cs" />
     <Compile Include="Enums\TipoCodigoBaixaDevolucao.cs" />
     <Compile Include="Enums\TipoCodigoProtesto.cs" />

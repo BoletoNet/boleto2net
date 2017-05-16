@@ -39,5 +39,13 @@ namespace Boleto2Net
             boleto.NossoNumeroDV = "";
             boleto.NossoNumeroFormatado = boleto.NossoNumero;
         }
+
+        public string FormataCodigoBarraCampoLivre(Boleto boleto)
+        {
+            var carteira = boleto.Banco.Cedente.ContaBancaria.Carteira;
+            if (string.IsNullOrWhiteSpace(boleto.NossoNumero) || string.IsNullOrWhiteSpace(carteira))
+                return "";
+            return $"000000{boleto.NossoNumero}{carteira}";
+        }
     }
 }

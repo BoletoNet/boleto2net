@@ -28,7 +28,7 @@ namespace Boleto2Net
             contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO. APÓS, ATUALIZE O BOLETO NO SITE BB.COM.BR");
 
             var codigoCedente = Cedente.Codigo;
-            Cedente.CodigoFormatado = codigoCedente.Length == 7 ? $"{contaBancaria.Agencia}/{codigoCedente}" : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
+            Cedente.CodigoFormatado = codigoCedente.Length == 7 ? $"{contaBancaria.Agencia} / {codigoCedente}" : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
         }
 
         public void ValidaBoleto(Boleto boleto)
@@ -43,14 +43,8 @@ namespace Boleto2Net
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var cedente = boleto.Banco.Cedente;
-            var carteira = cedente.ContaBancaria.Carteira;
-            if (cedente.Codigo.Length != 7)
-                throw new NotImplementedException("Não foi possível formatar o campo livre do código de barras do boleto.");
-
-            if (string.IsNullOrWhiteSpace(boleto.NossoNumero) || string.IsNullOrWhiteSpace(carteira))
-                return "";
-            return $"000000{boleto.NossoNumero}{carteira}";
+            var carteira = CarteiraFactory<BancoBrasil>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
         public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)

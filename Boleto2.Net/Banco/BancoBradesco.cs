@@ -29,9 +29,9 @@ namespace Boleto2Net
             contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO BRADESCO.", digitosConta: 7);
 
             var codigoCedente = Cedente.Codigo;
-            Cedente.Codigo = codigoCedente.Length < 20 ? codigoCedente.PadLeft(20, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 20);
+            Cedente.Codigo = codigoCedente.Length <= 20 ? codigoCedente.PadLeft(20, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 20);
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia}/{contaBancaria.Conta}-{contaBancaria.DigitoConta}";
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
         }
 
         public void ValidaBoleto(Boleto boleto)
@@ -46,12 +46,8 @@ namespace Boleto2Net
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var formataCampoLivre = "";
-            if (boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao == "09")
-                formataCampoLivre = $"{boleto.Banco.Cedente.ContaBancaria.Agencia}{boleto.Banco.Cedente.ContaBancaria.Carteira}{boleto.NossoNumero}{boleto.Banco.Cedente.ContaBancaria.Conta}{"0"}";
-            else
-                throw new NotImplementedException("Não foi possível formatar o campo livre do código de barras do boleto.");
-            return formataCampoLivre;
+            var carteira = CarteiraFactory<BancoBradesco>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
         public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)

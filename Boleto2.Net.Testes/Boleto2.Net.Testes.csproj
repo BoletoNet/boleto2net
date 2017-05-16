@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="BancoBrasilCarteira11_019Tests.cs" />
     <Compile Include="BancoBrasilCarteira17_019Tests.cs" />
+    <Compile Include="BancoSantanderCarteira101.cs" />
     <Compile Include="BancoSicoobCarteira1_01Tests.cs" />
     <Compile Include="BancoCaixaCarteiraSig14Tests.cs" />
     <Compile Include="BancoBradescoCarteira09.cs" />

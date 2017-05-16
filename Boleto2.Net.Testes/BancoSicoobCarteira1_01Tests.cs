@@ -22,7 +22,7 @@ namespace Boleto2Net.Testes
             };
             _banco = new Banco(756)
             {
-                Cedente = Utils.GerarCedente("17227", "8", contaBancaria)
+                Cedente = Utils.GerarCedente("17227", "8", "", contaBancaria)
             };
             _banco.FormataCedente();
         }
@@ -30,20 +30,15 @@ namespace Boleto2Net.Testes
         [Test]
         public void Banco756_Sicoob_1_01_REM240()
         {
-            Utils.TestarArquivoRemessa(_banco, TipoArquivo.CNAB240, nameof(BancoSicoobCarteira101Tests));
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSicoobCarteira101Tests), 5, true, "?");
         }
 
         [Test]
         public void Banco756_Sicoob_1_01_REM400()
         {
-            Utils.TestarArquivoRemessa(_banco, TipoArquivo.CNAB400, nameof(BancoSicoobCarteira101Tests));
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSicoobCarteira101Tests), 5, true, "?");
         }
 
-        [Test]
-        public void Banco756_Sicoob_1_01_PDF()
-        {
-            Utils.TestarBoletoPDF(_banco, nameof(BancoSicoobCarteira101Tests));
-        }
 
         [TestCase(300, "4", "BO123456D", "1", "0000004-0", "75691697400000300001427701017227800000040001", "75691.42776 01017.227800 00000.400010 1 69740000030000", 2016, 11, 10)]
         [TestCase(300, "3", "BO123456D", "2", "0000003-3", "75692711100000300001427701017227800000033001", "75691.42776 01017.227800 00000.330019 2 71110000030000", 2017, 03, 27)]

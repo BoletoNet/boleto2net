@@ -15,6 +15,7 @@ namespace Boleto2Net
         public TipoCarteira TipoCarteira { get; set; } = TipoCarteira.CarteiraCobrancaSimples;
         public TipoFormaCadastramento TipoFormaCadastramento { get; set; } = TipoFormaCadastramento.ComRegistro;
         public TipoImpressaoBoleto TipoImpressaoBoleto { get; set; } = TipoImpressaoBoleto.Empresa;
+        public TipoDocumento TipoDocumento { get; set; } = TipoDocumento.Tradicional;
         public string LocalPagamento { get; set; } = "PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.";
         public string CarteiraComVariacao => IsNullOrEmpty(Carteira) || IsNullOrEmpty(VariacaoCarteira) ? $"{Carteira}{VariacaoCarteira}" : $"{Carteira}/{VariacaoCarteira}";
         public int CodigoBancoCorrespondente { get; set; }

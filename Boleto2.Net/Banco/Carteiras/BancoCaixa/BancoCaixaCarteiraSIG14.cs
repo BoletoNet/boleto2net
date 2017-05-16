@@ -33,5 +33,14 @@ namespace Boleto2Net
             boleto.NossoNumeroDV = boleto.NossoNumero.CalcularDVCaixa();
             boleto.NossoNumeroFormatado = $"{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
         }
+
+        public string FormataCodigoBarraCampoLivre(Boleto boleto)
+        {
+            var cedente = boleto.Banco.Cedente;
+            var contaBancaria = cedente.ContaBancaria;
+            var formataCampoLivre = $"{cedente.Codigo}{cedente.CodigoDV}{boleto.NossoNumero.Substring(2, 3)}1{boleto.NossoNumero.Substring(5, 3)}4{boleto.NossoNumero.Substring(8, 9)}";
+            formataCampoLivre += formataCampoLivre.CalcularDVCaixa();
+            return formataCampoLivre;
+        }
     }
 }

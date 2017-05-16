@@ -12,11 +12,11 @@ namespace Boleto2Net.Testes
 
         private static int _proximoNossoNumero = 1;
 
-        internal static Cedente GerarCedente(string codigoCedente, string digitoCodigoCedente, ContaBancaria contaBancaria)
+        internal static Cedente GerarCedente(string codigoCedente, string digitoCodigoCedente, string codigoTransmissao, ContaBancaria contaBancaria)
         {
             return new Cedente
             {
-                CPFCNPJ = "12.123.123/1234-46",
+                CPFCNPJ = "86.875.666/0001-09",
                 Nome = "Cedente Teste",
                 Codigo = codigoCedente,
                 CodigoDV = digitoCodigoCedente,
@@ -39,7 +39,7 @@ namespace Boleto2Net.Testes
             if (_contador % 2 == 0)
                 return new Sacado
                 {
-                    CPFCNPJ = "123.456.789-09",
+                    CPFCNPJ = "443.316.101-28",
                     Nome = "Sacado Teste PF",
                     Observacoes = "Matricula 678/9",
                     Endereco = new Endereco
@@ -54,7 +54,7 @@ namespace Boleto2Net.Testes
                 };
             return new Sacado
             {
-                CPFCNPJ = "98.765.432/1098-74",
+                CPFCNPJ = "71.738.978/0001-01",
                 Nome = "Sacado Teste PJ",
                 Observacoes = "Matricula 123/4",
                 Endereco = new Endereco
@@ -69,19 +69,22 @@ namespace Boleto2Net.Testes
             };
         }
 
-        internal static Boletos GerarBoletos(Banco banco, int quantidadeBoletos)
+        internal static Boletos GerarBoletos(Banco banco, int quantidadeBoletos, string aceite)
         {
             var boletos = new Boletos
             {
                 Banco = banco
             };
             for (var i = 1; i <= quantidadeBoletos; i++)
-                boletos.Add(GerarBoleto(banco, i));
+                boletos.Add(GerarBoleto(banco, i, aceite));
             return boletos;
         }
 
-        internal static Boleto GerarBoleto(Banco banco, int i)
+        internal static Boleto GerarBoleto(Banco banco, int i, string aceite)
         {
+            if (aceite == "?")
+                aceite = _contador % 2 == 0 ? "N" : "A";
+
             var boleto = new Boleto
             {
                 Banco = banco,
@@ -93,7 +96,7 @@ namespace Boleto2Net.Testes
                 NossoNumero = (223344 + _proximoNossoNumero).ToString(),
                 NumeroDocumento = "BB" + _proximoNossoNumero.ToString("D6") + (char)(64 + i),
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Aceite = _contador % 2 == 0 ? "N" : "A",
+                Aceite = aceite,
                 CodigoInstrucao1 = "11",
                 CodigoInstrucao2 = "22",
                 DataDesconto = DateTime.Now.AddMonths(i),
@@ -105,9 +108,17 @@ namespace Boleto2Net.Testes
                 PercentualJurosDia = (decimal)0.002,
                 ValorJurosDia = (decimal)(100 * i * 0.002),
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
-                MensagemInstrucoesCaixa = "Mensagem para instruções do caixa",
                 NumeroControleParticipante = "CHAVEPRIMARIA=" + _proximoNossoNumero
             };
+            // Mensagem - Instruções do Caixa
+            StringBuilder msgCaixa = new StringBuilder();
+            if (boleto.ValorDesconto > 0)
+                msgCaixa.AppendLine($"Conceder desconto de {boleto.ValorDesconto.ToString("R$ ##,##0.00")} até {boleto.DataDesconto.ToString("dd/MM/yyyy")}. ");
+            if (boleto.ValorMulta > 0)
+                msgCaixa.AppendLine($"Cobrar multa de {boleto.ValorMulta.ToString("R$ ##,##0.00")} após o vencimento. ");
+            if (boleto.ValorJurosDia > 0)
+                msgCaixa.AppendLine($"Cobrar juros de {boleto.ValorJurosDia.ToString("R$ ##,##0.00")} por dia de atraso. ");
+            boleto.MensagemInstrucoesCaixa = msgCaixa.ToString();
             // Avalista
             if (_contador % 3 == 0)
             {
@@ -135,95 +146,81 @@ namespace Boleto2Net.Testes
             return boleto;
         }
 
-        internal static void TestarBoletoPDF(Banco banco, string nomeCarteira)
+        internal static void TestarHomologacao(Banco banco, TipoArquivo tipoArquivo, string nomeCarteira, int quantidadeBoletos, bool gerarPDF, string aceite)
         {
-            var quantidadeBoletosParaTeste = 3;
-            var boletos = GerarBoletos(banco, quantidadeBoletosParaTeste);
-            Assert.AreEqual(quantidadeBoletosParaTeste, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletosParaTeste);
+            var boletos = GerarBoletos(banco, quantidadeBoletos, aceite);
+            Assert.AreEqual(quantidadeBoletos, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletos);
 
-            // Define o nome do arquivo.
-            var nomeArquivo = Path.GetTempPath() + "Boleto2Net\\" + nomeCarteira + "_Arquivo.PDF";
-
-            // Cria pasta para os arquivos
-            if (Directory.Exists(Path.GetDirectoryName(nomeArquivo)) == false)
-                Directory.CreateDirectory(Path.GetDirectoryName(nomeArquivo));
-
-            // Se o arquivo já existir (testes anteriores), apaga o arquivo.
-            if (File.Exists(nomeArquivo))
+            // Define os nomes dos arquivos, cria pasta e apaga arquivos anteriores
+            var nomeArquivoREM = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.REM");
+            var nomeArquivoPDF = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.PDF");
+            if (!Directory.Exists(Path.GetDirectoryName(nomeArquivoREM)))
+                Directory.CreateDirectory(Path.GetDirectoryName(nomeArquivoREM));
+            if (File.Exists(nomeArquivoREM))
             {
-                File.Delete(nomeArquivo);
-                if (File.Exists(nomeArquivo))
-                    Assert.Fail("Arquivo Boletos (PDF) não foi excluído: " + nomeArquivo);
+                File.Delete(nomeArquivoREM);
+                if (File.Exists(nomeArquivoREM))
+                    Assert.Fail("Arquivo Remessa não foi excluído: " + nomeArquivoREM);
+            }
+            if (File.Exists(nomeArquivoPDF))
+            {
+                File.Delete(nomeArquivoPDF);
+                if (File.Exists(nomeArquivoPDF))
+                    Assert.Fail("Arquivo Boletos (PDF) não foi excluído: " + nomeArquivoPDF);
             }
 
-            // Gera arquivo PDF
-            try
-            {
-                var html = new StringBuilder();
-                foreach (var boletoTmp in boletos)
-                {
-                    using (var boletoParaImpressao = new BoletoBancario
-                    {
-                        Boleto = boletoTmp,
-                        OcultarInstrucoes = false,
-                        MostrarComprovanteEntrega = false,
-                        MostrarEnderecoCedente = true,
-                        ExibirDemonstrativo = true
-                    })
-                    {
-                        html.Append("<div style=\"page-break-after: always;\">");
-                        html.Append(boletoParaImpressao.MontaHtml());
-                        html.Append("</div>");
-                    }
-                    var pdf = new HtmlToPdfConverter().GeneratePdf(html.ToString());
-                    using (var fs = new FileStream(nomeArquivo, FileMode.Create))
-                        fs.Write(pdf, 0, pdf.Length);
-                }
-            }
-            catch (Exception e)
-            {
-                if (File.Exists(nomeArquivo))
-                    File.Delete(nomeArquivo);
-                Assert.Fail(e.InnerException.ToString());
-            }
-
-            // Se o arquivo existir, considera o teste OK
-            Assert.IsTrue(File.Exists(nomeArquivo), "Arquivo Boletos (PDF) não encontrado: " + nomeArquivo);
-        }
-
-        internal static void TestarArquivoRemessa(Banco banco, TipoArquivo tipoArquivo, string nomeCarteira)
-        {
-            const int quantidadeBoletosParaTeste = 36;
-            var boletos = GerarBoletos(banco, quantidadeBoletosParaTeste);
-            Assert.AreEqual(quantidadeBoletosParaTeste, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletosParaTeste);
-
-            // Define o nome do arquivo.
-            var nomeArquivo = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_Arquivo{tipoArquivo}.REM");
-
-            // Cria pasta para os arquivos
-            if (!Directory.Exists(Path.GetDirectoryName(nomeArquivo)))
-                Directory.CreateDirectory(Path.GetDirectoryName(nomeArquivo));
-
-            File.Delete(nomeArquivo);
-            if (File.Exists(nomeArquivo))
-                Assert.Fail("Arquivo Remessa não foi excluído: " + nomeArquivo);
-
-            // Gera o arquivo remessa.
+            // Arquivo Remessa.
             try
             {
                 var arquivoRemessa = new ArquivoRemessa(boletos.Banco, tipoArquivo, 1);
-                using (var fileStream = new FileStream(nomeArquivo, FileMode.Create))
+                using (var fileStream = new FileStream(nomeArquivoREM, FileMode.Create))
                     arquivoRemessa.GerarArquivoRemessa(boletos, fileStream);
+                if (!File.Exists(nomeArquivoREM))
+                    Assert.Fail("Arquivo Remessa não encontrado: " + nomeArquivoREM);
             }
             catch (Exception e)
             {
-                if (File.Exists(nomeArquivo))
-                    File.Delete(nomeArquivo);
+                if (File.Exists(nomeArquivoREM))
+                    File.Delete(nomeArquivoREM);
                 Assert.Fail(e.InnerException.ToString());
             }
 
-            // Se o arquivo existir, considera o teste OK
-            Assert.IsTrue(File.Exists(nomeArquivo), "Arquivo Remessa não encontrado: " + nomeArquivo);
+            if (gerarPDF)
+            {
+                // Gera arquivo PDF
+                try
+                {
+                    var html = new StringBuilder();
+                    foreach (var boletoTmp in boletos)
+                    {
+                        using (var boletoParaImpressao = new BoletoBancario
+                        {
+                            Boleto = boletoTmp,
+                            OcultarInstrucoes = false,
+                            MostrarComprovanteEntrega = false,
+                            MostrarEnderecoCedente = true,
+                            ExibirDemonstrativo = true
+                        })
+                        {
+                            html.Append("<div style=\"page-break-after: always;\">");
+                            html.Append(boletoParaImpressao.MontaHtml());
+                            html.Append("</div>");
+                        }
+                        var pdf = new HtmlToPdfConverter().GeneratePdf(html.ToString());
+                        using (var fs = new FileStream(nomeArquivoPDF, FileMode.Create))
+                            fs.Write(pdf, 0, pdf.Length);
+                        if (!File.Exists(nomeArquivoPDF))
+                            Assert.Fail("Arquivo Boletos (PDF) não encontrado: " + nomeArquivoPDF);
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (File.Exists(nomeArquivoPDF))
+                        File.Delete(nomeArquivoPDF);
+                    Assert.Fail(e.InnerException.ToString());
+                }
+            }
         }
     }
 }

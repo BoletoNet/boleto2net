@@ -30,5 +30,12 @@ namespace Boleto2Net
             boleto.NossoNumeroDV = $"{cedente.ContaBancaria.Agencia}{cedente.Codigo.PadLeft(9, '0')}{cedente.CodigoDV}{boleto.NossoNumero}".CalcularDVSicoob();
             boleto.NossoNumeroFormatado = $"{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
         }
+
+        public string FormataCodigoBarraCampoLivre(Boleto boleto)
+        {
+            var cedente = boleto.Banco.Cedente;
+            var contaBancaria = cedente.ContaBancaria;
+            return $"{contaBancaria.Carteira}{contaBancaria.Agencia}{contaBancaria.VariacaoCarteira}{cedente.Codigo}{cedente.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}001";
+        }
     }
 }
