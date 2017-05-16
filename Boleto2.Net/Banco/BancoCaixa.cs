@@ -32,7 +32,7 @@ namespace Boleto2Net
             if (Cedente.CodigoDV == Empty)
                 throw new Exception($"Dígito do código do cedente ({codigoCedente}) não foi informado.");
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}/{codigoCedente}-{Cedente.CodigoDV}";
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoCedente}-{Cedente.CodigoDV}";
 
             contaBancaria.LocalPagamento = "ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NA CAIXA ECONÔMICA FEDERAL.";
         }

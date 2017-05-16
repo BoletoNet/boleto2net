@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="Boleto\DemonstrativoValoresBoleto\GrupoDemonstrativo.cs" />
     <Compile Include="Boleto\DemonstrativoValoresBoleto\ItemDemonstrativo.cs" />
+    <Compile Include="Enums\TipoDocumento.cs" />
     <Compile Include="Enums\Modulo11Algoritmo.cs" />
     <Compile Include="Enums\TipoCodigoBaixaDevolucao.cs" />
     <Compile Include="Enums\TipoCodigoProtesto.cs" />

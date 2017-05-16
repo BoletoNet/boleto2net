@@ -373,7 +373,7 @@ namespace Boleto2Net
                     sacado += string.Format(" - CPF: " + Utils.FormataCPF(Boleto.Sacado.CPFCNPJ));
                     break;
                 case "J":
-                    sacado += string.Format(" - CNPJ: " + Utils.FormataCPF(Boleto.Sacado.CPFCNPJ));
+                    sacado += string.Format(" - CNPJ: " + Utils.FormataCNPJ(Boleto.Sacado.CPFCNPJ));
                     break;
             }
             if (Boleto.Sacado.Observacoes != string.Empty)
@@ -395,10 +395,10 @@ namespace Boleto2Net
                 switch (Boleto.Avalista.TipoCPFCNPJ("A"))
                 {
                     case "F":
-                        sacado += string.Format(" - CPF: " + Utils.FormataCPF(Boleto.Sacado.CPFCNPJ));
+                        avalista += string.Format(" - CPF: " + Utils.FormataCPF(Boleto.Avalista.CPFCNPJ));
                         break;
                     case "J":
-                        sacado += string.Format(" - CNPJ: " + Utils.FormataCPF(Boleto.Sacado.CPFCNPJ));
+                        avalista += string.Format(" - CNPJ: " + Utils.FormataCNPJ(Boleto.Avalista.CPFCNPJ));
                         break;
                 }
                 if (Boleto.Avalista.Observacoes != string.Empty)
@@ -430,7 +430,7 @@ namespace Boleto2Net
                 .Replace("@LINHADIGITAVEL", Boleto.CodigoBarra.LinhaDigitavel)
                 .Replace("@LOCALPAGAMENTO", Boleto.Banco.Cedente.ContaBancaria.LocalPagamento)
                 .Replace("@DATAVENCIMENTO", dataVencimento)
-                .Replace("@CEDENTE_BOLETO", !Boleto.Banco.Cedente.MostrarCNPJnoBoleto ? Boleto.Banco.Cedente.Nome : string.Format("{0}&nbsp;&nbsp;&nbsp;CNPJ: {1}", Boleto.Banco.Cedente.Nome, Boleto.Banco.Cedente.CPFCNPJ))
+                .Replace("@CEDENTE_BOLETO", !Boleto.Banco.Cedente.MostrarCNPJnoBoleto ? Boleto.Banco.Cedente.Nome : string.Format("{0} - CNPJ: {1}", Boleto.Banco.Cedente.Nome, Utils.FormataCNPJ(Boleto.Banco.Cedente.CPFCNPJ)))
                 .Replace("@CEDENTE", Boleto.Banco.Cedente.Nome)
                 .Replace("@DATADOCUMENTO", Boleto.DataEmissao.ToString("dd/MM/yyyy"))
                 .Replace("@NUMERODOCUMENTO", Boleto.NumeroDocumento)

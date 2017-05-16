@@ -31,7 +31,7 @@ namespace Boleto2Net
             var codigoCedente = Cedente.Codigo;
             Cedente.Codigo = codigoCedente.Length <= 20 ? codigoCedente.PadLeft(20, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 20);
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia}/{contaBancaria.Conta}-{contaBancaria.DigitoConta}";
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
         }
 
         public void ValidaBoleto(Boleto boleto)

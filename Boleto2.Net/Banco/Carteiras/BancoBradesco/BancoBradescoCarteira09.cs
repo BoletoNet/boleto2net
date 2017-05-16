@@ -28,7 +28,7 @@ namespace Boleto2Net
                 throw new Exception($"Nosso Número ({nossoNumero}) deve conter 11 dígitos.");
             boleto.NossoNumero = nossoNumero = nossoNumero.PadLeft(11, '0');
             boleto.NossoNumeroDV = (contaBancaria.Carteira + nossoNumero).CalcularDVBradesco();
-            boleto.NossoNumeroFormatado = $"{contaBancaria.Carteira}/{nossoNumero}-{boleto.NossoNumeroDV}";
+            boleto.NossoNumeroFormatado = $"{contaBancaria.Carteira.PadLeft(3, '0')}/{nossoNumero}-{boleto.NossoNumeroDV}";
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)

@@ -28,7 +28,7 @@ namespace Boleto2Net
             contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO. APÓS, ATUALIZE O BOLETO NO SITE BB.COM.BR");
 
             var codigoCedente = Cedente.Codigo;
-            Cedente.CodigoFormatado = codigoCedente.Length == 7 ? $"{contaBancaria.Agencia}/{codigoCedente}" : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
+            Cedente.CodigoFormatado = codigoCedente.Length == 7 ? $"{contaBancaria.Agencia} / {codigoCedente}" : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
         }
 
         public void ValidaBoleto(Boleto boleto)

@@ -29,9 +29,12 @@ namespace Boleto2Net
         //      1.14 - Correção Código da Espécie do Documento / Correções de Homologação do Sicoob
         // Abril/2017
         //      1.20 - Santander - Carteira 101
+        //      1.21 - Correção na impressão do CNPJ do sacado (estava formatado como CPF)
+        //      1.22 - Correção na impressão dos dados do beneficiario
+        //      1.23 - Correções Santander
 
 
-        readonly public string Versao = "1.20";
+        readonly public string Versao = "1.23";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
@@ -43,7 +46,7 @@ namespace Boleto2Net
                                     int numeroBanco, string agencia, string digitoAgencia, string operacaoConta, string conta, string digitoConta,
                                     string codigoCedente, string digitoCodigoCedente, string codigoTransmissao,
                                     string carteira, string variacaoCarteira,
-                                    int tipoCarteira, int tipoFormaCadastramento, int tipoImpressaoBoleto,
+                                    int tipoCarteira, int tipoFormaCadastramento, int tipoImpressaoBoleto, int tipoDocumento,
                                     ref string mensagemErro)
         {
             mensagemErro = "";
@@ -97,6 +100,10 @@ namespace Boleto2Net
                 {
                     mensagemErro += "Tipo da Impressão do Boleto inválida: 1-Banco, 2-Empresa" + Environment.NewLine;
                 }
+                if (tipoDocumento < 1 || tipoDocumento > 2)
+                {
+                    mensagemErro += "Tipo do Documento do Boleto inválido: 1-Tradicional, 2-Escritural" + Environment.NewLine;
+                }
 
                 // Banco, Cedente, Conta Corrente
                 boletos.Banco = new Banco(numeroBanco)
@@ -117,7 +124,8 @@ namespace Boleto2Net
                             VariacaoCarteira = variacaoCarteira,
                             TipoCarteira = (TipoCarteira)tipoCarteira,
                             TipoFormaCadastramento = (TipoFormaCadastramento)tipoFormaCadastramento,
-                            TipoImpressaoBoleto = (TipoImpressaoBoleto)tipoImpressaoBoleto
+                            TipoImpressaoBoleto = (TipoImpressaoBoleto)tipoImpressaoBoleto,
+                            TipoDocumento = (TipoDocumento)tipoDocumento
                         },
                         Codigo = codigoCedente,
                         CodigoDV = digitoCodigoCedente,

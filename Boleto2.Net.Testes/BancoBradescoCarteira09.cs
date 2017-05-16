@@ -29,14 +29,9 @@ namespace Boleto2Net.Testes
         [Test]
         public void Banco237_Bradesco_09_REM400()
         {
-            Utils.TestarArquivoRemessa(_banco, TipoArquivo.CNAB400, nameof(BancoBradescoCarteira09));
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBradescoCarteira09), 5, true, "?");
         }
 
-        [Test]
-        public void Banco237_Bradesco_09_PDF()
-        {
-            Utils.TestarBoletoPDF(_banco, nameof(BancoBradescoCarteira09));
-        }
 
         [TestCase(141.50, "453", "BB943A", "1", "09/00000000453-P", "23791690400000141501234090000000045301234560", "23791.23405 90000.000043 53012.345608 1 69040000014150", 2016, 9, 1)]
         [TestCase(2717.16, "456", "BB874A", "2", "09/00000000456-4", "23792693400002717161234090000000045601234560", "23791.23405 90000.000043 56012.345601 2 69340000271716", 2016, 10, 1)]

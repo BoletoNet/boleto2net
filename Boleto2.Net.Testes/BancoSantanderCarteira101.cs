@@ -21,7 +21,7 @@ namespace Boleto2Net.Testes
             };
             _banco = new Banco(033)
             {
-                Cedente = Utils.GerarCedente("6209467", "", "459800006209467", contaBancaria)
+                Cedente = Utils.GerarCedente("6209467", "", "409800006209467", contaBancaria)
             };
             _banco.FormataCedente();
         }
@@ -29,46 +29,40 @@ namespace Boleto2Net.Testes
         [Test]
         public void Banco033_Santander_101_REM240()
         {
-            Utils.TestarArquivoRemessa(_banco, TipoArquivo.CNAB240, nameof(BancoSantanderCarteira101));
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSantanderCarteira101), 5, true, "N");
         }
 
-        [Test]
-        public void Banco033_Santander_101_PDF()
-        {
-            Utils.TestarBoletoPDF(_banco, nameof(BancoSantanderCarteira101));
-        }
+        //[TestCase(141.50, "453", "BB943A", "1", "09/00000000453-P", "23791690400000141501234090000000045301234560", "23791.23405 90000.000043 53012.345608 1 69040000014150", 2016, 9, 1)]
+        //[TestCase(2717.16, "456", "BB874A", "2", "09/00000000456-4", "23792693400002717161234090000000045601234560", "23791.23405 90000.000043 56012.345601 2 69340000271716", 2016, 10, 1)]
+        //[TestCase(297.21, "444", "BB834A", "3", "09/00000000444-0", "23793690500000297211234090000000044401234560", "23791.23405 90000.000043 44012.345607 3 69050000029721", 2016, 9, 2)]
+        //[TestCase(297.21, "468", "BB856A", "4", "09/00000000468-8", "23794693500000297211234090000000046801234560", "23791.23405 90000.000043 68012.345606 4 69350000029721", 2016, 10, 2)]
+        //[TestCase(297.21, "443", "BB833A", "5", "09/00000000443-2", "23795690500000297211234090000000044301234560", "23791.23405 90000.000043 43012.345609 5 69050000029721", 2016, 9, 2)]
+        //[TestCase(649.39, "414", "BB815A", "6", "09/00000000414-9", "23796687300000649391234090000000041401234560", "23791.23405 90000.000043 14012.345600 6 68730000064939", 2016, 8, 1)]
+        //[TestCase(270, "561", "BB932A", "7", "09/00000000561-7", "23797702600000270001234090000000056101234560", "23791.23405 90000.000050 61012.345601 7 70260000027000", 2017, 1, 1)]
+        //[TestCase(2924.11, "445", "BB874A", "8", "09/00000000445-9", "23798690500002924111234090000000044501234560", "23791.23405 90000.000043 45012.345604 8 69050000292411", 2016, 9, 2)]
+        //[TestCase(830, "562", "BB933A", "9", "09/00000000562-5", "23799702600000830001234090000000056201234560", "23791.23405 90000.000050 62012.345609 9 70260000083000", 2017, 1, 1)]
+        //public void GeraUmBoletoValido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
+        //{
+        //    //Ambiente
+        //    var boleto = new Boleto
+        //    {
+        //        DataVencimento = new DateTime(anoMesDia[0], anoMesDia[1], anoMesDia[2]),
+        //        ValorTitulo = valorTitulo,
+        //        NossoNumero = nossoNumero,
+        //        NumeroDocumento = numeroDocumento,
+        //        EspecieDocumento = TipoEspecieDocumento.DM,
+        //        Banco = _banco,
+        //        Sacado = Utils.GerarSacado()
+        //    };
 
-        [TestCase(141.50, "453", "BB943A", "1", "09/00000000453-P", "23791690400000141501234090000000045301234560", "23791.23405 90000.000043 53012.345608 1 69040000014150", 2016, 9, 1)]
-        [TestCase(2717.16, "456", "BB874A", "2", "09/00000000456-4", "23792693400002717161234090000000045601234560", "23791.23405 90000.000043 56012.345601 2 69340000271716", 2016, 10, 1)]
-        [TestCase(297.21, "444", "BB834A", "3", "09/00000000444-0", "23793690500000297211234090000000044401234560", "23791.23405 90000.000043 44012.345607 3 69050000029721", 2016, 9, 2)]
-        [TestCase(297.21, "468", "BB856A", "4", "09/00000000468-8", "23794693500000297211234090000000046801234560", "23791.23405 90000.000043 68012.345606 4 69350000029721", 2016, 10, 2)]
-        [TestCase(297.21, "443", "BB833A", "5", "09/00000000443-2", "23795690500000297211234090000000044301234560", "23791.23405 90000.000043 43012.345609 5 69050000029721", 2016, 9, 2)]
-        [TestCase(649.39, "414", "BB815A", "6", "09/00000000414-9", "23796687300000649391234090000000041401234560", "23791.23405 90000.000043 14012.345600 6 68730000064939", 2016, 8, 1)]
-        [TestCase(270, "561", "BB932A", "7", "09/00000000561-7", "23797702600000270001234090000000056101234560", "23791.23405 90000.000050 61012.345601 7 70260000027000", 2017, 1, 1)]
-        [TestCase(2924.11, "445", "BB874A", "8", "09/00000000445-9", "23798690500002924111234090000000044501234560", "23791.23405 90000.000043 45012.345604 8 69050000292411", 2016, 9, 2)]
-        [TestCase(830, "562", "BB933A", "9", "09/00000000562-5", "23799702600000830001234090000000056201234560", "23791.23405 90000.000050 62012.345609 9 70260000083000", 2017, 1, 1)]
-        public void GeraUmBoletoValido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
-        {
-            //Ambiente
-            var boleto = new Boleto
-            {
-                DataVencimento = new DateTime(anoMesDia[0], anoMesDia[1], anoMesDia[2]),
-                ValorTitulo = valorTitulo,
-                NossoNumero = nossoNumero,
-                NumeroDocumento = numeroDocumento,
-                EspecieDocumento = TipoEspecieDocumento.DM,
-                Banco = _banco,
-                Sacado = Utils.GerarSacado()
-            };
+        //    //Ação
+        //    boleto.ValidarDados();
 
-            //Ação
-            boleto.ValidarDados();
-
-            //Assertivas
-            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}");
-            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido");
-            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido");
-            Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
-        }
+        //    //Assertivas
+        //    Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}");
+        //    Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido");
+        //    Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido");
+        //    Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
+        //}
     }
 }

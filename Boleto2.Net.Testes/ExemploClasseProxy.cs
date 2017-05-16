@@ -18,7 +18,7 @@ namespace Boleto2Net.Testes
                                                   "Av Testador", "12", "sala 30", "Centro", "Cidade", "SP", "11223-445", "Observacoes do Cedente",
                                                    237, "1234", "X", "", "123456", "X",
                                                    "1213141", "0", "", "09", "",
-                                                   (int)TipoCarteira.CarteiraCobrancaSimples, (int)TipoFormaCadastramento.ComRegistro, (int)TipoImpressaoBoleto.Empresa,
+                                                   (int)TipoCarteira.CarteiraCobrancaSimples, (int)TipoFormaCadastramento.ComRegistro, (int)TipoImpressaoBoleto.Empresa, (int)TipoDocumento.Escritural,
                                                    ref mensagemErro);
             Assert.AreEqual(true, retorno, "SetupCobrança: " +mensagemErro);
 

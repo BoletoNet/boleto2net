@@ -31,7 +31,7 @@ namespace Boleto2Net
             var codigoCedente = Cedente.Codigo;
             Cedente.Codigo = codigoCedente.Length <= 7 ? codigoCedente.PadLeft(7, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia}/{contaBancaria.Conta}-{contaBancaria.DigitoConta}";
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia} / {Cedente.Codigo}";
         }
 
         public void ValidaBoleto(Boleto boleto)
@@ -253,32 +253,20 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "033", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0000", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 009, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, Cedente.TipoCPFCNPJ("0"), '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 014, 0, Cedente.CPFCNPJ, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 008, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0017, 001, 0, Cedente.TipoCPFCNPJ("0"), '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 015, 0, Cedente.CPFCNPJ, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0033, 015, 0, Cedente.CodigoTransmissao, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0048, 005, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0053, 005, 0, Cedente.ContaBancaria.Agencia, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0058, 001, 0, Cedente.ContaBancaria.DigitoAgencia, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0059, 012, 0, Cedente.Codigo, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0071, 001, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0072, 001, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0048, 025, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0073, 030, 0, Cedente.Nome, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0103, 030, 0, "BANCO SANTANDER", ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0133, 010, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0143, 001, 0, "1", '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0144, 008, 0, DateTime.Now, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediHoraHHMMSS___________, 0152, 006, 0, DateTime.Now, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0152, 006, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0158, 006, 0, numeroArquivoRemessa, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0164, 003, 0, "030", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0167, 005, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0172, 020, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0192, 020, 0, "REMESSA-PRODUCAO", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0212, 012, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0224, 001, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0225, 004, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0229, 002, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0231, 010, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0164, 003, 0, "040", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0167, 074, 0, Empty, ' ');
                 reg.CodificarLinha();
                 return reg.LinhaRegistro;
             }
@@ -299,23 +287,19 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 001, 0, "R", ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0010, 002, 0, "01", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0012, 002, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0014, 003, 0, "020", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0014, 003, 0, "030", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0017, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, Cedente.TipoCPFCNPJ("0"), '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 015, 0, Cedente.CPFCNPJ, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0034, 020, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0054, 005, 0, Cedente.ContaBancaria.Agencia, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0059, 001, 0, Cedente.ContaBancaria.DigitoAgencia, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0060, 012, 0, Cedente.Codigo, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0072, 001, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0073, 001, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0054, 015, 0, Cedente.CodigoTransmissao, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0069, 005, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0074, 030, 0, Cedente.Nome, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0104, 040, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0144, 040, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0184, 008, 0, numeroArquivoRemessa, '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0192, 008, 0, DateTime.Now, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0200, 008, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0208, 033, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0200, 041, 0, Empty, ' ');
                 reg.CodificarLinha();
                 return reg.LinhaRegistro;
             }
@@ -338,20 +322,41 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0014, 001, 0, "P", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0015, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0016, 002, 0, "01", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 005, 0, boleto.Banco.Cedente.ContaBancaria.Agencia, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0023, 001, 0, boleto.Banco.Cedente.ContaBancaria.DigitoAgencia, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0024, 012, 0, boleto.Banco.Cedente.Codigo, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0036, 002, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0038, 007, 0, boleto.NossoNumero, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0045, 011, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0056, 005, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0061, 001, 0, (int)boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0062, 001, 0, (int)boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 004, 0, boleto.Banco.Cedente.ContaBancaria.Agencia, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0022, 001, 0, boleto.Banco.Cedente.ContaBancaria.DigitoAgencia, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0023, 009, 0, boleto.Banco.Cedente.ContaBancaria.Conta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0032, 001, 0, boleto.Banco.Cedente.ContaBancaria.DigitoConta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0033, 009, 0, boleto.Banco.Cedente.ContaBancaria.Conta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0042, 001, 0, boleto.Banco.Cedente.ContaBancaria.DigitoConta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0043, 002, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0045, 013, 0, boleto.NossoNumero+boleto.NossoNumeroDV, '0');
+
+                if (boleto.Banco.Cedente.ContaBancaria.TipoCarteira == TipoCarteira.CarteiraCobrancaSimples)
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 058, 001, 0, "5", '0');
+                if (boleto.Banco.Cedente.ContaBancaria.TipoCarteira == TipoCarteira.CarteiraCobrancaCaucionada)
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 058, 001, 0, "6", '0');
+                if (boleto.Banco.Cedente.ContaBancaria.TipoCarteira == TipoCarteira.CarteiraCobrancaDescontada)
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 058, 001, 0, "4", '0');
+
+                if (boleto.Banco.Cedente.ContaBancaria.TipoFormaCadastramento == TipoFormaCadastramento.ComRegistro)
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 059, 001, 0, "1", '0');
+                if (boleto.Banco.Cedente.ContaBancaria.TipoFormaCadastramento == TipoFormaCadastramento.SemRegistro)
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 059, 001, 0, "2", '0');
+
+                if (boleto.Banco.Cedente.ContaBancaria.TipoDocumento == TipoDocumento.Tradicional)
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 060, 001, 0, "1", '0');
+                if (boleto.Banco.Cedente.ContaBancaria.TipoDocumento == TipoDocumento.Escritural)
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 060, 001, 0, "2", '0');
+
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0061, 001, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0062, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0063, 015, 0, boleto.NumeroDocumento, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0078, 008, 0, boleto.DataVencimento, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0086, 015, 2, boleto.ValorTitulo, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0101, 005, 2, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0106, 001, 0, "0", ' ');
+
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0101, 004, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0105, 001, 0, "0", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0106, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0107, 002, 0, (int)boleto.EspecieDocumento, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 001, 0, boleto.Aceite, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0110, 008, 0, boleto.DataEmissao, '0');
@@ -383,16 +388,16 @@ namespace Boleto2Net
                     reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0143, 008, 0, boleto.DataDesconto, '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0151, 015, 2, boleto.ValorDesconto, '0');
                 }
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0166, 015, 2, 0, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0166, 015, 2, boleto.ValorIOF, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0181, 015, 2, boleto.ValorAbatimento, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0196, 025, 0, boleto.NumeroControleParticipante, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, (int)boleto.CodigoProtesto, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0222, 002, 0, boleto.DiasProtesto, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0225, 003, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0228, 002, 0, "09", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0230, 010, 2, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0240, 001, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, (int)boleto.CodigoBaixaDevolucao, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0225, 001, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0226, 002, 0, boleto.DiasBaixaDevolucao, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0228, 002, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0230, 011, 0, Empty, ' ');
                 reg.CodificarLinha();
                 var vLinha = reg.LinhaRegistro;
                 return vLinha;
@@ -428,8 +433,10 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0155, 015, 0, boleto.Avalista.CPFCNPJ, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0170, 040, 0, boleto.Avalista.Nome, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0210, 003, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0213, 020, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0233, 008, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0213, 003, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0216, 003, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0219, 003, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0222, 019, 0, Empty, ' ');
                 reg.CodificarLinha();
                 var vLinha = reg.LinhaRegistro;
                 return vLinha;
@@ -466,22 +473,14 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 008, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0027, 015, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0042, 001, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0043, 008, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0051, 015, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0042, 024, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 001, 0, codMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0067, 008, 0, boleto.DataMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0075, 015, 2, boleto.ValorMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0090, 010, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0100, 040, 0, msg3, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0140, 040, 0, msg4, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0180, 020, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0200, 016, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0216, 001, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0217, 012, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0229, 002, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0231, 001, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0232, 009, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0180, 061, 0, Empty, ' ');
                 reg.CodificarLinha();
                 var vLinha = reg.LinhaRegistro;
                 return vLinha;
@@ -496,8 +495,8 @@ namespace Boleto2Net
         {
             try
             {
-                var msg5A9 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(80, 200), 200, 200, ' ', 0, true, true, false);
-                if (IsNullOrWhiteSpace(msg5A9))
+                var msg5A7 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(80, 200), 200, 200, ' ', 0, true, true, false);
+                if (IsNullOrWhiteSpace(msg5A7))
                     return "";
 
                 numeroRegistroGeral++;
@@ -509,8 +508,10 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0014, 001, 0, "S", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0015, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0016, 002, 0, "01", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, "3", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0019, 200, 0, msg5A9, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, "2", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0019, 120, 0, msg5A7, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0139, 040, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0179, 040, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0219, 022, 0, Empty, ' ');
                 reg.CodificarLinha();
                 return reg.LinhaRegistro;
@@ -536,9 +537,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "5", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 009, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 006, 0, numeroRegistrosNoLote, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0024, 092, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0116, 008, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0124, 117, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0024, 217, 0, Empty, ' ');
                 reg.CodificarLinha();
                 return reg.LinhaRegistro;
             }
@@ -561,8 +560,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 009, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 006, 0, "1", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0024, 006, 0, numeroRegistrosNoArquivo, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0030, 006, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0036, 205, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0030, 211, 0, Empty, ' ');
                 reg.CodificarLinha();
                 return reg.LinhaRegistro;
             }
