@@ -16,24 +16,21 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var nossoNumero = boleto.NossoNumero;
-            var contaBancaria = boleto.Banco.Cedente.ContaBancaria;
-
-            if (IsNullOrWhiteSpace(nossoNumero))
+            if (IsNullOrWhiteSpace(boleto.NossoNumero))
                 throw new Exception("Nosso Número não informado.");
+
             // Nosso número não pode ter mais de 7 dígitos
-            if (nossoNumero.Length > 7)
-                throw new Exception($"Nosso Número ({nossoNumero}) deve conter 7 dígitos.");
-            boleto.NossoNumero = nossoNumero = nossoNumero.PadLeft(7, '0');
-            boleto.NossoNumeroDV = nossoNumero.CalcularDVSantander();
-            boleto.NossoNumeroFormatado = $"{nossoNumero}-{boleto.NossoNumeroDV}";
+            if (boleto.NossoNumero.Length > 7)
+                throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter 7 dígitos.");
+
+            boleto.NossoNumero = boleto.NossoNumero.PadLeft(7, '0');
+            boleto.NossoNumeroDV = boleto.NossoNumero.CalcularDVSantander();
+            boleto.NossoNumeroFormatado = $"{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var cedente = boleto.Banco.Cedente;
-            var contaBancaria = cedente.ContaBancaria;
-            return $"9{cedente.Codigo}00000{boleto.NossoNumero}{boleto.NossoNumeroDV}0101";
+            return $"9{boleto.Banco.Cedente.Codigo}00000{boleto.NossoNumero}{boleto.NossoNumeroDV}0101";
         }
     }
 }

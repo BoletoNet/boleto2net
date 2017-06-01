@@ -28,13 +28,13 @@ namespace Boleto2Net.Testes
         }
 
         [Test]
-        public void Banco001_Brasil_17_019_REM240()
+        public void Brasil_17_019_REM240()
         {
             Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoBrasilCarteira17019Tests), 5, true, "?");
         }
 
         [Test]
-        public void Banco001_Brasil_17_019_REM400()
+        public void Brasil_17_019_REM400()
         {
             Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBrasilCarteira17019Tests), 5, true, "?");
         }
@@ -50,7 +50,7 @@ namespace Boleto2Net.Testes
         [TestCase(300, "4", "BO123456D", "7", "12345670000000004", "00197695900000300000000001234567000000000417", "00190.00009 01234.567004 00000.004176 7 69590000030000", 2016, 10, 26)]
         [TestCase(609, "7", "BO123456G", "8", "12345670000000007", "00198705200000609000000001234567000000000717", "00190.00009 01234.567004 00000.007179 8 70520000060900", 2017, 1, 27)]
         [TestCase(600, "7", "BO123456G", "9", "12345670000000007", "00199705200000600000000001234567000000000717", "00190.00009 01234.567004 00000.007179 9 70520000060000", 2017, 1, 27)]
-        public void GeraUmBoletoValido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
+        public void Brasil_17_019_BoletoOK(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
             var boleto = new Boleto

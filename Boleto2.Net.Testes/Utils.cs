@@ -102,11 +102,11 @@ namespace Boleto2Net.Testes
                 DataDesconto = DateTime.Now.AddMonths(i),
                 ValorDesconto = (decimal)(100 * i * 0.10),
                 DataMulta = DateTime.Now.AddMonths(i),
-                PercentualMulta = (decimal)0.02,
-                ValorMulta = (decimal)(100 * i * 0.02),
+                PercentualMulta = (decimal)2.00,
+                ValorMulta = (decimal)(100 * i * (2.00/100)),
                 DataJuros = DateTime.Now.AddMonths(i),
-                PercentualJurosDia = (decimal)0.002,
-                ValorJurosDia = (decimal)(100 * i * 0.002),
+                PercentualJurosDia = (decimal)0.2,
+                ValorJurosDia = (decimal)(100 * i * (0.2/100)),
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
                 NumeroControleParticipante = "CHAVEPRIMARIA=" + _proximoNossoNumero
             };

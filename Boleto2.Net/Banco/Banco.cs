@@ -14,6 +14,7 @@ namespace Boleto2Net
             [033] = BancoSantander.Instance,
             [104] = BancoCaixa.Instance,
             [237] = BancoBradesco.Instance,
+            [341] = BancoItau.Instance,
             [756] = BancoSicoob.Instance
         };
 
@@ -62,7 +63,7 @@ namespace Boleto2Net
             {
                 var campoLivre = _banco.FormataCodigoBarraCampoLivre(boleto);
                 if (campoLivre.Length != 25)
-                    throw new Exception("Campo Livre deve ter 25 posições");
+                    throw new Exception($"Campo Livre deve ter 25 posições: {campoLivre}");
                 return campoLivre;
             }
             catch (Exception ex)

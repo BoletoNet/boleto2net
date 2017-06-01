@@ -29,7 +29,7 @@ namespace Boleto2Net.Testes
 
         }
         [Test]
-        public void Banco001_Brasil_11_019_TestePendente()
+        public void Brasil_11_019_TestePendente()
         {
             Assert.Inconclusive("Aguardando boletos de exemplo (gerados pelo banco - segunda via) para implementar os testes:/n" +
                                 "Remessa Cnab240/n" +

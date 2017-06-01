@@ -34,7 +34,7 @@ namespace Boleto2Net.Testes
         }
 
         [Test]
-        public void Banco756_Sicoob_1_01_REM400()
+        public void Sicoob_1_01_REM400()
         {
             Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSicoobCarteira101Tests), 5, true, "?");
         }
@@ -49,7 +49,7 @@ namespace Boleto2Net.Testes
         [TestCase(4011.24, "12349", "BO123456F", "7", "0012349-2", "75697702200004011241427701017227800123492001", "75691.42776 01017.227800 01234.920013 7 70220000401124", 2016, 12, 28)]
         [TestCase(700, "8", "BO123456B", "8", "0000008-0", "75698709500000700001427701017227800000080001", "75691.42776 01017.227800 00000.800011 8 70950000070000", 2017, 3, 11)]
         [TestCase(409, "5", "BO123456E", "9", "0000005-8", "75699700200000409001427701017227800000058001", "75691.42776 01017.227800 00000.580019 9 70020000040900", 2016, 12, 08)]
-        public void GeraUmBoletoValido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
+        public void Sicoob_1_01_BoletoOK(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
             var boleto = new Boleto

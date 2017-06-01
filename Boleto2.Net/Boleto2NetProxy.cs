@@ -32,9 +32,11 @@ namespace Boleto2Net
         //      1.21 - Correção na impressão do CNPJ do sacado (estava formatado como CPF)
         //      1.22 - Correção na impressão dos dados do beneficiario
         //      1.23 - Correções Santander
+        //      1.24 - Ajuste Caixa - Carteira SIG14 - FormataNossoNumero
+        //      1.25 - Santander - Carteira 101 Homologada
+        //      1.26 - Itaú - Carteira 109 Homologada
 
-
-        readonly public string Versao = "1.23";
+        readonly public string Versao = "1.25";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }

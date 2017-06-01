@@ -16,19 +16,17 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var nossoNumero = boleto.NossoNumero;
-            var contaBancaria = boleto.Banco.Cedente.ContaBancaria;
-            // Carteira 09: Dúvida: Não sei se na carteira 09, o banco também emite o boleto. Se emitir, será necessário tirar a trava do nosso número em branco:
-            // Se for só a empresa, devemos tratar aqui, que o nosso número não
             // O nosso número não pode ser em branco.
-            if (IsNullOrWhiteSpace(nossoNumero))
+            if (IsNullOrWhiteSpace(boleto.NossoNumero))
                 throw new Exception("Nosso Número não informado.");
+            
             // Nosso número não pode ter mais de 11 dígitos
-            if (nossoNumero.Length > 11)
-                throw new Exception($"Nosso Número ({nossoNumero}) deve conter 11 dígitos.");
-            boleto.NossoNumero = nossoNumero = nossoNumero.PadLeft(11, '0');
-            boleto.NossoNumeroDV = (contaBancaria.Carteira + nossoNumero).CalcularDVBradesco();
-            boleto.NossoNumeroFormatado = $"{contaBancaria.Carteira.PadLeft(3, '0')}/{nossoNumero}-{boleto.NossoNumeroDV}";
+            if (boleto.NossoNumero.Length > 11)
+                throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter 11 dígitos.");
+
+            boleto.NossoNumero = boleto.NossoNumero.PadLeft(11, '0');
+            boleto.NossoNumeroDV = (boleto.Banco.Cedente.ContaBancaria.Carteira + boleto.NossoNumero).CalcularDVBradesco();
+            boleto.NossoNumeroFormatado = $"{boleto.Banco.Cedente.ContaBancaria.Carteira.PadLeft(3, '0')}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)

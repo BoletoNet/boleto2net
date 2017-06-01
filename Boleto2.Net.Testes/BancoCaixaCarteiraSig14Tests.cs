@@ -28,7 +28,7 @@ namespace Boleto2Net.Testes
         }
 
         [Test]
-        public void Banco104_Caixa_SIG14_REM240()
+        public void Caixa_SIG14_REM240()
         {
             Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoCaixaCarteiraSig14Tests), 5, true, "?");
         }
@@ -43,7 +43,7 @@ namespace Boleto2Net.Testes
         [TestCase(800, "9", "BO123456B", "7", "14000000000000009-0", "10497711500000800001234560000100040000000099", "10491.23456 60000.100044 00000.000992 7 71150000080000", 2017, 3, 31)]
         [TestCase(100, "2", "BO123456B", "8", "14000000000000002-2", "10498691800000100001234560000100040000000021", "10491.23456 60000.100044 00000.000216 8 69180000010000", 2016, 9, 15)]
         [TestCase(200, "3", "BO123456C", "9", "14000000000000003-0", "10499694700000200001234560000100040000000030", "10491.23456 60000.100044 00000.000307 9 69470000020000", 2016, 10, 14)]
-        public void GeraUmBoletoValido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
+        public void Caixa_SIG14_BoletoOK(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
             var boleto = new Boleto
