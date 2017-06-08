@@ -21,13 +21,13 @@ namespace Boleto2Net
         public int CodigoBancoCorrespondente { get; set; }
         public string NossoNumeroBancoCorrespondente { get; set; }
 
-        public void FormatarDados(string localPagamento = "PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.", int digitosConta = 8)
+        public void FormatarDados(string localPagamento, int digitosConta)
         {
             var agencia = Agencia;
-            Agencia = agencia.Length <= 4 ? agencia.PadLeft(4, '0') : throw Boleto2NetException.AgenciaInvalida(agencia);
+            Agencia = agencia.Length <= 4 ? agencia.PadLeft(4, '0') : throw Boleto2NetException.AgenciaInvalida(agencia, 4);
 
             var conta = Conta;
-            Conta = conta.Length <= digitosConta ? conta.PadLeft(digitosConta, '0') : throw Boleto2NetException.ContaInvalida(conta);
+            Conta = conta.Length <= digitosConta ? conta.PadLeft(digitosConta, '0') : throw Boleto2NetException.ContaInvalida(conta, digitosConta);
 
             LocalPagamento = localPagamento;
         }
