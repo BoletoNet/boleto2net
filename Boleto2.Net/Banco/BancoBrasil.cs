@@ -25,7 +25,7 @@ namespace Boleto2Net
             if (!CarteiraFactory<BancoBrasil>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
                 throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
 
-            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO. APÓS, ATUALIZE O BOLETO NO SITE BB.COM.BR");
+            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO. APÓS, ATUALIZE O BOLETO NO SITE BB.COM.BR", 8);
 
             var codigoCedente = Cedente.Codigo;
             Cedente.CodigoFormatado = codigoCedente.Length == 7 ? $"{contaBancaria.Agencia} / {codigoCedente}" : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);

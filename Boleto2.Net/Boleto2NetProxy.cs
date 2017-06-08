@@ -35,8 +35,10 @@ namespace Boleto2Net
         //      1.24 - Ajuste Caixa - Carteira SIG14 - FormataNossoNumero
         //      1.25 - Santander - Carteira 101 Homologada
         //      1.26 - Itaú - Carteira 109 Homologada
+        // Junho/2017
+        //      1.30 - Correções no método FormataCedente e suas exceções - Quantidade de dígitos da conta e código do cedente
 
-        readonly public string Versao = "1.25";
+        readonly public string Versao = "1.30";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
