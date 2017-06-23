@@ -14,9 +14,9 @@ namespace Boleto2Net.Testes
                 DigitoAgencia = "X",
                 Conta = "123456",
                 DigitoConta = "X",
-                Carteira = "11",
-                VariacaoCarteira = "019",
-                TipoCarteira = TipoCarteira.CarteiraCobrancaSimples,
+                CarteiraPadrao = "11",
+                VariacaoCarteiraPadrao = "019",
+                TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaSimples,
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };

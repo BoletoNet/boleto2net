@@ -23,8 +23,8 @@ namespace Boleto2Net
         {
             var contaBancaria = Cedente.ContaBancaria;
 
-            if (!CarteiraFactory<BancoSantander>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
-                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
+            if (!CarteiraFactory<BancoSantander>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
             contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO SANTANDER.", digitosConta: 9);
 
@@ -40,13 +40,13 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoSantander>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoSantander>.ObterCarteira(boleto.CarteiraComVariacao);
             carteira.FormataNossoNumero(boleto);
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoSantander>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoSantander>.ObterCarteira(boleto.CarteiraComVariacao);
             return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
@@ -162,9 +162,9 @@ namespace Boleto2Net
                 boleto.NumeroControleParticipante = registro.Substring(105, 25);
 
                 //Carteira
-                boleto.Banco.Cedente.ContaBancaria.Carteira = registro.Substring(57, 1);
-                if (boleto.Banco.Cedente.ContaBancaria.Carteira == "1")
-                    boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                boleto.Carteira = registro.Substring(57, 1);
+                if (boleto.Carteira == "1")
+                    boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 //Identificação do Título no Banco
                 boleto.NossoNumero = registro.Substring(50, 6);
@@ -331,11 +331,11 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0043, 002, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0045, 013, 0, boleto.NossoNumero+boleto.NossoNumeroDV, '0');
 
-                if (boleto.Banco.Cedente.ContaBancaria.TipoCarteira == TipoCarteira.CarteiraCobrancaSimples)
+                if (boleto.TipoCarteira == TipoCarteira.CarteiraCobrancaSimples)
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 058, 001, 0, "5", '0');
-                if (boleto.Banco.Cedente.ContaBancaria.TipoCarteira == TipoCarteira.CarteiraCobrancaCaucionada)
+                if (boleto.TipoCarteira == TipoCarteira.CarteiraCobrancaCaucionada)
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 058, 001, 0, "6", '0');
-                if (boleto.Banco.Cedente.ContaBancaria.TipoCarteira == TipoCarteira.CarteiraCobrancaDescontada)
+                if (boleto.TipoCarteira == TipoCarteira.CarteiraCobrancaDescontada)
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 058, 001, 0, "4", '0');
 
                 if (boleto.Banco.Cedente.ContaBancaria.TipoFormaCadastramento == TipoFormaCadastramento.ComRegistro)

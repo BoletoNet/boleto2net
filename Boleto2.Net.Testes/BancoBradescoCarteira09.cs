@@ -14,8 +14,8 @@ namespace Boleto2Net.Testes
                 DigitoAgencia = "X",
                 Conta = "123456",
                 DigitoConta = "X",
-                Carteira = "09",
-                TipoCarteira = TipoCarteira.CarteiraCobrancaSimples,
+                CarteiraPadrao = "09",
+                TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaSimples,
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
@@ -45,14 +45,13 @@ namespace Boleto2Net.Testes
         public void Bradesco_09_BoletoOK(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
-            var boleto = new Boleto
+            var boleto = new Boleto(_banco)
             {
                 DataVencimento = new DateTime(anoMesDia[0], anoMesDia[1], anoMesDia[2]),
                 ValorTitulo = valorTitulo,
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Banco = _banco,
                 Sacado = Utils.GerarSacado()
             };
 

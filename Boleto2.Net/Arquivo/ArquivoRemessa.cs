@@ -62,7 +62,7 @@ namespace Boleto2Net
                     
                     // Ajusta Totalizadores
                     valorBoletoGeral += boleto.ValorTitulo;
-                    switch (boleto.Banco.Cedente.ContaBancaria.TipoCarteira)
+                    switch (boleto.TipoCarteira)
                     {
                         case TipoCarteira.CarteiraCobrancaSimples:
                             numeroRegistroCobrancaSimples++;

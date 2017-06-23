@@ -31,7 +31,7 @@ namespace Boleto2Net
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            return $"000000{boleto.NossoNumero}{boleto.Banco.Cedente.ContaBancaria.Carteira}";
+            return $"000000{boleto.NossoNumero}{boleto.Carteira}";
         }
     }
 }

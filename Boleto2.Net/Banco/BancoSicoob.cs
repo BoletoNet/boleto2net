@@ -30,8 +30,8 @@ namespace Boleto2Net
         {
             var contaBancaria = Cedente.ContaBancaria;
 
-            if (!CarteiraFactory<BancoSicoob>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
-                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
+            if (!CarteiraFactory<BancoSicoob>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
             var codigoCedente = Cedente.Codigo;
             if (Cedente.CodigoDV == Empty)
@@ -50,13 +50,13 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.CarteiraComVariacao);
             carteira.FormataNossoNumero(boleto);
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.CarteiraComVariacao);
             return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
@@ -273,11 +273,11 @@ namespace Boleto2Net
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0047, 001, 0, boleto.NossoNumeroDV, '0');
                 }
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0048, 002, 0, "01", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0050, 002, 0, boleto.Banco.Cedente.ContaBancaria.VariacaoCarteira, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0050, 002, 0, boleto.VariacaoCarteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0052, 001, 0, "4", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0053, 005, 0, Empty, ' ');
 
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0058, 001, 0, boleto.Banco.Cedente.ContaBancaria.Carteira, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0058, 001, 0, boleto.Carteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0059, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0060, 001, 0, " ", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0061, 001, 0, (int)boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto, '0');
@@ -551,7 +551,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 004, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0106, 001, 0, (int)boleto.Banco.Cedente.ContaBancaria.TipoImpressaoBoleto, '0');
 
-                switch (boleto.Banco.Cedente.ContaBancaria.TipoCarteira)
+                switch (boleto.TipoCarteira)
                 {
                     case TipoCarteira.CarteiraCobrancaSimples:
                         reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0107, 002, 0, "01", ' '); // Simples com Registro
@@ -560,7 +560,7 @@ namespace Boleto2Net
                         reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0107, 002, 0, "03", ' '); // Garantida Caucionada
                         break;
                     default:
-                        throw new Exception("Tipo de carteira não suportada: (" + boleto.Banco.Cedente.ContaBancaria.TipoCarteira.ToString() + ").");
+                        throw new Exception("Tipo de carteira não suportada: (" + boleto.TipoCarteira.ToString() + ").");
                 }
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 002, 0, "01", ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 010, 0, boleto.NumeroDocumento, ' ');
@@ -648,14 +648,14 @@ namespace Boleto2Net
                 boleto.NumeroControleParticipante = registro.Substring(105, 25);
 
                 //Carteira
-                boleto.Banco.Cedente.ContaBancaria.Carteira = registro.Substring(57, 1);
-                switch (boleto.Banco.Cedente.ContaBancaria.Carteira)
+                boleto.Carteira = registro.Substring(57, 1);
+                switch (boleto.Carteira)
                 {
                     case "3":
-                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaCaucionada;
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaCaucionada;
                         break;
                     default:
-                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
                         break;
                 }
 
@@ -747,17 +747,17 @@ namespace Boleto2Net
                 boleto.NumeroControleParticipante = registro.Substring(37, 25);
 
                 //Carteira
-                boleto.Banco.Cedente.ContaBancaria.Carteira = registro.Substring(106, 2);
-                switch (boleto.Banco.Cedente.ContaBancaria.Carteira)
+                boleto.Carteira = registro.Substring(106, 2);
+                switch (boleto.Carteira)
                 {
                     case "01":
-                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
                         break;
                     case "03":
-                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaCaucionada;
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaCaucionada;
                         break;
                     default:
-                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
                         break;
                 }
 
