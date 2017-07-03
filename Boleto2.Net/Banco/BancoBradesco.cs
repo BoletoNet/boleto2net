@@ -23,8 +23,8 @@ namespace Boleto2Net
         {
             var contaBancaria = Cedente.ContaBancaria;
 
-            if (!CarteiraFactory<BancoBradesco>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
-                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
+            if (!CarteiraFactory<BancoBradesco>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
             contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO BRADESCO.", 7);
 
@@ -40,13 +40,13 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoBradesco>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoBradesco>.ObterCarteira(boleto.CarteiraComVariacao);
             carteira.FormataNossoNumero(boleto);
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoBradesco>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoBradesco>.ObterCarteira(boleto.CarteiraComVariacao);
             return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
@@ -155,14 +155,13 @@ namespace Boleto2Net
                 boleto.NumeroControleParticipante = registro.Substring(37, 25);
 
                 //Carteira (no arquivo retorno, vem com 1 caracter. Ajustamos para 2 caracteres, como no manual do Bradesco.
-                var contaBancaria = boleto.Banco.Cedente.ContaBancaria;
-                contaBancaria.Carteira = registro.Substring(107, 1).PadLeft(2, '0');
-                contaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                boleto.Carteira = registro.Substring(107, 1).PadLeft(2, '0');
+                boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 //Identificação do Título no Banco
                 boleto.NossoNumero = registro.Substring(70, 11); //Sem o DV
                 boleto.NossoNumeroDV = registro.Substring(81, 1); //DV
-                boleto.NossoNumeroFormatado = $"{contaBancaria.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
+                boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
 
                 //Identificação de Ocorrência
                 boleto.CodigoOcorrencia = registro.Substring(108, 2);
@@ -254,7 +253,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0013, 007, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0020, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0021, 001, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0022, 003, 0, boleto.Banco.Cedente.ContaBancaria.Carteira, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0022, 003, 0, boleto.Carteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0025, 005, 0, boleto.Banco.Cedente.ContaBancaria.Agencia, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0030, 007, 0, boleto.Banco.Cedente.ContaBancaria.Conta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0037, 001, 0, boleto.Banco.Cedente.ContaBancaria.DigitoConta, '0');
@@ -369,7 +368,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0341, 006, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0347, 013, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0360, 007, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0367, 003, 0, boleto.Banco.Cedente.ContaBancaria.Carteira, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0367, 003, 0, boleto.Carteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0370, 005, 0, boleto.Banco.Cedente.ContaBancaria.Agencia, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0375, 007, 0, boleto.Banco.Cedente.ContaBancaria.Conta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0382, 001, 0, boleto.Banco.Cedente.ContaBancaria.DigitoConta, '0');

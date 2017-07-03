@@ -37,8 +37,13 @@ namespace Boleto2Net
         //      1.26 - Itaú - Carteira 109 Homologada
         // Junho/2017
         //      1.30 - Correções no método FormataCedente e suas exceções - Quantidade de dígitos da conta e código do cedente
+        //      1.31 - Correções na leitura do retorno do Itaú
+        //      1.40 - Inclusao das propriedades Carteira, VariacaoCarteira, TipoCarteira também na classe Boleto.
+        //             As propriedades que já existiam na classe ContaCorrente, foram renomeadas para CarteiraPadrao, VariacaoCarteiraPadrao, TipoCarteiraPadrao
+        //             A classe Boleto passou a ter um construtor obrigatorio, onde recebe um objeto Banco, e já prepara as 3 propriedades com o padrão definido.
+        //             Alteração foi necessária pois existem retornos com boletos em diferentes carteiras, e do modo que estava, aceitava apenas uma carteira para toda a lista de boletos.
 
-        readonly public string Versao = "1.30";
+        readonly public string Versao = "1.40c";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
@@ -124,9 +129,9 @@ namespace Boleto2Net
                             OperacaoConta = operacaoConta,
                             Conta = conta,
                             DigitoConta = digitoConta,
-                            Carteira = carteira,
-                            VariacaoCarteira = variacaoCarteira,
-                            TipoCarteira = (TipoCarteira)tipoCarteira,
+                            CarteiraPadrao = carteira,
+                            VariacaoCarteiraPadrao = variacaoCarteira,
+                            TipoCarteiraPadrao = (TipoCarteira)tipoCarteira,
                             TipoFormaCadastramento = (TipoFormaCadastramento)tipoFormaCadastramento,
                             TipoImpressaoBoleto = (TipoImpressaoBoleto)tipoImpressaoBoleto,
                             TipoDocumento = (TipoDocumento)tipoDocumento
@@ -219,10 +224,7 @@ namespace Boleto2Net
                     mensagemErro = "Realize o setup da cobrança antes de executar este método.";
                     return false;
                 }
-                boleto = new Boleto
-                {
-                    Banco = boletos.Banco
-                };
+                boleto = new Boleto(boletos.Banco);
                 return true;
             }
             catch (Exception ex)

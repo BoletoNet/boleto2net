@@ -39,6 +39,12 @@ namespace Boleto2Net
 
         public List<string> IdsRetornoCnab400RegistroDetalhe => _banco.IdsRetornoCnab400RegistroDetalhe;
 
+        public Boleto NovoBoleto()
+        {
+            var boleto = new Boleto(_banco);
+            return boleto;
+        }
+
         /// <summary>
         ///     Formata Cedente
         /// </summary>

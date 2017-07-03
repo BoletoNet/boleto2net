@@ -22,8 +22,8 @@ namespace Boleto2Net
         {
             var contaBancaria = Cedente.ContaBancaria;
 
-            if (!CarteiraFactory<BancoBrasil>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
-                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
+            if (!CarteiraFactory<BancoBrasil>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
             contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO. APÓS, ATUALIZE O BOLETO NO SITE BB.COM.BR", 8);
 
@@ -37,13 +37,13 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoBrasil>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoBrasil>.ObterCarteira(boleto.CarteiraComVariacao);
             carteira.FormataNossoNumero(boleto);
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoBrasil>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoBrasil>.ObterCarteira(boleto.CarteiraComVariacao);
             return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
@@ -343,8 +343,8 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 014, 0, Cedente.CPFCNPJ, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0033, 009, 0, Cedente.Codigo, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0042, 004, 0, "0014", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0046, 002, 0, Cedente.ContaBancaria.Carteira, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0048, 003, 0, Cedente.ContaBancaria.VariacaoCarteira, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0046, 002, 0, Cedente.ContaBancaria.CarteiraPadrao, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0048, 003, 0, Cedente.ContaBancaria.VariacaoCarteiraPadrao, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0051, 002, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0053, 005, 0, Cedente.ContaBancaria.Agencia, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0058, 001, 0, Cedente.ContaBancaria.DigitoAgencia, ' ');
@@ -389,8 +389,8 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 015, 0, Cedente.CPFCNPJ, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0034, 009, 0, Cedente.Codigo, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0043, 004, 0, "0014", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0047, 002, 0, Cedente.ContaBancaria.Carteira, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0049, 003, 0, Cedente.ContaBancaria.VariacaoCarteira, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0047, 002, 0, Cedente.ContaBancaria.CarteiraPadrao, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0049, 003, 0, Cedente.ContaBancaria.VariacaoCarteiraPadrao, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0052, 002, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0054, 005, 0, Cedente.ContaBancaria.Agencia, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0059, 001, 0, Cedente.ContaBancaria.DigitoAgencia, ' ');
@@ -432,8 +432,8 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0036, 001, 0, boleto.Banco.Cedente.ContaBancaria.DigitoConta, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0037, 001, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 020, 0, boleto.NossoNumero, ' ');
-                var tipoCarteira = (int)boleto.Banco.Cedente.ContaBancaria.TipoCarteira;
-                if ((boleto.Banco.Cedente.ContaBancaria.Carteira == "17") & (tipoCarteira == 1))
+                var tipoCarteira = (int)boleto.TipoCarteira;
+                if ((boleto.Carteira == "17") & (tipoCarteira == 1))
                     tipoCarteira = 7; // Informar 7 – para carteira 17 modalidade Simples.
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0058, 001, 0, tipoCarteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0059, 001, 0, (int)boleto.Banco.Cedente.ContaBancaria.TipoFormaCadastramento, '0');
@@ -693,10 +693,10 @@ namespace Boleto2Net
                 else
                     reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0088, 001, 0, string.Empty, 'A');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0089, 003, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0092, 003, 0, boleto.Banco.Cedente.ContaBancaria.VariacaoCarteira, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0092, 003, 0, boleto.VariacaoCarteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0095, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0096, 006, 0, "0", '0');
-                switch (boleto.Banco.Cedente.ContaBancaria.TipoCarteira)
+                switch (boleto.TipoCarteira)
                 {
                     case TipoCarteira.CarteiraCobrancaSimples:
                         reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 005, 0, string.Empty, ' ');
@@ -711,9 +711,9 @@ namespace Boleto2Net
                         reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 005, 0, "08VDR", ' ');
                         break;
                     default:
-                        throw new Exception("Tipo de carteira não suportada: (" + boleto.Banco.Cedente.ContaBancaria.TipoCarteira + ").");
+                        throw new Exception("Tipo de carteira não suportada: (" + boleto.TipoCarteira + ").");
                 }
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0107, 002, 0, boleto.Banco.Cedente.ContaBancaria.Carteira, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0107, 002, 0, boleto.Carteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 002, 0, "01", ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 010, 0, boleto.NumeroDocumento, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0121, 006, 0, boleto.DataVencimento, ' ');
@@ -851,21 +851,21 @@ namespace Boleto2Net
                 boleto.NumeroControleParticipante = registro.Substring(38, 25);
 
                 //Carteira
-                boleto.Banco.Cedente.ContaBancaria.Carteira = registro.Substring(106, 2);
-                boleto.Banco.Cedente.ContaBancaria.VariacaoCarteira = registro.Substring(091, 3);
+                boleto.Carteira = registro.Substring(106, 2);
+                boleto.VariacaoCarteira = registro.Substring(091, 3);
                 switch (registro.Substring(80, 1))
                 {
                     case "2":
-                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaVinculada;
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaVinculada;
                         break;
                     case "4":
-                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaDescontada;
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaDescontada;
                         break;
                     case "8":
-                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaVendor;
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaVendor;
                         break;
                     default:
-                        boleto.Banco.Cedente.ContaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
                         break;
                 }
 

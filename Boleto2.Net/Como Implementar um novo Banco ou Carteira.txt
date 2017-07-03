@@ -92,8 +92,8 @@
 	Controle do Participante
 		boleto.NumeroControleParticipante
 	Carteira
-		boleto.Banco.Cedente.ContaBancaria.Carteira
-		boleto.Banco.Cedente.ContaBancaria.TipoCarteira (Padrão: CarteiraCobrancaSimples)
+		boleto.Carteira
+		boleto.TipoCarteira (Padrão: CarteiraCobrancaSimples)
 	Identificação do Título no Banco
 		boleto.NossoNumero (Sem o dígito)
 		boleto.NossoNumeroDV (Apenas o dígito)

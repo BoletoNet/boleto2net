@@ -85,9 +85,8 @@ namespace Boleto2Net.Testes
             if (aceite == "?")
                 aceite = _contador % 2 == 0 ? "N" : "A";
 
-            var boleto = new Boleto
+            var boleto = new Boleto(banco)
             {
-                Banco = banco,
                 Sacado = GerarSacado(),
                 DataEmissao = DateTime.Now.AddDays(-3),
                 DataProcessamento = DateTime.Now,

@@ -14,8 +14,8 @@ namespace Boleto2Net.Testes
                 DigitoAgencia = "5",
                 Conta = "12345678",
                 DigitoConta = "9",
-                Carteira = "101",
-                TipoCarteira = TipoCarteira.CarteiraCobrancaSimples,
+                CarteiraPadrao = "101",
+                TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaSimples,
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
@@ -44,14 +44,13 @@ namespace Boleto2Net.Testes
         public void Santander_101_BoletoOK(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
-            var boleto = new Boleto
+            var boleto = new Boleto(_banco)
             {
                 DataVencimento = new DateTime(anoMesDia[0], anoMesDia[1], anoMesDia[2]),
                 ValorTitulo = valorTitulo,
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Banco = _banco,
                 Sacado = Utils.GerarSacado()
             };
 

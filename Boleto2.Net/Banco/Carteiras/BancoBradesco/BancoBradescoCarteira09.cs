@@ -25,14 +25,14 @@ namespace Boleto2Net
                 throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter 11 dígitos.");
 
             boleto.NossoNumero = boleto.NossoNumero.PadLeft(11, '0');
-            boleto.NossoNumeroDV = (boleto.Banco.Cedente.ContaBancaria.Carteira + boleto.NossoNumero).CalcularDVBradesco();
-            boleto.NossoNumeroFormatado = $"{boleto.Banco.Cedente.ContaBancaria.Carteira.PadLeft(3, '0')}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
+            boleto.NossoNumeroDV = (boleto.Carteira + boleto.NossoNumero).CalcularDVBradesco();
+            boleto.NossoNumeroFormatado = $"{boleto.Carteira.PadLeft(3, '0')}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
             var contaBancaria = boleto.Banco.Cedente.ContaBancaria;
-            return $"{contaBancaria.Agencia}{contaBancaria.Carteira}{boleto.NossoNumero}{contaBancaria.Conta}{"0"}";
+            return $"{contaBancaria.Agencia}{boleto.Carteira}{boleto.NossoNumero}{contaBancaria.Conta}{"0"}";
         }
     }
 }

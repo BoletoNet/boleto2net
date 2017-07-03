@@ -8,6 +8,13 @@ namespace Boleto2Net
     [Browsable(false)]
     public class Boleto
     {
+        public Boleto(IBanco banco)
+        {
+            Banco = banco;
+            Carteira = banco.Cedente.ContaBancaria.CarteiraPadrao;
+            VariacaoCarteira = banco.Cedente.ContaBancaria.VariacaoCarteiraPadrao;
+            TipoCarteira = banco.Cedente.ContaBancaria.TipoCarteiraPadrao;
+        }
         public int CodigoMoeda { get; set; } = 9;
         public string EspecieMoeda { get; set; } = "R$";
         public int QuantidadeMoeda { get; set; } = 0;
@@ -18,6 +25,11 @@ namespace Boleto2Net
         public string NossoNumero { get; set; } = string.Empty;
         public string NossoNumeroDV { get; set; } = string.Empty;
         public string NossoNumeroFormatado { get; set; } = string.Empty;
+
+        public TipoCarteira TipoCarteira { get; set; } = TipoCarteira.CarteiraCobrancaSimples;
+        public string Carteira { get; set; } = string.Empty;
+        public string VariacaoCarteira { get; set; } = string.Empty;
+        public string CarteiraComVariacao => string.IsNullOrEmpty(Carteira) || string.IsNullOrEmpty(VariacaoCarteira) ? $"{Carteira}{VariacaoCarteira}" : $"{Carteira}/{VariacaoCarteira}";
 
         public DateTime DataProcessamento { get; set; } = DateTime.Now;
         public DateTime DataEmissao { get; set; } = DateTime.Now;

@@ -58,10 +58,7 @@ namespace Boleto2Net
             if (tipoRegistro == "3" & tipoSegmento == "T")
             {
                 // Segmento T - Indica um novo boleto
-                var boleto = new Boleto
-                {
-                    Banco = this.Banco
-                };
+                var boleto = new Boleto(this.Banco);
                 Banco.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
                 Boletos.Add(boleto);
             }
@@ -110,10 +107,7 @@ namespace Boleto2Net
             Boleto boleto;
             if (novoBoleto)
             {
-                boleto = new Boleto
-                {
-                    Banco = this.Banco
-                };
+                boleto = new Boleto(this.Banco);
             }
             else
             {

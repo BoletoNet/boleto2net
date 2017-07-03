@@ -23,8 +23,8 @@ namespace Boleto2Net
         {
             var contaBancaria = Cedente.ContaBancaria;
 
-            if (!CarteiraFactory<BancoItau>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacao))
-                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacao);
+            if (!CarteiraFactory<BancoItau>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
+                throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
             contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO ITAÚ.", 5);
 
@@ -37,13 +37,13 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoItau>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoItau>.ObterCarteira(boleto.CarteiraComVariacao);
             carteira.FormataNossoNumero(boleto);
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var carteira = CarteiraFactory<BancoItau>.ObterCarteira(boleto.Banco.Cedente.ContaBancaria.CarteiraComVariacao);
+            var carteira = CarteiraFactory<BancoItau>.ObterCarteira(boleto.CarteiraComVariacao);
             return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
@@ -158,19 +158,18 @@ namespace Boleto2Net
                 boleto.NumeroControleParticipante = registro.Substring(37, 25);
 
                 //Carteira
-                var contaBancaria = boleto.Banco.Cedente.ContaBancaria;
-                contaBancaria.Carteira = registro.Substring(107, 1).PadLeft(2, '0');
-                contaBancaria.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                boleto.Carteira = registro.Substring(82, 3);
+                boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 //Identificação do Título no Banco
-                boleto.NossoNumero = registro.Substring(70, 11); //Sem o DV
-                boleto.NossoNumeroDV = registro.Substring(81, 1); //DV
-                boleto.NossoNumeroFormatado = $"{contaBancaria.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
+                boleto.NossoNumero = registro.Substring(85, 8);
+                boleto.NossoNumeroDV = registro.Substring(93, 1); //DV
+                boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
 
                 //Identificação de Ocorrência
                 boleto.CodigoOcorrencia = registro.Substring(108, 2);
                 boleto.DescricaoOcorrencia = DescricaoOcorrenciaCnab400(boleto.CodigoOcorrencia);
-                boleto.CodigoOcorrenciaAuxiliar = registro.Substring(318, 10);
+                boleto.CodigoOcorrenciaAuxiliar = registro.Substring(377, 8);
 
                 //Número do Documento
                 boleto.NumeroDocumento = registro.Substring(116, 10);
@@ -263,10 +262,10 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 025, 0, boleto.NumeroControleParticipante, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0063, 008, 0, boleto.NossoNumero, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0071, 013, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0084, 003, 0, boleto.Banco.Cedente.ContaBancaria.Carteira, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0084, 003, 0, boleto.Carteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0087, 021, 0, Empty, ' ');
 
-                switch (boleto.Banco.Cedente.ContaBancaria.Carteira)
+                switch (boleto.Carteira)
                 {
                     case "109":
                         reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 108, 001, 0, "I", ' ');

@@ -437,7 +437,7 @@ namespace Boleto2Net
                 .Replace("@ESPECIEDOCUMENTO", Boleto.EspecieDocumento.ToString())
                 .Replace("@DATAPROCESSAMENTO", Boleto.DataProcessamento.ToString("dd/MM/yyyy"))
                 .Replace("@NOSSONUMERO", Boleto.NossoNumeroFormatado)
-                .Replace("@CARTEIRA", Boleto.Banco.Cedente.ContaBancaria.Carteira)
+                .Replace("@CARTEIRA", Boleto.Carteira)
                 .Replace("@ESPECIE", Boleto.EspecieMoeda)
                 .Replace("@QUANTIDADE", (Boleto.QuantidadeMoeda == 0 ? "" : Boleto.QuantidadeMoeda.ToString()))
                 .Replace("@VALORDOCUMENTO", Boleto.ValorMoeda)
