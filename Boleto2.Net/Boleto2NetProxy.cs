@@ -42,8 +42,11 @@ namespace Boleto2Net
         //             As propriedades que já existiam na classe ContaCorrente, foram renomeadas para CarteiraPadrao, VariacaoCarteiraPadrao, TipoCarteiraPadrao
         //             A classe Boleto passou a ter um construtor obrigatorio, onde recebe um objeto Banco, e já prepara as 3 propriedades com o padrão definido.
         //             Alteração foi necessária pois existem retornos com boletos em diferentes carteiras, e do modo que estava, aceitava apenas uma carteira para toda a lista de boletos.
+        // Julho/2017
+        //      1.41 - Banco do Brasil - Carteira 17 Variação 027
+        //      1.42 - Banco do Brasil - Correção BB - Ficha de Compensação - AGÊNCIA/CÓDIGO DO BENEFICIÁRIO: Informe o prefixo da agência e número da conta de relacionamento com o BB no formato AAAA-Z / CCCCC-Z
 
-        readonly public string Versao = "1.40c";
+        readonly public string Versao = "1.42";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
