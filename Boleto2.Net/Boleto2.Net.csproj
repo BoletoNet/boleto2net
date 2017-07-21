@@ -73,6 +73,7 @@
     <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira11_019.cs" />
     <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira17_019.cs" />
     <Compile Include="Banco\Carteiras\BancoBradesco\BancoBradescoCarteira09.cs" />
+    <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira17_027.cs" />
     <Compile Include="Banco\Carteiras\BancoCaixa\BancoCaixaCarteiraSIG14.cs" />
     <Compile Include="Banco\Carteiras\BancoItau\BancoItauCarteira109.cs" />
     <Compile Include="Banco\Carteiras\BancoSantander\BancoSantanderCarteira101.cs" />
