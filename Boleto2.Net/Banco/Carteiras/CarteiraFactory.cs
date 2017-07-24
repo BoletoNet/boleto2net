@@ -15,12 +15,13 @@ namespace Boleto2Net
         static CarteiraFactory()
         {
             const string propName = nameof(BancoBrasilCarteira11_019.Instance);
-            string ObterCodigo(Type type) => type.GetCustomAttributes(false).OfType<CarteiraCodigoAttribute>().First().Codigo;
+            string[] ObterCodigos(Type type) => type.GetCustomAttributes(false).OfType<CarteiraCodigoAttribute>().First().Codigos;
             Lazy<ICarteira<T>> ObterInstancia(Type type) => (Lazy<ICarteira<T>>)type.GetProperty(propName, BindingFlags.NonPublic | BindingFlags.Static).GetValue(null, null);
 
             Carteiras = typeof(CarteiraFactory<>).Assembly.GetTypes()
                 .Where(type => CarteiraType.IsAssignableFrom(type))
-                .ToDictionary(ObterCodigo, ObterInstancia);
+                .SelectMany(ObterCodigos, (cod, tipo) => Tuple.Create(tipo, cod))
+                .ToDictionary(t => t.Item1, t => ObterInstancia(t.Item2));
         }
 
         internal static ICarteira<T> ObterCarteira(string identificacao)

@@ -54,9 +54,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\portable-net40+sl4+win8+wp8\System.ValueTuple.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -71,9 +68,8 @@
     <Compile Include="Banco\BancoSantander.cs" />
     <Compile Include="Banco\BancoSicoob.cs" />
     <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira11_019.cs" />
-    <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira17_019.cs" />
+    <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira17.cs" />
     <Compile Include="Banco\Carteiras\BancoBradesco\BancoBradescoCarteira09.cs" />
-    <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira17_027.cs" />
     <Compile Include="Banco\Carteiras\BancoCaixa\BancoCaixaCarteiraSIG14.cs" />
     <Compile Include="Banco\Carteiras\BancoItau\BancoItauCarteira109.cs" />
     <Compile Include="Banco\Carteiras\BancoSantander\BancoSantanderCarteira101.cs" />
@@ -209,7 +205,9 @@
     <EmbeddedResource Include="BoletoImpressao\BoletoNetPDF.css" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Como Implementar um novo Banco ou Carteira.txt" />
