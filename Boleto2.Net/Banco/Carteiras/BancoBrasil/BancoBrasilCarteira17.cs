@@ -4,11 +4,11 @@ using static System.String;
 namespace Boleto2Net
 {
     [CarteiraCodigo("17/019", "17/027")]
-    internal class BancoBrasilCarteira17Variacao019e027 : ICarteira<BancoBrasil>
+    internal class BancoBrasilCarteira17 : ICarteira<BancoBrasil>
     {
-        internal static Lazy<ICarteira<BancoBrasil>> Instance { get; } = new Lazy<ICarteira<BancoBrasil>>(() => new BancoBrasilCarteira17Variacao019e027());
+        internal static Lazy<ICarteira<BancoBrasil>> Instance { get; } = new Lazy<ICarteira<BancoBrasil>>(() => new BancoBrasilCarteira17());
 
-        private BancoBrasilCarteira17Variacao019e027()
+        private BancoBrasilCarteira17()
         {
 
         }
