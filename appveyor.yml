@@ -2,6 +2,8 @@ version: 2.1.0.{build}
 environment:
    matrix:
        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+   COVERALLS_REPO_TOKEN:
+        secure: n1GGF5LOUx3ITCBy3FhfRJOhJBej9rUa9PeR8QDNeJRKPmVQf8TOId3jEzkyuahj
 
 configuration: Release
 
