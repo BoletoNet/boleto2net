@@ -12,7 +12,7 @@ after_build:
   - ps: >-
       . .\build.ps1 Pack-Nuget
 artifacts:
-  - path: boleto2net\lib
+  - path: '**\*.nupkg'
     name: src
 
 deploy:
