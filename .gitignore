@@ -236,3 +236,5 @@ _Pvt_Extensions
 .fake/
 /src/*.tss
 /WSDL
+/tools
+/result.xml

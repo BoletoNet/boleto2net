@@ -3,16 +3,15 @@ environment:
    matrix:
        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
    COVERALLS_REPO_TOKEN:
-        secure: n1GGF5LOUx3ITCBy3FhfRJOhJBej9rUa9PeR8QDNeJRKPmVQf8TOId3jEzkyuahj
+        secure: isaQ8N2liPbtG8Oi1y4EXmS33nj/Xdy4PSonzQBN2LXLBkfBChMVJnWCqinRxJPz
 
 configuration: Release
 
-before_build:
-  - nuget restore
+build_script:
+  - ps: .\build.ps1 -Target CiBuild -Experimental
   
-after_build:
-  - ps: >-
-      . .\build.ps1 Pack-Nuget
+test: off
+
 artifacts:
   - path: '**\boleto*.nupkg'
     name: nuget
