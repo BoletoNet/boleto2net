@@ -205,6 +205,7 @@
     <EmbeddedResource Include="BoletoImpressao\BoletoNetPDF.css" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Boleto2.Net.nuspec" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
