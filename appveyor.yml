@@ -1,12 +1,15 @@
 version: 2.1.0.{build}
 image: Visual Studio 2017
+environment:
+  $msbuildPath: $(cmd /c where msbuild)
+
 configuration: Release
 
 after_build:
   - ps: >-
       . .\build.ps1 Pack-Nuget
 artifacts:
-  - path: boleto2net\src
+  - path: boleto2net\lib
     name: src
 
 deploy:
