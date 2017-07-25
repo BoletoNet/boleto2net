@@ -1,7 +1,7 @@
  $rootDir = $env:APPVEYOR_BUILD_FOLDER
  $buildNumber = $env:APPVEYOR_BUILD_NUMBER
  $solutionFile = "$rootDir\Boleto2Net.sln"
- $srcDir = "$rootDir\boleto2.net"
+ $srcDir = "$rootDir"
  $slns = ls "$rootDir\*.sln"
  $packagesDir = "$rootDir\packages"
  $nuspecPath = "$rootDir\boleto2net\boleto2.net\boleto2.net.nuspec"
