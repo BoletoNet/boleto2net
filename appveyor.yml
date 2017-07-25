@@ -5,6 +5,9 @@ environment:
 
 configuration: Release
 
+before_build:
+  - nuget restore
+  
 after_build:
   - ps: >-
       . .\build.ps1 Pack-Nuget
