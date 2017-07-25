@@ -12,7 +12,7 @@ after_build:
   - ps: >-
       . .\build.ps1 Pack-Nuget
 artifacts:
-  - path: **\boleto*.nupkg
+  - path: '**\boleto*.nupkg'
     name: nuget
 
 deploy:
