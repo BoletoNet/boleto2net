@@ -1,3 +1,6 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/r9ovipu6yu7numn6?svg=true)](https://ci.appveyor.com/project/carloscds/boleto2net)
+
+
 # boleto2net
 Nova versão do Boleto.Net
 
