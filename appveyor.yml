@@ -12,8 +12,8 @@ after_build:
   - ps: >-
       . .\build.ps1 Pack-Nuget
 artifacts:
-  - path: '**\*.nupkg'
-    name: src
+  - path: boleto2.net\Boleto2.Net.nuspec
+    name: nuget
 
 deploy:
 - provider: NuGet
