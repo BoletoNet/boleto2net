@@ -4,9 +4,9 @@
  $srcDir = "$rootDir"
  $slns = ls "$rootDir\*.sln"
  $packagesDir = "$rootDir\packages"
- $nuspecPath = "$rootDir\boleto2net\boleto2.net\boleto2.net.nuspec"
+ $nuspecPath = "$rootDir\boleto2.net\boleto2.net.nuspec"
  $nugetExe = "$packagesDir\NuGet.CommandLine.2.8.5\tools\NuGet.exe"
- $nupkgPath = "$rootDir\Boleto2Net\boleto2.net\lib\Boleto.Net.{0}.nupkg"
+ $nupkgPath = "$rootDir\boleto2.net\lib\Boleto.Net.{0}.nupkg"
 
 foreach($sln in $slns) {
    nuget restore $sln
