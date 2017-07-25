@@ -1,22 +1,19 @@
-version: 2.0.0.{build}
+version: 2.1.0.{build}
 image: Visual Studio 2017
-
 configuration: Release
 
 after_build:
   - ps: >-
       . .\build.ps1 Pack-Nuget
-
 artifacts:
-  - path: boleto2net\lib
-    name: lib
+  - path: boleto2net\src
+    name: src
 
 deploy:
 - provider: NuGet
   server: https://www.myget.org/F/boleto2netbuild/
   api_key:
     secure: rH9VFKFXJsR5D07BF9PayFm7mRo7acVANtfgYkGa3S9ybX0RCWBiSM153yhLaorG
-
   skip_symbols: true
   on:
     branch: master
