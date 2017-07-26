@@ -126,19 +126,6 @@ namespace Boleto2Net
             throw new NotImplementedException();
         }
 
-        public override void LerHeaderRetornoCNAB400(string registro)
-        {
-            try
-            {
-                if (registro.Substring(0, 9) != "02RETORNO")
-                    throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao ler HEADER do arquivo de RETORNO / CNAB 400.", ex);
-            }
-        }
-
         public override void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
             try
@@ -196,10 +183,6 @@ namespace Boleto2Net
         public override void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
-        }
-
-        public override void LerTrailerRetornoCNAB400(string registro)
-        {
         }
 
         private string GerarHeaderRemessaCNAB400(int numeroArquivoRemessa, ref int numeroRegistroGeral)

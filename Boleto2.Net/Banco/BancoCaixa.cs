@@ -561,22 +561,12 @@ namespace Boleto2Net
             }
         }
 
-        public override void LerHeaderRetornoCNAB400(string registro)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
         }
 
         public override void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void LerTrailerRetornoCNAB400(string registro)
         {
             throw new NotImplementedException();
         }

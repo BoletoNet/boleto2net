@@ -237,13 +237,23 @@ namespace Boleto2Net
 
         public abstract void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro);
 
-        public abstract void LerHeaderRetornoCNAB400(string registro);
+        public virtual void LerHeaderRetornoCNAB400(string registro)
+        {
+            if (registro.Substring(0, 9) != "02RETORNO")
+            {
+                throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+            }
+        }
 
         public abstract void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro);
 
         public abstract void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro);
 
-        public abstract void LerTrailerRetornoCNAB400(string registro);
+        public virtual void LerTrailerRetornoCNAB400(string registro)
+        {
+            if (registro.Substring(0, 1) != "9")
+                throw new Exception("O Trailer do arquivo não começa com 9");
+        }
 
         #endregion
     }
