@@ -793,25 +793,6 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400.", ex);
             }
         }
-
-        private static string GerarTrailerRemessaCNAB400(ref int numeroRegistroGeral)
-        {
-            try
-            {
-                numeroRegistroGeral++;
-                var reg = new TRegistroEDI();
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "9", ' '); //001-001
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 393, 0, string.Empty, ' '); //002-393
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0'); //395-400
-                reg.CodificarLinha();
-                return reg.LinhaRegistro;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro durante a geração do registro TRAILER do arquivo de REMESSA.", ex);
-            }
-        }
-
         #endregion
 
         #region Retorno - CNAB400
