@@ -9,18 +9,18 @@ using static System.String;
 
 namespace Boleto2Net
 {
-    internal sealed class BancoCaixa : IBanco
+    internal sealed class BancoCaixa : Banco
     {
-        internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoCaixa());
+        public BancoCaixa()
+        {
+            Codigo = 104;
+            Nome = "Caixa Econômica Federal";
+            Digito = "0";
 
-        public Cedente Cedente { get; set; }
-        public int Codigo { get; } = 104;
-        public string Nome { get; } = "Caixa Econômica Federal";
-        public string Digito { get; } = "0";
-        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string>();
-        public bool RemoveAcentosArquivoRemessa { get; }
 
-        public void FormataCedente()
+        }
+
+        public override void FormataCedente()
         {
             var contaBancaria = Cedente.ContaBancaria;
             if (!CarteiraFactory<BancoCaixa>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
@@ -37,23 +37,12 @@ namespace Boleto2Net
             contaBancaria.LocalPagamento = "ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NA CAIXA ECONÔMICA FEDERAL.";
         }
 
-        public void ValidaBoleto(Boleto boleto)
+        internal override ICarteira ObterCarteira(Boleto boleto)
         {
+            return CarteiraFactory<BancoCaixa>.ObterCarteira(boleto.Carteira);
         }
 
-        public void FormataNossoNumero(Boleto boleto)
-        {
-            var carteira = CarteiraFactory<BancoCaixa>.ObterCarteira(boleto.Carteira);
-            carteira.FormataNossoNumero(boleto);
-        }
-
-        public string FormataCodigoBarraCampoLivre(Boleto boleto)
-        {
-            var carteira = CarteiraFactory<BancoCaixa>.ObterCarteira(boleto.Carteira);
-            return carteira.FormataCodigoBarraCampoLivre(boleto);
-        }
-
-        public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        public override string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
@@ -78,7 +67,7 @@ namespace Boleto2Net
             }
         }
 
-        public string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        public override string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
         {
             try
             {
@@ -124,7 +113,7 @@ namespace Boleto2Net
             }
         }
 
-        public string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
+        public override string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
             ref int numeroRegistroGeral, decimal valorBoletoGeral,
             int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
             int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
@@ -490,7 +479,7 @@ namespace Boleto2Net
 
         #region SIG14 - Retorno
 
-        public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
+        public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             try
             {
@@ -542,7 +531,7 @@ namespace Boleto2Net
             }
         }
 
-        public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
+        public override void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
         {
             try
             {
@@ -572,22 +561,12 @@ namespace Boleto2Net
             }
         }
 
-        public void LerHeaderRetornoCNAB400(string registro)
+        public override void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
         }
 
-        public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LerTrailerRetornoCNAB400(string registro)
+        public override void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
         }

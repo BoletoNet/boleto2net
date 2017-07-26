@@ -6,91 +6,52 @@ using Microsoft.VisualBasic;
 
 namespace Boleto2Net
 {
-    public sealed class Banco : IBanco
+    public abstract class Banco : IBanco
     {
-        private static readonly Dictionary<int, Lazy<IBanco>> Bancos = new Dictionary<int, Lazy<IBanco>>
+        static public Banco NovaInstancia(int codigo)
         {
-            [001] = BancoBrasil.Instance,
-            [033] = BancoSantander.Instance,
-            [104] = BancoCaixa.Instance,
-            [237] = BancoBradesco.Instance,
-            [341] = BancoItau.Instance,
-            [756] = BancoSicoob.Instance
-        };
-
-        private readonly IBanco _banco;
-
-        public Banco(int codigoBanco)
-            => _banco = (Bancos.ContainsKey(codigoBanco) ? Bancos[codigoBanco] : throw Boleto2NetException.BancoNaoImplementado(codigoBanco)).Value;
-
-        public int Codigo => _banco.Codigo;
-
-        public string Digito => _banco.Digito;
-
-        public string Nome => _banco.Nome;
-
-        public bool RemoveAcentosArquivoRemessa => _banco.RemoveAcentosArquivoRemessa;
-
-        public Cedente Cedente
-        {
-            get => _banco.Cedente;
-            set => _banco.Cedente = value;
+            switch (codigo)
+            {
+                case 001: return new BancoBrasil();
+                case 033: return new BancoSantander();
+                case 104: return new BancoCaixa();
+                case 237: return new BancoBradesco();
+                case 341: return new BancoItau();
+                case 756: return new BancoSicoob();
+                default: throw Boleto2NetException.BancoNaoImplementado(codigo);
+            }
         }
 
-        public List<string> IdsRetornoCnab400RegistroDetalhe => _banco.IdsRetornoCnab400RegistroDetalhe;
+        public int          Codigo                           { get; protected set; }
+        public string       Digito                           { get; protected set; }
+        public string       Nome                             { get; protected set; }
+        public bool         RemoveAcentosArquivoRemessa      { get; protected set; }
+        public List<string> IdsRetornoCnab400RegistroDetalhe { get;                } = new List<string>();
+
+        public Cedente      Cedente                          { get; set; }
 
         public Boleto NovoBoleto()
         {
-            var boleto = new Boleto(_banco);
+            var boleto = new Boleto(this);
             return boleto;
         }
+        internal abstract ICarteira ObterCarteira(Boleto boleto);
 
-        /// <summary>
-        ///     Formata Cedente
-        /// </summary>
-        public void FormataCedente()
-        {
-            try
-            {
-                _banco.FormataCedente();
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoFormatarCedente(ex);
-            }
-        }
+        public abstract void FormataCedente();
 
-        /// <summary>
-        ///     Formata Campo Livre
-        /// </summary>
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            try
-            {
-                var campoLivre = _banco.FormataCodigoBarraCampoLivre(boleto);
-                if (campoLivre.Length != 25)
-                    throw new Exception($"Campo Livre deve ter 25 posições: {campoLivre}");
-                return campoLivre;
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoFormatarCodigoDeBarra(ex);
-            }
+            var carteira = ObterCarteira(boleto);
+            var campoLivre = carteira.FormataCodigoBarraCampoLivre(boleto);
+            if (campoLivre.Length != 25)
+                throw new Exception($"Campo Livre deve ter 25 posições: {campoLivre}");
+            return campoLivre;
         }
 
-        /// <summary>
-        ///     Formata nosso número
-        /// </summary>
         public void FormataNossoNumero(Boleto boleto)
         {
-            try
-            {
-                _banco.FormataNossoNumero(boleto);
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoFormatarNossoNumero(ex);
-            }
+            var carteira = ObterCarteira(boleto);
+            carteira.FormataNossoNumero(boleto);
         }
 
         /// <summary>
@@ -100,8 +61,6 @@ namespace Boleto2Net
         {
             try
             {
-                // Valida os dados do Boleto na classe do banco responsável
-                _banco.ValidaBoleto(boleto);
                 // Formata nosso número (Classe Abstrata)
                 FormataNossoNumero(boleto);
                 // Formata o código de Barras (Classe Abstrata)
@@ -253,79 +212,58 @@ namespace Boleto2Net
         /// <summary>
         ///     Gera os registros de header do aquivo de remessa
         /// </summary>
-        public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
-        {
-            try
-            {
-                return _banco.GerarHeaderRemessa(tipoArquivo, numeroArquivoRemessa, ref numeroRegistroGeral);
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoGerarRegistroHeaderDoArquivoRemessa(ex);
-            }
-        }
+        public abstract string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral);
 
         /// <summary>
         ///     Gera registros de detalhe do arquivo remessa
         /// </summary>
-        public string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
-        {
-            try
-            {
-                return _banco.GerarDetalheRemessa(tipoArquivo, boleto, ref numeroRegistro);
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoGerarRegistroDetalheDoArquivoRemessa(ex);
-            }
-        }
+        public abstract string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro);
 
         /// <summary>
         ///     Gera os registros de Trailer do arquivo de remessa
         /// </summary>
-        public string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
+        public abstract string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
             ref int numeroRegistroGeral, decimal valorBoletoGeral,
             int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
             int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
             int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
-            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
-        {
-            try
-            {
-                return _banco.GerarTrailerRemessa(tipoArquivo, numeroArquivoRemessa,
-                    ref numeroRegistroGeral, valorBoletoGeral,
-                    numeroRegistroCobrancaSimples, valorCobrancaSimples,
-                    numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
-                    numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
-                    numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoGerrarRegistroTrailerDoArquivoRemessa(ex);
-            }
-        }
+            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada);
 
+        public string GerarTrailerRemessaCNAB400(ref int numeroRegistroGeral)
+        {
+            numeroRegistroGeral++;
+            var reg = new TRegistroEDI();
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "9", ' ');                 //001-001
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 393, 0, string.Empty, ' ');        //002-393
+            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0'); //395-400
+            reg.CodificarLinha();
+            return reg.LinhaRegistro;
+        }
         #endregion
 
         #region Leitura do Arquivo Retorno
 
-        public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
-            => _banco.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
+        public abstract void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro);
 
-        public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
-            => _banco.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
+        public abstract void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro);
 
-        public void LerHeaderRetornoCNAB400(string registro)
-            => _banco.LerHeaderRetornoCNAB400(registro);
+        public virtual void LerHeaderRetornoCNAB400(string registro)
+        {
+            if (registro.Substring(0, 9) != "02RETORNO")
+            {
+                throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+            }
+        }
 
-        public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
-            => _banco.LerDetalheRetornoCNAB400Segmento1(ref boleto, registro);
+        public abstract void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro);
 
-        public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
-            => _banco.LerDetalheRetornoCNAB400Segmento7(ref boleto, registro);
+        public abstract void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro);
 
-        public void LerTrailerRetornoCNAB400(string registro)
-            => _banco.LerTrailerRetornoCNAB400(registro);
+        public virtual void LerTrailerRetornoCNAB400(string registro)
+        {
+            if (registro.Substring(0, 1) != "9")
+                throw new Exception("O Trailer do arquivo não começa com 9");
+        }
 
         #endregion
     }
