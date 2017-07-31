@@ -20,8 +20,10 @@ namespace Boleto2Net.Testes
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
-            _banco = Banco.NovaInstancia(756);
-            _banco.Cedente = Utils.GerarCedente("17227", "8", "", contaBancaria);
+            _banco = new Banco(756)
+            {
+                Cedente = Utils.GerarCedente("17227", "8", "", contaBancaria)
+            };
             _banco.FormataCedente();
         }
 

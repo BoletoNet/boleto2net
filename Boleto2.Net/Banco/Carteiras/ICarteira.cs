@@ -1,12 +1,9 @@
 ﻿namespace Boleto2Net
 {
-    internal interface ICarteira
+    internal interface ICarteira<T>
+        where T : IBanco
     {
         void FormataNossoNumero(Boleto boleto);
         string FormataCodigoBarraCampoLivre(Boleto boleto);
-    }
-    internal interface ICarteira<T> : ICarteira
-        where T : IBanco
-    {
     }
 }
