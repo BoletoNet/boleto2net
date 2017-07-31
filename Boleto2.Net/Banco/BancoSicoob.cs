@@ -2,25 +2,31 @@
 using System.Collections.Generic;
 using System.Web.UI;
 using Boleto2Net.Exceptions;
-
 using static System.String;
 
 [assembly: WebResource("BoletoNet.Imagens.001.jpg", "image/jpg")]
 
 namespace Boleto2Net
 {
-    internal sealed class BancoSicoob : Banco
+    internal sealed class BancoSicoob : IBanco
     {
-        public BancoSicoob()
+        internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoSicoob());
+
+        private BancoSicoob()
         {
-            Codigo = 756;
-            Nome = "Sicoob";
-            Digito = "0";
             RemoveAcentosArquivoRemessa = false;
             IdsRetornoCnab400RegistroDetalhe.Add("1");
         }
 
-        public override void FormataCedente()
+        public Cedente Cedente { get; set; }
+
+        public int Codigo { get; } = 756;
+        public string Nome { get; } = "Sicoob";
+        public string Digito { get; } = "0";
+        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
+        public bool RemoveAcentosArquivoRemessa { get; }
+
+        public void FormataCedente()
         {
             var contaBancaria = Cedente.ContaBancaria;
 
@@ -38,12 +44,23 @@ namespace Boleto2Net
             Cedente.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoCedente}-{Cedente.CodigoDV}";
         }
 
-        internal override ICarteira ObterCarteira(Boleto boleto)
+        public void ValidaBoleto(Boleto boleto)
         {
-            return CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.CarteiraComVariacao);
         }
 
-        public override string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        public void FormataNossoNumero(Boleto boleto)
+        {
+            var carteira = CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.CarteiraComVariacao);
+            carteira.FormataNossoNumero(boleto);
+        }
+
+        public string FormataCodigoBarraCampoLivre(Boleto boleto)
+        {
+            var carteira = CarteiraFactory<BancoSicoob>.ObterCarteira(boleto.CarteiraComVariacao);
+            return carteira.FormataCodigoBarraCampoLivre(boleto);
+        }
+
+        public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
@@ -71,7 +88,7 @@ namespace Boleto2Net
             }
         }
 
-        public override string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        public string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
         {
             try
             {
@@ -114,7 +131,7 @@ namespace Boleto2Net
             }
         }
 
-        public override string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
+        public string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
                                             ref int numeroRegistroGeral, decimal valorBoletoGeral,
                                             int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
                                             int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
@@ -603,10 +620,27 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400.", ex);
             }
         }
+        private string GerarTrailerRemessaCNAB400(ref int numeroRegistroGeral)
+        {
+            try
+            {
+                numeroRegistroGeral++;
+                TRegistroEDI reg = new TRegistroEDI();
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "9", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 393, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
+                reg.CodificarLinha();
+                return reg.LinhaRegistro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro durante a geração do registro TRAILER do arquivo de REMESSA.", ex);
+            }
+        }
         #endregion
 
         #region Retorno - CNAB240
-        public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
+        public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             try
             {
@@ -659,7 +693,7 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / T.", ex);
             }
         }
-        public override void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
+        public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
         {
             try
             {
@@ -691,7 +725,21 @@ namespace Boleto2Net
         #endregion
 
         #region Retorno - CNAB400
-        public override void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
+        public void LerHeaderRetornoCNAB400(string registro)
+        {
+            try
+            {
+                if (registro.Substring(0, 9) != "02RETORNO")
+                {
+                    throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler HEADER do arquivo de RETORNO / CNAB 400.", ex);
+            }
+        }
+        public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
             try
             {
@@ -762,12 +810,12 @@ namespace Boleto2Net
             }
         }
 
-        public override void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
+        public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
         }
 
-        public override void LerTrailerRetornoCNAB400(string registro)
+        public void LerTrailerRetornoCNAB400(string registro)
         {
         }
         #endregion
