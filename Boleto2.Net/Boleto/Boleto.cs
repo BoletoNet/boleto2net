@@ -44,8 +44,8 @@ namespace Boleto2Net
         // Valores do Boleto
         public decimal ValorTitulo { get; set; }
 
-        public decimal ValorPago { get; set; }
-        public decimal ValorCredito { get; set; }
+        public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o sacado pagou. Se não existir essa informação no arquivo retorno, deixar zerada.
+        public decimal ValorPagoCredito { get; set; } // ValorPagoCredito deve ser preenchido com o valor que será creditado na conta corrente. Se não existir essa informação no arquivo retorno, deixar zerada.
         public decimal ValorJurosDia { get; set; }
         public decimal ValorMulta { get; set; }
         public decimal ValorDesconto { get; set; }
