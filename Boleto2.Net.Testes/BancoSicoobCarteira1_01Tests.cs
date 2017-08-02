@@ -5,7 +5,7 @@ namespace Boleto2Net.Testes
 {
     public class BancoSicoobCarteira101Tests
     {
-        readonly Banco _banco;
+        readonly IBanco _banco;
         public BancoSicoobCarteira101Tests()
         {
             var contaBancaria = new ContaBancaria
@@ -20,10 +20,8 @@ namespace Boleto2Net.Testes
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
-            _banco = new Banco(756)
-            {
-                Cedente = Utils.GerarCedente("17227", "8", "", contaBancaria)
-            };
+            _banco = Banco.Instancia(Bancos.Sicoob);
+            _banco.Cedente = Utils.GerarCedente("17227", "8", "", contaBancaria);
             _banco.FormataCedente();
         }
 

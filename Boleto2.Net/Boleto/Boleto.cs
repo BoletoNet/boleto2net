@@ -126,6 +126,9 @@ namespace Boleto2Net
                 throw new Exception("Aceite do Boleto deve ser definido com A ou N");
 
             Banco.ValidaBoleto(this);
+            Banco.FormataNossoNumero(this);
+            Boleto2Net.Banco.FormataCodigoBarra(this);
+            Boleto2Net.Banco.FormataLinhaDigitavel(this);
         }
     }
 }

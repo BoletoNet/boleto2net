@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.IO;
 
 namespace Boleto2Net
 {
@@ -120,40 +120,38 @@ namespace Boleto2Net
                 }
 
                 // Banco, Cedente, Conta Corrente
-                boletos.Banco = new Banco(numeroBanco)
+                boletos.Banco = Banco.Instancia(numeroBanco);
+                boletos.Banco.Cedente = new Cedente
                 {
-                    Cedente = new Cedente
+                    CPFCNPJ = cnpj,
+                    Nome = razaoSocial,
+                    Observacoes = observacoes,
+                    ContaBancaria = new ContaBancaria
                     {
-                        CPFCNPJ = cnpj,
-                        Nome = razaoSocial,
-                        Observacoes = observacoes,
-                        ContaBancaria = new ContaBancaria
-                        {
-                            Agencia = agencia,
-                            DigitoAgencia = digitoAgencia,
-                            OperacaoConta = operacaoConta,
-                            Conta = conta,
-                            DigitoConta = digitoConta,
-                            CarteiraPadrao = carteira,
-                            VariacaoCarteiraPadrao = variacaoCarteira,
-                            TipoCarteiraPadrao = (TipoCarteira)tipoCarteira,
-                            TipoFormaCadastramento = (TipoFormaCadastramento)tipoFormaCadastramento,
-                            TipoImpressaoBoleto = (TipoImpressaoBoleto)tipoImpressaoBoleto,
-                            TipoDocumento = (TipoDocumento)tipoDocumento
-                        },
-                        Codigo = codigoCedente,
-                        CodigoDV = digitoCodigoCedente,
-                        CodigoTransmissao = codigoTransmissao,
-                        Endereco = new Endereco
-                        {
-                            LogradouroEndereco = enderecoLogradouro,
-                            LogradouroNumero = enderecoNumero,
-                            LogradouroComplemento = enderecoComplemento,
-                            Bairro = enderecoBairro,
-                            Cidade = enderecoCidade,
-                            UF = enderecoEstado,
-                            CEP = enderecoCep
-                        }
+                        Agencia = agencia,
+                        DigitoAgencia = digitoAgencia,
+                        OperacaoConta = operacaoConta,
+                        Conta = conta,
+                        DigitoConta = digitoConta,
+                        CarteiraPadrao = carteira,
+                        VariacaoCarteiraPadrao = variacaoCarteira,
+                        TipoCarteiraPadrao = (TipoCarteira)tipoCarteira,
+                        TipoFormaCadastramento = (TipoFormaCadastramento)tipoFormaCadastramento,
+                        TipoImpressaoBoleto = (TipoImpressaoBoleto)tipoImpressaoBoleto,
+                        TipoDocumento = (TipoDocumento)tipoDocumento
+                    },
+                    Codigo = codigoCedente,
+                    CodigoDV = digitoCodigoCedente,
+                    CodigoTransmissao = codigoTransmissao,
+                    Endereco = new Endereco
+                    {
+                        LogradouroEndereco = enderecoLogradouro,
+                        LogradouroNumero = enderecoNumero,
+                        LogradouroComplemento = enderecoComplemento,
+                        Bairro = enderecoBairro,
+                        Cidade = enderecoCidade,
+                        UF = enderecoEstado,
+                        CEP = enderecoCep
                     }
                 };
                 boletos.Banco.FormataCedente();

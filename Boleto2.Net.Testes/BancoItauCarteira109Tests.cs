@@ -5,7 +5,7 @@ namespace Boleto2Net.Testes
 {
     public class BancoItauCarteira109Tests
     {
-        readonly Banco _banco;
+        readonly IBanco _banco;
         public BancoItauCarteira109Tests()
         {
             var contaBancaria = new ContaBancaria
@@ -19,10 +19,8 @@ namespace Boleto2Net.Testes
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
-            _banco = new Banco(341)
-            {
-                Cedente = Utils.GerarCedente("", "", "", contaBancaria)
-            };
+            _banco = Banco.Instancia(Bancos.Itau);
+            _banco.Cedente = Utils.GerarCedente("", "", "", contaBancaria);
 
             _banco.FormataCedente();
         }

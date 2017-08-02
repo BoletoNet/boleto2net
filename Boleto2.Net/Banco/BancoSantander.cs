@@ -71,7 +71,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do Header do arquivo de REMESSA.", ex);
+                throw Boleto2NetException.ErroAoGerarRegistroHeaderDoArquivoRemessa(ex);
             }
         }
 
@@ -117,7 +117,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do Detalhe arquivo de REMESSA.", ex);
+                throw Boleto2NetException.ErroAoGerarRegistroDetalheDoArquivoRemessa(ex);
             }
         }
 
@@ -329,7 +329,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0033, 009, 0, boleto.Banco.Cedente.ContaBancaria.Conta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0042, 001, 0, boleto.Banco.Cedente.ContaBancaria.DigitoConta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0043, 002, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0045, 013, 0, boleto.NossoNumero+boleto.NossoNumeroDV, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0045, 013, 0, boleto.NossoNumero + boleto.NossoNumeroDV, '0');
 
                 if (boleto.TipoCarteira == TipoCarteira.CarteiraCobrancaSimples)
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 058, 001, 0, "5", '0');
@@ -456,8 +456,9 @@ namespace Boleto2Net
                     codMulta = "1";
                 else
                     codMulta = "0";
-                var msg3 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(00, 40), 40, 40, ' ', 0, true, true, false);
-                var msg4 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(40, 40), 40, 40, ' ', 0, true, true, false);
+                var msg = boleto.MensagemArquivoRemessa.PadRight(500, ' ');
+                var msg3 = msg.Substring(00, 40).FitStringLength(40, ' ');
+                var msg4 = msg.Substring(40, 40).FitStringLength(40, ' ');
                 if ((codMulta == "0") & IsNullOrWhiteSpace(msg3) & IsNullOrWhiteSpace(msg4))
                     return "";
 
@@ -495,7 +496,7 @@ namespace Boleto2Net
         {
             try
             {
-                var msg5A7 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(80, 200), 200, 200, ' ', 0, true, true, false);
+                var msg5A7 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(80, 200).FitStringLength(200, ' ');
                 if (IsNullOrWhiteSpace(msg5A7))
                     return "";
 

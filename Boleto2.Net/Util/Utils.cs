@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace Boleto2Net
 {
-    sealed class Utils
+    static class Utils
     {
         internal static string FormatCode(string text, int length) => text.PadLeft(length, '0');
 
@@ -151,44 +151,8 @@ namespace Boleto2Net
         /// <summary>
         /// Formata o campo de acordo com o tipo e o tamanho 
         /// </summary>        
-        public static string FitStringLength(string sringToBeFit, int maxLength, int minLength, char fitChar, int maxStartPosition, bool maxTest, bool minTest, bool isNumber)
-        {
-            try
-            {
-                string result = "";
-
-                if (maxTest == true)
-                {
-                    // max
-                    if (sringToBeFit.Length > maxLength)
-                    {
-                        result += sringToBeFit.Substring(maxStartPosition, maxLength);
-                    }
-                }
-
-                if (minTest == true)
-                {
-                    // min
-                    if (sringToBeFit.Length <= minLength)
-                    {
-                        if (isNumber == true)
-                        {
-                            result += (string)(new string(fitChar, (minLength - sringToBeFit.Length)) + sringToBeFit);
-                        }
-                        else
-                        {
-                            result += (string)(sringToBeFit + new string(fitChar, (minLength - sringToBeFit.Length)));
-                        }
-                    }
-                }
-                return result;
-            }
-            catch(Exception ex)
-            {
-                Exception tmpEx = new Exception("Problemas ao Formatar a string. String = " + sringToBeFit, ex);
-                throw tmpEx;
-            }
-        }
+        public static string FitStringLength(this string sringToBeFit, int maxLength, char fitChar) 
+            => sringToBeFit.Length > maxLength ? sringToBeFit.Substring(0, maxLength) : sringToBeFit.PadLeft(maxLength, fitChar);
 
         public static string SubstituiCaracteresEspeciais(string strline)
         {
