@@ -703,7 +703,7 @@ namespace Boleto2Net
                 boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(47, 15)) / 100;
                 boleto.ValorIOF = Convert.ToDecimal(registro.Substring(62, 15)) / 100;
                 boleto.ValorPago = Convert.ToDecimal(registro.Substring(77, 15)) / 100;
-                boleto.ValorCredito = Convert.ToDecimal(registro.Substring(92, 15)) / 100;
+                boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(92, 15)) / 100;
                 boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(107, 15)) / 100;
                 boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(122, 15)) / 100;
 

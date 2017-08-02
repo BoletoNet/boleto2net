@@ -28,7 +28,7 @@ namespace Boleto2Net.Testes
         }
 
         [Test]
-        public void Banco756_Sicoob_1_01_REM240()
+        public void Sicoob_1_01_REM240()
         {
             Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSicoobCarteira101Tests), 5, true, "?");
         }
