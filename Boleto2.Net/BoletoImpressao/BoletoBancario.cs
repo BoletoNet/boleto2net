@@ -61,22 +61,7 @@ namespace Boleto2Net
         public Boleto Boleto { get; set; }
 
         [Browsable(false)]
-        public Banco Banco { get; set; }
-        //{
-        //	get
-        //	{
-        //		if ((_ibanco == null) ||
-        //			(_ibanco.Codigo != _codigoBanco))
-        //		{
-        //			_ibanco = new Banco(_codigoBanco);
-        //		}
-
-        //		if (_boleto != null)
-        //			_boleto.Banco = _ibanco;
-
-        //		return _ibanco;
-        //	}
-        //}
+        public IBanco Banco { get; set; }
 
         #region Propriedades
         [Browsable(true), Description("Mostra o comprovante de entrega sem dados para marcar")]

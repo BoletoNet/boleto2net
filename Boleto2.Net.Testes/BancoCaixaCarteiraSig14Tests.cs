@@ -5,7 +5,7 @@ namespace Boleto2Net.Testes
 {
     public class BancoCaixaCarteiraSig14Tests
     {
-        readonly Banco _banco;
+        readonly IBanco _banco;
 
         public BancoCaixaCarteiraSig14Tests()
         {
@@ -20,10 +20,8 @@ namespace Boleto2Net.Testes
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
-            _banco = new Banco(104)
-            {
-                Cedente = Utils.GerarCedente("123456", "0", "", contaBancaria)
-            };
+            _banco = Banco.Instancia(Bancos.Caixa);
+            _banco.Cedente = Utils.GerarCedente("123456", "0", "", contaBancaria);
             _banco.FormataCedente();
         }
 

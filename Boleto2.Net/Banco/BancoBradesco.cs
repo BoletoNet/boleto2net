@@ -67,7 +67,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do HEADER do arquivo de REMESSA.", ex);
+                throw Boleto2NetException.ErroAoGerarRegistroHeaderDoArquivoRemessa(ex);
             }
         }
 
@@ -94,7 +94,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do DETALHE arquivo de REMESSA.", ex);
+                throw Boleto2NetException.ErroAoGerarRegistroDetalheDoArquivoRemessa(ex);
             }
         }
 
@@ -120,7 +120,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("", ex);
+                throw Boleto2NetException.ErroAoGerrarRegistroTrailerDoArquivoRemessa(ex);
             }
         }
 

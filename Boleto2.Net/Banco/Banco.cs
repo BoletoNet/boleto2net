@@ -6,7 +6,7 @@ using Microsoft.VisualBasic;
 
 namespace Boleto2Net
 {
-    public sealed class Banco : IBanco
+    public static class Banco
     {
         private static readonly Dictionary<int, Lazy<IBanco>> Bancos = new Dictionary<int, Lazy<IBanco>>
         {
@@ -18,102 +18,11 @@ namespace Boleto2Net
             [756] = BancoSicoob.Instance
         };
 
-        private readonly IBanco _banco;
+        public static IBanco Instancia(int codigoBanco)
+            => (Bancos.ContainsKey(codigoBanco) ? Bancos[codigoBanco] : throw Boleto2NetException.BancoNaoImplementado(codigoBanco)).Value;
 
-        public Banco(int codigoBanco)
-            => _banco = (Bancos.ContainsKey(codigoBanco) ? Bancos[codigoBanco] : throw Boleto2NetException.BancoNaoImplementado(codigoBanco)).Value;
-
-        public int Codigo => _banco.Codigo;
-
-        public string Digito => _banco.Digito;
-
-        public string Nome => _banco.Nome;
-
-        public bool RemoveAcentosArquivoRemessa => _banco.RemoveAcentosArquivoRemessa;
-
-        public Cedente Cedente
-        {
-            get => _banco.Cedente;
-            set => _banco.Cedente = value;
-        }
-
-        public List<string> IdsRetornoCnab400RegistroDetalhe => _banco.IdsRetornoCnab400RegistroDetalhe;
-
-        public Boleto NovoBoleto()
-        {
-            var boleto = new Boleto(_banco);
-            return boleto;
-        }
-
-        /// <summary>
-        ///     Formata Cedente
-        /// </summary>
-        public void FormataCedente()
-        {
-            try
-            {
-                _banco.FormataCedente();
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoFormatarCedente(ex);
-            }
-        }
-
-        /// <summary>
-        ///     Formata Campo Livre
-        /// </summary>
-        public string FormataCodigoBarraCampoLivre(Boleto boleto)
-        {
-            try
-            {
-                var campoLivre = _banco.FormataCodigoBarraCampoLivre(boleto);
-                if (campoLivre.Length != 25)
-                    throw new Exception($"Campo Livre deve ter 25 posições: {campoLivre}");
-                return campoLivre;
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoFormatarCodigoDeBarra(ex);
-            }
-        }
-
-        /// <summary>
-        ///     Formata nosso número
-        /// </summary>
-        public void FormataNossoNumero(Boleto boleto)
-        {
-            try
-            {
-                _banco.FormataNossoNumero(boleto);
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoFormatarNossoNumero(ex);
-            }
-        }
-
-        /// <summary>
-        ///     Valida o boleto
-        /// </summary>
-        public void ValidaBoleto(Boleto boleto)
-        {
-            try
-            {
-                // Valida os dados do Boleto na classe do banco responsável
-                _banco.ValidaBoleto(boleto);
-                // Formata nosso número (Classe Abstrata)
-                FormataNossoNumero(boleto);
-                // Formata o código de Barras (Classe Abstrata)
-                FormataCodigoBarra(boleto);
-                // Formata linha digitavel (Classe Abstrata)
-                FormataLinhaDigitavel(boleto);
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoValidarBoleto(ex);
-            }
-        }
+        public static IBanco Instancia(Bancos codigoBanco)
+            => Instancia((int)codigoBanco);
 
         /// <summary>
         ///     Formata código de barras
@@ -125,10 +34,11 @@ namespace Boleto2Net
         ///     10 a 19 - 10 - Valor
         ///     20 a 44 – 25 - Campo Livre
         /// </summary>
-        public void FormataCodigoBarra(Boleto boleto)
+        public static void FormataCodigoBarra(Boleto boleto)
         {
+            var banco = boleto.Banco;
             var codigoBarra = boleto.CodigoBarra;
-            codigoBarra.CampoLivre = FormataCodigoBarraCampoLivre(boleto);
+            codigoBarra.CampoLivre = banco.FormataCodigoBarraCampoLivre(boleto);
             if (string.IsNullOrWhiteSpace(codigoBarra.CampoLivre))
             {
                 codigoBarra.CodigoBanco = string.Empty;
@@ -138,7 +48,7 @@ namespace Boleto2Net
             }
             else
             {
-                codigoBarra.CodigoBanco = Utils.FitStringLength(Codigo.ToString(), 3, 3, '0', 0, true, true, true);
+                codigoBarra.CodigoBanco = banco.Codigo.ToString().FitStringLength(3, '0');
                 codigoBarra.Moeda = boleto.CodigoMoeda;
                 codigoBarra.FatorVencimento = boleto.DataVencimento.FatorVencimento();
                 codigoBarra.ValorDocumento = boleto.ValorTitulo.ToString("N2").Replace(",", "").Replace(".", "").PadLeft(10, '0');
@@ -161,7 +71,7 @@ namespace Boleto2Net
         ///     Composto pelo fator de vencimento com 4(quatro) caracteres e o valor do documento com 10(dez) caracteres, sem
         ///     separadores e sem edição.
         /// </summary>
-        public void FormataLinhaDigitavel(Boleto boleto)
+        public static void FormataLinhaDigitavel(Boleto boleto)
         {
             var codigoBarra = boleto.CodigoBarra;
             if (string.IsNullOrWhiteSpace(codigoBarra.CampoLivre))
@@ -172,6 +82,7 @@ namespace Boleto2Net
             //BBBMC.CCCCD1 CCCCC.CCCCCD2 CCCCC.CCCCCD3 D4 FFFFVVVVVVVVVV
 
             var codigoDeBarras = codigoBarra.CodigoDeBarras;
+
             #region Campo 1
 
             // POSIÇÃO 1 A 3 DO CODIGO DE BARRAS
@@ -247,86 +158,5 @@ namespace Boleto2Net
             var digito = (10 - soma % 10) % 10;
             return digito;
         }
-
-        #region Gerar Arquivo Remessa
-
-        /// <summary>
-        ///     Gera os registros de header do aquivo de remessa
-        /// </summary>
-        public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
-        {
-            try
-            {
-                return _banco.GerarHeaderRemessa(tipoArquivo, numeroArquivoRemessa, ref numeroRegistroGeral);
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoGerarRegistroHeaderDoArquivoRemessa(ex);
-            }
-        }
-
-        /// <summary>
-        ///     Gera registros de detalhe do arquivo remessa
-        /// </summary>
-        public string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
-        {
-            try
-            {
-                return _banco.GerarDetalheRemessa(tipoArquivo, boleto, ref numeroRegistro);
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoGerarRegistroDetalheDoArquivoRemessa(ex);
-            }
-        }
-
-        /// <summary>
-        ///     Gera os registros de Trailer do arquivo de remessa
-        /// </summary>
-        public string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
-            ref int numeroRegistroGeral, decimal valorBoletoGeral,
-            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
-            int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
-            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
-            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
-        {
-            try
-            {
-                return _banco.GerarTrailerRemessa(tipoArquivo, numeroArquivoRemessa,
-                    ref numeroRegistroGeral, valorBoletoGeral,
-                    numeroRegistroCobrancaSimples, valorCobrancaSimples,
-                    numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
-                    numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
-                    numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
-            }
-            catch (Exception ex)
-            {
-                throw Boleto2NetException.ErroAoGerrarRegistroTrailerDoArquivoRemessa(ex);
-            }
-        }
-
-        #endregion
-
-        #region Leitura do Arquivo Retorno
-
-        public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
-            => _banco.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
-
-        public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
-            => _banco.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
-
-        public void LerHeaderRetornoCNAB400(string registro)
-            => _banco.LerHeaderRetornoCNAB400(registro);
-
-        public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
-            => _banco.LerDetalheRetornoCNAB400Segmento1(ref boleto, registro);
-
-        public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
-            => _banco.LerDetalheRetornoCNAB400Segmento7(ref boleto, registro);
-
-        public void LerTrailerRetornoCNAB400(string registro)
-            => _banco.LerTrailerRetornoCNAB400(registro);
-
-        #endregion
     }
 }

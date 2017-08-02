@@ -74,7 +74,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do Header do arquivo de REMESSA.", ex);
+                throw Boleto2NetException.ErroAoGerarRegistroHeaderDoArquivoRemessa(ex);
             }
         }
 
@@ -120,7 +120,7 @@ namespace Boleto2Net
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro durante a geração do Detalhe arquivo de REMESSA.", ex);
+                throw Boleto2NetException.ErroAoGerarRegistroDetalheDoArquivoRemessa(ex);
             }
         }
 
@@ -363,8 +363,9 @@ namespace Boleto2Net
                     codMulta = "1";
                 else
                     codMulta = "0";
-                var msg3 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(00, 40), 40, 40, ' ', 0, true, true, false);
-                var msg4 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(40, 40), 40, 40, ' ', 0, true, true, false);
+                var msg = boleto.MensagemArquivoRemessa.PadRight(500, ' ');
+                var msg3 = msg.Substring(00, 40).FitStringLength(40, ' ');
+                var msg4 = msg.Substring(40, 40).FitStringLength(40, ' ');
                 if ((codMulta == "0") & IsNullOrWhiteSpace(msg3) & IsNullOrWhiteSpace(msg4))
                     return "";
 
@@ -405,7 +406,7 @@ namespace Boleto2Net
         {
             try
             {
-                var msg5A9 = Utils.FitStringLength(boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(80, 200), 200, 200, ' ', 0, true, true, false);
+                var msg5A9 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(80, 200).FitStringLength(200, ' ');
                 if (IsNullOrWhiteSpace(msg5A9))
                     return "";
 

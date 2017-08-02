@@ -69,7 +69,7 @@ namespace Boleto2Net.Testes
             };
         }
 
-        internal static Boletos GerarBoletos(Banco banco, int quantidadeBoletos, string aceite)
+        internal static Boletos GerarBoletos(IBanco banco, int quantidadeBoletos, string aceite)
         {
             var boletos = new Boletos
             {
@@ -80,7 +80,7 @@ namespace Boleto2Net.Testes
             return boletos;
         }
 
-        internal static Boleto GerarBoleto(Banco banco, int i, string aceite)
+        internal static Boleto GerarBoleto(IBanco banco, int i, string aceite)
         {
             if (aceite == "?")
                 aceite = _contador % 2 == 0 ? "N" : "A";
@@ -102,10 +102,10 @@ namespace Boleto2Net.Testes
                 ValorDesconto = (decimal)(100 * i * 0.10),
                 DataMulta = DateTime.Now.AddMonths(i),
                 PercentualMulta = (decimal)2.00,
-                ValorMulta = (decimal)(100 * i * (2.00/100)),
+                ValorMulta = (decimal)(100 * i * (2.00 / 100)),
                 DataJuros = DateTime.Now.AddMonths(i),
                 PercentualJurosDia = (decimal)0.2,
-                ValorJurosDia = (decimal)(100 * i * (0.2/100)),
+                ValorJurosDia = (decimal)(100 * i * (0.2 / 100)),
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
                 NumeroControleParticipante = "CHAVEPRIMARIA=" + _proximoNossoNumero
             };
@@ -145,7 +145,7 @@ namespace Boleto2Net.Testes
             return boleto;
         }
 
-        internal static void TestarHomologacao(Banco banco, TipoArquivo tipoArquivo, string nomeCarteira, int quantidadeBoletos, bool gerarPDF, string aceite)
+        internal static void TestarHomologacao(IBanco banco, TipoArquivo tipoArquivo, string nomeCarteira, int quantidadeBoletos, bool gerarPDF, string aceite)
         {
             var boletos = GerarBoletos(banco, quantidadeBoletos, aceite);
             Assert.AreEqual(quantidadeBoletos, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletos);
