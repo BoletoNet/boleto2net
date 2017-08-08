@@ -80,8 +80,6 @@ function MD5HashFile([string] $filePath)
     }
 }
 
-Write-Host $env:COVERALLS_REPO_TOKEN
-Get-ChildItem Env:
 Write-Host "Preparing to run build script..."
 
 if(!$PSScriptRoot){
