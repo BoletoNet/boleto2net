@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boleto2.Net", "Boleto2.Net\Boleto2.Net.csproj", "{F173E80B-E36B-48AD-B483-A27F8CA86F3C}"
 EndProject
@@ -9,34 +9,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boleto2.Net.Testes", "Bolet
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|.NET = Debug|.NET
 		Debug|Any CPU = Debug|Any CPU
-		Debug|Mixed Platforms = Debug|Mixed Platforms
-		Release|.NET = Release|.NET
 		Release|Any CPU = Release|Any CPU
-		Release|Mixed Platforms = Release|Mixed Platforms
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F173E80B-E36B-48AD-B483-A27F8CA86F3C}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{F173E80B-E36B-48AD-B483-A27F8CA86F3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F173E80B-E36B-48AD-B483-A27F8CA86F3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F173E80B-E36B-48AD-B483-A27F8CA86F3C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F173E80B-E36B-48AD-B483-A27F8CA86F3C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F173E80B-E36B-48AD-B483-A27F8CA86F3C}.Release|.NET.ActiveCfg = Release|Any CPU
 		{F173E80B-E36B-48AD-B483-A27F8CA86F3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F173E80B-E36B-48AD-B483-A27F8CA86F3C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F173E80B-E36B-48AD-B483-A27F8CA86F3C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F173E80B-E36B-48AD-B483-A27F8CA86F3C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{92951948-996F-4F22-AB35-74B06C45E1D4}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{92951948-996F-4F22-AB35-74B06C45E1D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{92951948-996F-4F22-AB35-74B06C45E1D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92951948-996F-4F22-AB35-74B06C45E1D4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{92951948-996F-4F22-AB35-74B06C45E1D4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{92951948-996F-4F22-AB35-74B06C45E1D4}.Release|.NET.ActiveCfg = Release|Any CPU
 		{92951948-996F-4F22-AB35-74B06C45E1D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92951948-996F-4F22-AB35-74B06C45E1D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92951948-996F-4F22-AB35-74B06C45E1D4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{92951948-996F-4F22-AB35-74B06C45E1D4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
