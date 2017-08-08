@@ -38,6 +38,8 @@ http://cakebuild.net
 
 #>
 
+Write-Host $env:COVERALLS_REPO_TOKEN
+
 [CmdletBinding()]
 Param(
     [string]$Script = "build.cake",
