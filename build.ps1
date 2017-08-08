@@ -38,8 +38,6 @@ http://cakebuild.net
 
 #>
 
-Write-Host $env:COVERALLS_REPO_TOKEN
-
 [CmdletBinding()]
 Param(
     [string]$Script = "build.cake",
@@ -82,6 +80,7 @@ function MD5HashFile([string] $filePath)
     }
 }
 
+Write-Host $env:COVERALLS_REPO_TOKEN
 Write-Host "Preparing to run build script..."
 
 if(!$PSScriptRoot){
