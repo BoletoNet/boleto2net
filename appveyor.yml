@@ -2,8 +2,7 @@ version: 2.1.0.{build}
 image: Visual Studio 2017
 environment:
   $msbuildPath: $(cmd /c where msbuild)
-  COVERALLS_REPO_TOKEN:
-    secure: isaQ8N2liPbtG8Oi1y4EXmS33nj/Xdy4PSonzQBN2LXLBkfBChMVJnWCqinRxJPz
+  COVERALLS_REPO_TOKEN: 6Q3DHopayUJ6xtDuAXO9S9Q8GknjKpYUe
 
 configuration: Release
 
