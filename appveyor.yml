@@ -1,9 +1,9 @@
 version: 2.1.0.{build}
+image: Visual Studio 2017
 environment:
-   matrix:
-       - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-   COVERALLS_REPO_TOKEN:
-        secure: isaQ8N2liPbtG8Oi1y4EXmS33nj/Xdy4PSonzQBN2LXLBkfBChMVJnWCqinRxJPz
+  $msbuildPath: $(cmd /c where msbuild)
+  COVERALLS_REPO_TOKEN:
+    secure: isaQ8N2liPbtG8Oi1y4EXmS33nj/Xdy4PSonzQBN2LXLBkfBChMVJnWCqinRxJPz
 
 configuration: Release
 
