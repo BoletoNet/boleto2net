@@ -14,7 +14,7 @@ namespace Boleto2Net
 
         static CarteiraFactory()
         {
-            const string propName = nameof(BancoBrasilCarteira11_019.Instance);
+            const string propName = nameof(BancoBrasilCarteira11.Instance);
             string[] ObterCodigos(Type type) => type.GetCustomAttributes(false).OfType<CarteiraCodigoAttribute>().First().Codigos;
             Lazy<ICarteira<T>> ObterInstancia(Type type) => (Lazy<ICarteira<T>>)type.GetProperty(propName, BindingFlags.NonPublic | BindingFlags.Static).GetValue(null, null);
 

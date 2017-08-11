@@ -4,6 +4,19 @@ namespace Boleto2Net.Extensions
 {
     public static class StringExtensions
     {
+        public static string Right(this string value, int length)
+        {
+            if (String.IsNullOrEmpty(value))
+                return string.Empty;
+            return value.Length <= length ? value : value.Substring(value.Length - length);
+        }
+        public static string Left(this string value, int length)
+        {
+            if (String.IsNullOrEmpty(value))
+                return string.Empty;
+            return value.Length <= length ? value : value.Substring(0, length);
+        }
+
         public static string CalcularDVCaixa(this string texto)
         {
             string digito;
