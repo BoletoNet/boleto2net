@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.UI;
 using Boleto2Net.Exceptions;
+using Boleto2Net.Extensions;
 
 [assembly: WebResource("BoletoNet.Imagens.001.jpg", "image/jpg")]
 
@@ -30,7 +31,7 @@ namespace Boleto2Net
             if (Cedente.Codigo.Length != 7)
                 throw Boleto2NetException.CodigoCedenteInvalido(Cedente.Codigo, 7);
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta.Right(5)}-{contaBancaria.DigitoConta}";
         }
 
         public void ValidaBoleto(Boleto boleto)
