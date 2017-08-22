@@ -19,7 +19,7 @@ namespace Boleto2Net
             if (IsNullOrWhiteSpace(boleto.NossoNumero))
                 throw new Exception("Nosso Número não informado.");
 
-            // Nosso número não pode ter mais de 7 dígitos
+            // Nosso número não pode ter mais de 12 dígitos
             if (boleto.NossoNumero.Length > 12)
                 throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter 12 dígitos.");
 
