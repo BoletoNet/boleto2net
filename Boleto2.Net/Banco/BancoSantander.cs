@@ -178,8 +178,8 @@ namespace Boleto2Net
                 }
 
                 //Identificação do Título no Banco
-                boleto.NossoNumero = registro.Substring(45, 7); // 7 dígitos
-                boleto.NossoNumeroDV = registro.Substring(52, 1);
+                boleto.NossoNumero = registro.Substring(44, 12);
+                boleto.NossoNumeroDV = registro.Substring(56, 1);
                 boleto.NossoNumeroFormatado = Format("{0}-{1}", boleto.NossoNumero, boleto.NossoNumeroDV);
 
                 //Identificação de Ocorrência
