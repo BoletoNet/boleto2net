@@ -159,32 +159,43 @@ namespace Boleto2Net
             try
             {
                 //Nº Controle do Participante
-                boleto.NumeroControleParticipante = registro.Substring(105, 25);
+                boleto.NumeroControleParticipante = registro.Substring(100, 25);
 
                 //Carteira
-                boleto.Carteira = registro.Substring(57, 1);
-                if (boleto.Carteira == "1")
-                    boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                boleto.Carteira = registro.Substring(53, 1);
+                switch (boleto.Carteira)
+                {
+                    case "3":
+                    case "6":
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaCaucionada;
+                        break;
+                    case "4":
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaDescontada;
+                        break;
+                    default:
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                        break;
+                }
 
                 //Identificação do Título no Banco
-                boleto.NossoNumero = registro.Substring(50, 6);
-                boleto.NossoNumeroDV = registro.Substring(56, 1);
+                boleto.NossoNumero = registro.Substring(45, 7); // 7 dígitos
+                boleto.NossoNumeroDV = registro.Substring(52, 1);
                 boleto.NossoNumeroFormatado = Format("{0}-{1}", boleto.NossoNumero, boleto.NossoNumeroDV);
 
                 //Identificação de Ocorrência
                 boleto.CodigoOcorrencia = registro.Substring(15, 2);
                 boleto.DescricaoOcorrencia = Cnab.OcorrenciaCnab240(boleto.CodigoOcorrencia);
-                boleto.CodigoOcorrenciaAuxiliar = registro.Substring(213, 10);
+                boleto.CodigoOcorrenciaAuxiliar = registro.Substring(208, 10);
 
                 //Número do Documento
-                boleto.NumeroDocumento = registro.Substring(58, 15);
+                boleto.NumeroDocumento = registro.Substring(54, 15);
                 boleto.EspecieDocumento = TipoEspecieDocumento.NaoDefinido;
 
                 //Valor do Título
-                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(81, 15)) / 100;
+                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(77, 15)) / 100;
 
                 //Data Vencimento do Título
-                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(73, 8)).ToString("##-##-####"));
+                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(69, 8)).ToString("##-##-####"));
 
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;

@@ -49,8 +49,9 @@ namespace Boleto2Net
         //      1.43 - Classe Boleto = Ajuste das propriedades ValorPago e ValorPagoCredito
         //      1.44 - Banco do Brasil - Correção BB - Ficha de Compensação - AGÊNCIA/CÓDIGO DO BENEFICIÁRIO: Informe o prefixo da agência e número da conta de relacionamento com o BB no formato AAAA-Z / CCCCC-Z
         //             Alteração na Impressão do Boleto Bancário: Comprovante de Entrega - Alterado de "Agência / Código do Cedente" para "Agência / Código do Beneficiário"
+        //      1.45 - Santander - Correção na posição dos campos na leitura do arquivo retorno (Cnab240), segmento T.
 
-        readonly public string Versao = "1.44";
+        readonly public string Versao = "1.45";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
