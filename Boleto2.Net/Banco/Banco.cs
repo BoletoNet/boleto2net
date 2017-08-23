@@ -146,7 +146,7 @@ namespace Boleto2Net
             int soma = 0, peso = 2;
             for (var i = texto.Length; i > 0; i--)
             {
-                var resto = Convert.ToInt32(Strings.Mid(texto, i, 1)) * peso;
+                var resto = Convert.ToInt32(texto.MidVB(i, 1)) * peso;
                 if (resto > 9)
                     resto = resto / 10 + resto % 10;
                 soma += resto;
