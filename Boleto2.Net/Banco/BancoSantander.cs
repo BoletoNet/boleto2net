@@ -402,9 +402,40 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0166, 015, 2, boleto.ValorIOF, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0181, 015, 2, boleto.ValorAbatimento, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0196, 025, 0, boleto.NumeroControleParticipante, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, (int)boleto.CodigoProtesto, '0');
+                switch (boleto.CodigoProtesto)
+                {
+                    case TipoCodigoProtesto.NaoProtestar:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, 0, '0');
+                        break;
+                    case TipoCodigoProtesto.ProtestarDiasCorridos:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, 1, '0');
+                        break;
+                    case TipoCodigoProtesto.ProtestarDiasuteis:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, 2, '0');
+                        break;
+                    case TipoCodigoProtesto.UtilizarPerfilBeneficiario:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, 3, '0');
+                        break;
+                    case TipoCodigoProtesto.CancelamentoProtestoAutomatico:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, 9, '0');
+                        break;
+                    default:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, 0, '0');
+                        break;
+                }
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0222, 002, 0, boleto.DiasProtesto, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, (int)boleto.CodigoBaixaDevolucao, '0');
+                switch (boleto.CodigoBaixaDevolucao)
+                {
+                    case TipoCodigoBaixaDevolucao.NaoBaixarNaoDevolver:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, 2, '0');
+                        break;
+                    case TipoCodigoBaixaDevolucao.BaixarDevolver:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, 1, '0');
+                        break;
+                    default:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, 0, '0');
+                        break;
+                }
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0225, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0226, 002, 0, boleto.DiasBaixaDevolucao, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0228, 002, 0, "0", '0');
