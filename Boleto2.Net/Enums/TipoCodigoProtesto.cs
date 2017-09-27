@@ -2,7 +2,10 @@
 {
     public enum TipoCodigoProtesto
     {
-        Protestar=1,
-        NaoProtestar=3
+        NaoProtestar = 0,
+        ProtestarDiasCorridos = 1,
+        ProtestarDiasuteis = 2,
+        UtilizarPerfilBeneficiario = 3,
+        CancelamentoProtestoAutomatico = 4
     }
 }
