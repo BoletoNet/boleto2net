@@ -69,7 +69,7 @@ namespace Boleto2Net
         public DateTime DataDesconto { get; set; }
 
 
-        public string CodigoOcorrencia { get; set; } = string.Empty;
+        public string CodigoOcorrencia { get; set; } = "01";
         public string DescricaoOcorrencia { get; set; } = string.Empty;
         public string CodigoOcorrenciaAuxiliar { get; set; } = string.Empty;
 
