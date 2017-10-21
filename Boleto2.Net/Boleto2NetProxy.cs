@@ -51,8 +51,9 @@ namespace Boleto2Net
         //             Alteração na Impressão do Boleto Bancário: Comprovante de Entrega - Alterado de "Agência / Código do Cedente" para "Agência / Código do Beneficiário"
         //      1.45 - Santander - Correção na posição dos campos na leitura do arquivo retorno (Cnab240), segmento T.
         //             Santander - Correção do nosso número (de 7 para 12 posições) + dígito verificador = total 13 posições.
+        //      1.46 - PullRequest #37
 
-        readonly public string Versao = "1.45";
+        readonly public string Versao = "1.46";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
