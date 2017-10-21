@@ -21,6 +21,7 @@ namespace Boleto2Net
         public string LocalPagamento { get; set; } = "PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.";
         public int CodigoBancoCorrespondente { get; set; }
         public string NossoNumeroBancoCorrespondente { get; set; }
+        public TipoDistribuicaoBoleto TipoDistribuicao { get; set; } = TipoDistribuicaoBoleto.ClienteDistribui;
 
         public void FormatarDados(string localPagamento, int digitosConta)
         {
