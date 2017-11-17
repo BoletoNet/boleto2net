@@ -5,6 +5,6 @@
         BancoDistribui = 1,
         ClienteDistribui = 2,
         BancoEnviaEmail = 3,
-        BancoEviaSMS = 4
+        BancoEnviaSMS = 4
     }
 }

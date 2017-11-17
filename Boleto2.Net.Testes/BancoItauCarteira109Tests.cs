@@ -28,7 +28,7 @@ namespace Boleto2Net.Testes
         [Test]
         public void Itau_109_REM400()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoItauCarteira109Tests), 5, true, "N");
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoItauCarteira109Tests), 5, true, "N", 223344);
         }
 
         [TestCase(600.00, "223350", "BB000001F", "1", "109/00223350-2", "34191719500000600001090022335021234567890000", "34191.09008 22335.021238 45678.900007 1 71950000060000", 2017, 06, 19)]

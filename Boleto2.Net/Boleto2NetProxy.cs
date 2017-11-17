@@ -52,8 +52,10 @@ namespace Boleto2Net
         //      1.45 - Santander - Correção na posição dos campos na leitura do arquivo retorno (Cnab240), segmento T.
         //             Santander - Correção do nosso número (de 7 para 12 posições) + dígito verificador = total 13 posições.
         //      1.46 - PullRequest #37
+        // Novembro/2017
+        //      1.50 - Caso não for definido o Nosso Número, Boleto2Net não irá gerar o código de barras e linha digitável.
 
-        readonly public string Versao = "1.46";
+        readonly public string Versao = "1.50a";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }

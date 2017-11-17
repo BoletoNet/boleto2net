@@ -27,7 +27,7 @@ namespace Boleto2Net.Testes
         [Test]
         public void Santander_101_REM240()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSantanderCarteira101Tests), 5, true, "N");
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSantanderCarteira101Tests), 5, true, "N", 223344);
         }
 
         [TestCase(2717.16, "456", "BB874A", "1", "000000000456-1", "03391693400002717169123456700000000045610101", "03399.12347 56700.000005 00456.101013 1 69340000271716", 2016, 10, 1)]

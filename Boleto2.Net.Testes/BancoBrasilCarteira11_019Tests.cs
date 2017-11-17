@@ -10,30 +10,33 @@ namespace Boleto2Net.Testes
         {
             var contaBancaria = new ContaBancaria
             {
-                Agencia = "1234",
-                DigitoAgencia = "X",
-                Conta = "123456",
+                Agencia = "0180",
+                DigitoAgencia = "5",
+                Conta = "43101",
                 DigitoConta = "X",
                 CarteiraPadrao = "11",
                 VariacaoCarteiraPadrao = "019",
                 TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaSimples,
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
-                TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
+                TipoImpressaoBoleto = TipoImpressaoBoleto.Banco
             };
             _banco = Banco.Instancia(Bancos.BancoDoBrasil);
-            _banco.Cedente = Utils.GerarCedente("1234567", "", "", contaBancaria);
+            _banco.Cedente = Utils.GerarCedente("1740981", "", "", contaBancaria);
             _banco.FormataCedente();
 
 
         }
+
         [Test]
-        public void Brasil_11_019_TestePendente()
+        public void Brasil_11_019_REM240()
         {
-            Assert.Inconclusive("Aguardando boletos de exemplo (gerados pelo banco - segunda via) para implementar os testes:/n" +
-                                "Remessa Cnab240/n" +
-                                "Remessa Cnab400/n" +
-                                "Arquivo PDF/n" +
-                                "DV de 1 a 9");
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoBrasilCarteira11019Tests), 5, true, "?", 0);
+        }
+
+        [Test]
+        public void Brasil_11_019_REM400()
+        {
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBrasilCarteira11019Tests), 5, true, "?", 0);
         }
 
     }

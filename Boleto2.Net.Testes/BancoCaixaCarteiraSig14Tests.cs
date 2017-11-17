@@ -28,7 +28,7 @@ namespace Boleto2Net.Testes
         [Test]
         public void Caixa_SIG14_REM240()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoCaixaCarteiraSig14Tests), 5, true, "?");
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoCaixaCarteiraSig14Tests), 5, true, "?", 223344);
         }
 
 
