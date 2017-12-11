@@ -576,6 +576,12 @@ namespace Boleto2Net
                 //Data Vencimento do Título
                 boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(73, 8)).ToString("##-##-####"));
 
+                //Dados Sacado
+                boleto.Sacado = new Sacado();
+                boleto.Sacado.CPFCNPJ = registro.Substring(133, 15);
+                boleto.Sacado.Nome = registro.Substring(148, 40);
+
+
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
             }
