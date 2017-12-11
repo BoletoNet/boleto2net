@@ -441,7 +441,7 @@ namespace Boleto2Net
         {
             try
             {
-                var msg5A9 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(80, 200).FitStringLength(200, ' ');
+                var msg5A9 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(0, 200).FitStringLength(200, ' ');
                 if (IsNullOrWhiteSpace(msg5A9))
                     return "";
 

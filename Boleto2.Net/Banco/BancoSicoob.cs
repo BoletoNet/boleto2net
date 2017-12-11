@@ -111,6 +111,14 @@ namespace Boleto2Net
                             detalhe += Environment.NewLine;
                             detalhe += strline;
                         }
+                        // Segmento S (Opcional)
+                        strline = GerarDetalheSegmentoSRemessaCNAB240(boleto, ref numeroRegistro);
+                        if (!IsNullOrWhiteSpace(strline))
+                        {
+                            detalhe += Environment.NewLine;
+                            detalhe += strline;
+                        }
+
 
                         break;
 
@@ -445,6 +453,37 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar DETALHE do Segmento Q no arquivo de remessa do CNAB240.", ex);
             }
         }
+
+
+        private string GerarDetalheSegmentoSRemessaCNAB240(Boleto boleto, ref int numeroRegistroGeral)
+        {
+            try
+            {
+                var msg5A9 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(0, 200).FitStringLength(200, ' ');
+                if (IsNullOrWhiteSpace(msg5A9))
+                    return "";
+
+                numeroRegistroGeral++;
+                var reg = new TRegistroEDI();
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "756", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0001", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "3", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0009, 005, 0, numeroRegistroGeral, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0014, 001, 0, "S", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0015, 001, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0016, 002, 0, "01", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, "3", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0019, 200, 0, msg5A9, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0219, 022, 0, Empty, ' ');
+                reg.CodificarLinha();
+                return reg.LinhaRegistro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao gerar DETALHE do Segmento S no arquivo de remessa do CNAB240.", ex);
+            }
+        }
+
         private string GerarTrailerLoteRemessaCNAB240(ref int numeroRegistroGeral,
                                                                 int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
                                                                 int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
