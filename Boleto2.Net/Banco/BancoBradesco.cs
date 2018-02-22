@@ -578,7 +578,8 @@ namespace Boleto2Net
 
                 //Dados Sacado
                 boleto.Sacado = new Sacado();
-                boleto.Sacado.CPFCNPJ = registro.Substring(133, 15);
+                string str = registro.Substring(133, 15);
+                boleto.Sacado.CPFCNPJ = str.Substring(str.Length - 14, 14);
                 boleto.Sacado.Nome = registro.Substring(148, 40);
 
 
