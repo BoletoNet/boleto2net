@@ -441,7 +441,7 @@ namespace Boleto2Net
         {
             try
             {
-                var msg5A9 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(80, 200).FitStringLength(200, ' ');
+                var msg5A9 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(0, 200).FitStringLength(200, ' ');
                 if (IsNullOrWhiteSpace(msg5A9))
                     return "";
 
@@ -575,6 +575,13 @@ namespace Boleto2Net
 
                 //Data Vencimento do Título
                 boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(73, 8)).ToString("##-##-####"));
+
+                //Dados Sacado
+                boleto.Sacado = new Sacado();
+                string str = registro.Substring(133, 15);
+                boleto.Sacado.CPFCNPJ = str.Substring(str.Length - 14, 14);
+                boleto.Sacado.Nome = registro.Substring(148, 40);
+
 
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;

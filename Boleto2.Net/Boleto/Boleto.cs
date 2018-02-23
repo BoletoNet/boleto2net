@@ -68,6 +68,15 @@ namespace Boleto2Net
         // Desconto
         public DateTime DataDesconto { get; set; }
 
+        /// <summary>
+        /// Banco no qual o boleto/título foi quitado/recolhido
+        /// </summary>
+        public string BancoCobradorRecebedor { get; set; }
+        
+        /// <summary>
+        /// Agência na qual o boleto/título foi quitado/recolhido
+        /// </summary>
+        public string AgenciaCobradoraRecebedora { get; set; }
 
         public string CodigoOcorrencia { get; set; } = "01";
         public string DescricaoOcorrencia { get; set; } = string.Empty;

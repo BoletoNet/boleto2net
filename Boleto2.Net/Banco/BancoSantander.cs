@@ -197,6 +197,24 @@ namespace Boleto2Net
                 //Data Vencimento do Título
                 boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(69, 8)).ToString("##-##-####"));
 
+                //093 – 095 Nº do Banco Cobrador / Recebedor N 003 - LAYOUT V 2.8 Fevereiro/2017 Pág 9
+                boleto.BancoCobradorRecebedor = registro.Substring(92, 3);
+
+                //096 – 099 Agência Cobradora / Recebedora N 004 - LAYOUT V 2.8 Fevereiro/2017 Pág 9
+                //100 – 100 Dígito da Agência do Beneficiário N 001 - LAYOUT V 2.8 Fevereiro/2017 Pág 9
+                boleto.AgenciaCobradoraRecebedora = registro.Substring(95, 5);
+
+                //129 – 143 Número de inscrição Pagador N 015 30 - LAYOUT V 2.8 Fevereiro/2017 Pág 9
+                //aqui, apesar de haver 15 caracteres no layout, pegamos apenas os últimos 14(o necessário) pois há uma validação no momento da atribuição(set) do CPFCNPJ
+                boleto.Sacado = new Sacado();
+                boleto.Sacado.CPFCNPJ = registro.Substring(129, 14);
+                
+                //144 - 183 Nome do Pagador A 040 - LAYOUT V 2.8 Fevereiro/2017 Pág 9
+                boleto.Sacado.Nome = registro.Substring(143, 40);
+
+                //194 – 208 Valor da Tarifa / Custas N 015 2 - LAYOUT V 2.8 Fevereiro/2017 Pág 9
+                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(193, 15)) / 100;
+
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
             }
