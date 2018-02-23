@@ -19,11 +19,13 @@ namespace Boleto2Net
         public TipoImpressaoBoleto TipoImpressaoBoleto { get; set; } = TipoImpressaoBoleto.Empresa;
         public TipoDocumento TipoDocumento { get; set; } = TipoDocumento.Tradicional;
         public string LocalPagamento { get; set; } = "PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.";
+
+        public string MensagemFixaTopoBoleto = "";
         public int CodigoBancoCorrespondente { get; set; }
         public string NossoNumeroBancoCorrespondente { get; set; }
         public TipoDistribuicaoBoleto TipoDistribuicao { get; set; } = TipoDistribuicaoBoleto.ClienteDistribui;
 
-        public void FormatarDados(string localPagamento, int digitosConta)
+        public void FormatarDados(string localPagamento, string mensagemFixaTopoBoleto, int digitosConta)
         {
             var agencia = Agencia;
             Agencia = agencia.Length <= 4 ? agencia.PadLeft(4, '0') : throw Boleto2NetException.AgenciaInvalida(agencia, 4);
@@ -32,6 +34,7 @@ namespace Boleto2Net
             Conta = conta.Length <= digitosConta ? conta.PadLeft(digitosConta, '0') : throw Boleto2NetException.ContaInvalida(conta, digitosConta);
 
             LocalPagamento = localPagamento;
+            MensagemFixaTopoBoleto = mensagemFixaTopoBoleto;
         }
     }
 }

@@ -21,8 +21,8 @@ img {
 }
 
 .cp {
-	font: bold 10px arial;
-	color: black;
+    font: bold 10px arial;
+    color: #000000;
 }
 
 .ti {
@@ -35,18 +35,23 @@ img {
 }
 
 .ct {
-	font: 9px "arial narrow";
-	color: #000033;
+    font: 9px "arial narrow";
+    color: #000000;
 }
 
 .cn {
-	font: 9px arial;
-	color: black;
+    font: 9px arial;
+    color: #000000;
+}
+
+.cn8 {
+    font: 8px arial;
+    color: #000000;
 }
 
 .bc {
-	font: bold 22px arial;
-	color: #000000;
+    font: bold 22px arial;
+    color: #000000;
 }
 
 .cut {
@@ -81,13 +86,13 @@ img {
 }
 
 .cpN {
-	font: bold 10px arial;
-	color: black;
+    font: bold 10px arial;
+    color: #000000;
 }
 
 .ctN {
-	font: 9px "arial narrow";
-	color: #000033;
+    font: 9px "arial narrow";
+    color: #000000;
 }
 
 .pL0 {
@@ -222,12 +227,12 @@ img {
 	width: 106px;
 }
 
-.w113 {
-	width: 113px;
-}
-
 .w112 {
 	width: 112px;
+}
+
+.w113 {
+    width: 113px;
 }
 
 .w123 {
@@ -287,7 +292,11 @@ img {
 }
 
 .w409 {
-	width: 409px;
+    width: 409px;
+}
+
+.w450 {
+    width: 409px;
 }
 
 .w472 {

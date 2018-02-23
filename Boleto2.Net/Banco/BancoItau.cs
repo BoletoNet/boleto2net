@@ -17,7 +17,7 @@ namespace Boleto2Net
         public string Nome { get; } = "Itaú";
         public string Digito { get; } = "7";
         public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
-        public bool RemoveAcentosArquivoRemessa { get; } = false;
+        public bool RemoveAcentosArquivoRemessa { get; } = true;
 
         public void FormataCedente()
         {
@@ -26,7 +26,7 @@ namespace Boleto2Net
             if (!CarteiraFactory<BancoItau>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
                 throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
-            contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO ITAÚ.", 5);
+            contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO ITAÚ.", "", 5);
 
             Cedente.CodigoFormatado = $"{contaBancaria.Agencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
         }
@@ -268,6 +268,7 @@ namespace Boleto2Net
                 switch (boleto.Carteira)
                 {
                     case "109":
+                    case "112":
                         reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 108, 001, 0, "I", ' ');
                         break;
 
@@ -307,9 +308,26 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0327, 008, 0, boleto.Sacado.Endereco.CEP.Replace("-", ""), '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0335, 015, 0, boleto.Sacado.Endereco.Cidade, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0350, 002, 0, boleto.Sacado.Endereco.UF, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 030, 0, boleto.Avalista.Nome, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0382, 004, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0386, 006, 0, "0", '0');
+                if (boleto.CodigoInstrucao1 == "94" | boleto.CodigoInstrucao2 == "94")
+                {
+                    // Mensagem com 40 posições (Elimina Avalista, Data Mora)
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 040, 0, boleto.MensagemArquivoRemessa, ' ');
+                }
+                else
+                {
+                    if (boleto.CodigoInstrucao1 == "93" | boleto.CodigoInstrucao2 == "93")
+                    {
+                        // Mensagem com 30 posições (Elimina Avalista)
+                        reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 030, 0, boleto.MensagemArquivoRemessa, ' ');
+                    }
+                    else
+                    {
+                        // Nome do Avalista
+                        reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 030, 0, boleto.Avalista.Nome, ' ');
+                    }
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0382, 004, 0, Empty, ' ');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0386, 006, 0, "0", '0');
+                }
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0392, 002, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0394, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');

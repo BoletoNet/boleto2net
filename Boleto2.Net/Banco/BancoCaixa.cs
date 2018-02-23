@@ -18,7 +18,7 @@ namespace Boleto2Net
         public string Nome { get; } = "Caixa Econômica Federal";
         public string Digito { get; } = "0";
         public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string>();
-        public bool RemoveAcentosArquivoRemessa { get; }
+        public bool RemoveAcentosArquivoRemessa { get; } = true;
 
         public void FormataCedente()
         {

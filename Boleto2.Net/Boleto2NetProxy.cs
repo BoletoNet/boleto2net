@@ -54,8 +54,14 @@ namespace Boleto2Net
         //      1.46 - PullRequest #37
         // Novembro/2017
         //      1.50 - Caso não for definido o Nosso Número, Boleto2Net não irá gerar o código de barras e linha digitável.
+        //      1.51 - Banrisul - Carteira 1
+        //      1.52 - ContaBancaria.MensagemFixaTopoBoleto / Permite informar uma mensagem no topo do boleto (Ex: SAC BANRISUL: 0800 ...)
+        //             IBanco.RemoveAcentosArquivoRemessa = true / Por padrão, todos os bancos retiram os acentos ao gerar o arquivo remessa.
+        //      1.53 - Itaú - Carteira 112
+        // Janeiro/2018
+        //      1.54 - Itaú - Arquivo Remessa (Permite informar mensagem com 30 ou 40 caracteres, conforme instrução 93 ou 94)
 
-        readonly public string Versao = "1.50a";
+        readonly public string Versao = "1.54";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
@@ -89,18 +95,18 @@ namespace Boleto2Net
                 {
                     mensagemErro += "Agência não informada." + Environment.NewLine;
                 }
-                if (string.IsNullOrWhiteSpace(digitoAgencia))
-                {
-                    mensagemErro += "Dígito da agência não informado." + Environment.NewLine;
-                }
+                //if (string.IsNullOrWhiteSpace(digitoAgencia))
+                //{
+                //    mensagemErro += "Dígito da agência não informado." + Environment.NewLine;
+                //}
                 if (string.IsNullOrWhiteSpace(conta))
                 {
                     mensagemErro += "Conta não informada." + Environment.NewLine;
                 }
-                if (string.IsNullOrWhiteSpace(digitoConta))
-                {
-                    mensagemErro += "Dígito da conta não informado." + Environment.NewLine;
-                }
+                //if (string.IsNullOrWhiteSpace(digitoConta))
+                //{
+                //    mensagemErro += "Dígito da conta não informado." + Environment.NewLine;
+                //}
                 if (string.IsNullOrWhiteSpace(carteira))
                 {
                     mensagemErro += "Carteira não informada." + Environment.NewLine;
