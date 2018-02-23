@@ -63,6 +63,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="BancoBanrisulCarteira1Tests.cs" />
     <Compile Include="BancoBrasilCarteira11_019Tests.cs" />
     <Compile Include="BancoBrasilCarteira17_019Tests.cs" />
     <Compile Include="BancoItauCarteira109Tests.cs" />

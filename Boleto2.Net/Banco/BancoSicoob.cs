@@ -14,7 +14,6 @@ namespace Boleto2Net
 
         private BancoSicoob()
         {
-            RemoveAcentosArquivoRemessa = false;
             IdsRetornoCnab400RegistroDetalhe.Add("1");
         }
 
@@ -24,7 +23,7 @@ namespace Boleto2Net
         public string Nome { get; } = "Sicoob";
         public string Digito { get; } = "0";
         public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
-        public bool RemoveAcentosArquivoRemessa { get; }
+        public bool RemoveAcentosArquivoRemessa { get; } = true;
 
         public void FormataCedente()
         {
@@ -37,7 +36,7 @@ namespace Boleto2Net
             if (Cedente.CodigoDV == Empty)
                 throw new Exception($"Dígito do código do cedente ({codigoCedente}) não foi informado.");
 
-            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.", 8);
+            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.", "", 8);
 
             Cedente.Codigo = codigoCedente.Length <= 6 ? codigoCedente.PadLeft(6, '0'): throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 6);
 

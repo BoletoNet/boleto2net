@@ -17,7 +17,7 @@ namespace Boleto2Net
         public string Nome { get; } = "Santander";
         public string Digito { get; } = "7";
         public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { };
-        public bool RemoveAcentosArquivoRemessa { get; } = false;
+        public bool RemoveAcentosArquivoRemessa { get; } = true;
 
         public void FormataCedente()
         {
@@ -26,7 +26,7 @@ namespace Boleto2Net
             if (!CarteiraFactory<BancoSantander>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
                 throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
-            contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO SANTANDER.", digitosConta: 9);
+            contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO SANTANDER.", "", digitosConta: 9);
 
             var codigoCedente = Cedente.Codigo;
             Cedente.Codigo = codigoCedente.Length <= 7 ? codigoCedente.PadLeft(7, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
