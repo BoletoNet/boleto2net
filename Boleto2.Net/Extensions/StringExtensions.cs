@@ -17,6 +17,21 @@ namespace Boleto2Net.Extensions
             return value.Length <= length ? value : value.Substring(0, length);
         }
 
+        public static string MidVB(this string str, int start, int length)
+        {
+            return str.Mid(--start,length);
+        }
+
+        public static string Mid(this string str, int startIndex, int length)
+        {
+            if (str.Length <= 0 || startIndex >= str.Length) return string.Empty;
+            if (startIndex + length > str.Length)
+            {
+                length = str.Length - startIndex;
+            }
+            return str.Substring(startIndex, length);
+        }
+
         public static string CalcularDVCaixa(this string texto)
         {
             string digito;

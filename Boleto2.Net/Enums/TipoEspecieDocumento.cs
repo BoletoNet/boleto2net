@@ -95,6 +95,12 @@
         /// <summary>Encargos Condominiais</summary>
         EC = 30,
 
+        /// <summary>Cartão de Crédito</summary>
+        CC = 31,
+
+        /// <summary>Boleto Proposta</summary>
+        BP = 32,
+
         /// <summary>Outros</summary>
         OU = 99
     }

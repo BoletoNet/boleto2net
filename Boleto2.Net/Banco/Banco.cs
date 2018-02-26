@@ -12,6 +12,7 @@ namespace Boleto2Net
         {
             [001] = BancoBrasil.Instance,
             [033] = BancoSantander.Instance,
+            [041] = BancoBanrisul.Instance,
             [104] = BancoCaixa.Instance,
             [237] = BancoBradesco.Instance,
             [341] = BancoItau.Instance,
@@ -39,20 +40,15 @@ namespace Boleto2Net
             var banco = boleto.Banco;
             var codigoBarra = boleto.CodigoBarra;
             codigoBarra.CampoLivre = banco.FormataCodigoBarraCampoLivre(boleto);
-            if (string.IsNullOrWhiteSpace(codigoBarra.CampoLivre))
-            {
-                codigoBarra.CodigoBanco = string.Empty;
-                codigoBarra.Moeda = 0;
-                codigoBarra.FatorVencimento = 0;
-                codigoBarra.ValorDocumento = string.Empty;
-            }
-            else
-            {
-                codigoBarra.CodigoBanco = banco.Codigo.ToString().FitStringLength(3, '0');
-                codigoBarra.Moeda = boleto.CodigoMoeda;
-                codigoBarra.FatorVencimento = boleto.DataVencimento.FatorVencimento();
-                codigoBarra.ValorDocumento = boleto.ValorTitulo.ToString("N2").Replace(",", "").Replace(".", "").PadLeft(10, '0');
-            }
+
+            if (codigoBarra.CampoLivre.Length != 25)
+                throw new Exception($"Campo Livre ({codigoBarra.CampoLivre}) deve conter 25 dígitos.");
+
+            // Formata Código de Barras do Boleto
+            codigoBarra.CodigoBanco = banco.Codigo.ToString().FitStringLength(3, '0');
+            codigoBarra.Moeda = boleto.CodigoMoeda;
+            codigoBarra.FatorVencimento = boleto.DataVencimento.FatorVencimento();
+            codigoBarra.ValorDocumento = boleto.ValorTitulo.ToString("N2").Replace(",", "").Replace(".", "").PadLeft(10, '0');
         }
 
         /// <summary>
@@ -146,7 +142,7 @@ namespace Boleto2Net
             int soma = 0, peso = 2;
             for (var i = texto.Length; i > 0; i--)
             {
-                var resto = Convert.ToInt32(Strings.Mid(texto, i, 1)) * peso;
+                var resto = Convert.ToInt32(texto.MidVB(i, 1)) * peso;
                 if (resto > 9)
                     resto = resto / 10 + resto % 10;
                 soma += resto;

@@ -153,7 +153,8 @@ namespace Boleto2Net {
         ///						&lt;td class=&quot;barra&quot;&gt;&lt;img src=&quot;@URLIMAGEMBARRA&quot; /&gt;&lt;/td&gt;
         ///						&lt;td class=&quot;w65 Ab bc Ac&quot;&gt;@CODIGOBANCO-@DIGITOBANCO&lt;/td&gt;
         ///						&lt;td class=&quot;barra&quot;&gt;&lt;img src=&quot;@URLIMAGEMBARRA&quot; /&gt;&lt;/td&gt;
-        ///						&lt;td class=&quot;w500 Ar ld&quot; valign=&quot;bottom&quot;&gt;Comprovante de Entrega&lt;/td&gt;
+        ///						&lt;td class=&quot;w150 cn8 Al Ab&quot;&gt;@MENSAGEMFIXATOPOBOLETO&lt;/td&gt;
+        ///						&lt;td class=&quot;w450 Ar ld&quot; valign=&quot;bottom&quot;&gt;Comprovante de Entrega&lt;/td&gt;
         ///				&lt;/tr&gt;
         ///		&lt;/table&gt;.
         /// </summary>
@@ -377,7 +378,7 @@ namespace Boleto2Net {
         ///						&lt;td class=&quot;barra&quot;&gt;&lt;img src=&quot;@URLIMAGEMBARRA&quot; /&gt;&lt;/td&gt;
         ///						&lt;td class=&quot;w65 Ab bc Ac&quot;&gt;@CODIGOBANCO-@DIGITOBANCO&lt;/td&gt;
         ///						&lt;td class=&quot;barra&quot;&gt;&lt;img src=&quot;@URLIMAGEMBARRA&quot; /&gt;&lt;/td&gt;
-        ///						&lt;td class=&quot;w500 Ar ld&quot; valign=&quot;bottom&quot;&gt;@LINHADIGITAVEL&lt;/td&gt;
+        ///						&lt;td class=&quot;w450 Ar ld&quot; valign=&quot;bottom&quot;&gt;@LINHADIGITAVEL&lt;/td&gt;
         ///				&lt;/tr&gt;
         ///		&lt;/table&gt;.
         /// </summary>
@@ -626,7 +627,7 @@ namespace Boleto2Net {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a &lt;table class=&quot;w666&quot;&gt;
         ///				&lt;tr class=&quot;ct h13&quot;&gt;
-        ///						&lt;td class=&quot;w659&quot;&gt;Beneficiário Endereço / Sacador Avalista&lt;/td&gt;
+        ///						&lt;td class=&quot;w659&quot;&gt;Endereço do Beneficiário&lt;/td&gt;
         ///				&lt;/tr&gt;
         ///				&lt;tr class=&quot;cp h12 rBb&quot;&gt;
         ///						&lt;td class=&quot;At&quot;&gt;@ENDERECOCEDENTE&lt;/td&gt;
@@ -646,7 +647,8 @@ namespace Boleto2Net {
         ///						&lt;td class=&quot;barra&quot;&gt;&lt;img src=&quot;@URLIMAGEMBARRA&quot; /&gt;&lt;/td&gt;
         ///						&lt;td class=&quot;w65 Ab bc Ac&quot;&gt;@CODIGOBANCO-@DIGITOBANCO&lt;/td&gt;
         ///						&lt;td class=&quot;barra&quot;&gt;&lt;img src=&quot;@URLIMAGEMBARRA&quot; /&gt;&lt;/td&gt;
-        ///						&lt;td class=&quot;w500 Ar Ab ld&quot;&gt;@LINHADIGITAVEL&lt;/td&gt;
+        ///						&lt;td class=&quot;w150 cn8 Al Ab&quot;&gt;@MENSAGEMFIXATOPOBOLETO&lt;/td&gt;
+        ///						&lt;td class=&quot;w450 Ar Ab ld&quot;&gt;@LINHADIGITAVEL&lt;/td&gt;
         ///				&lt;/tr&gt;
         ///		&lt;/table&gt;.
         /// </summary>

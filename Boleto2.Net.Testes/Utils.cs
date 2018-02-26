@@ -69,18 +69,18 @@ namespace Boleto2Net.Testes
             };
         }
 
-        internal static Boletos GerarBoletos(IBanco banco, int quantidadeBoletos, string aceite)
+        internal static Boletos GerarBoletos(IBanco banco, int quantidadeBoletos, string aceite, int NossoNumeroInicial)
         {
             var boletos = new Boletos
             {
                 Banco = banco
             };
             for (var i = 1; i <= quantidadeBoletos; i++)
-                boletos.Add(GerarBoleto(banco, i, aceite));
+                boletos.Add(GerarBoleto(banco, i, aceite, NossoNumeroInicial));
             return boletos;
         }
 
-        internal static Boleto GerarBoleto(IBanco banco, int i, string aceite)
+        internal static Boleto GerarBoleto(IBanco banco, int i, string aceite, int NossoNumeroInicial)
         {
             if (aceite == "?")
                 aceite = _contador % 2 == 0 ? "N" : "A";
@@ -92,7 +92,7 @@ namespace Boleto2Net.Testes
                 DataProcessamento = DateTime.Now,
                 DataVencimento = DateTime.Now.AddMonths(i),
                 ValorTitulo = (decimal)100 * i,
-                NossoNumero = (223344 + _proximoNossoNumero).ToString(),
+                NossoNumero = NossoNumeroInicial == 0 ? "" : (NossoNumeroInicial + _proximoNossoNumero).ToString(),
                 NumeroDocumento = "BB" + _proximoNossoNumero.ToString("D6") + (char)(64 + i),
                 EspecieDocumento = TipoEspecieDocumento.DM,
                 Aceite = aceite,
@@ -145,9 +145,9 @@ namespace Boleto2Net.Testes
             return boleto;
         }
 
-        internal static void TestarHomologacao(IBanco banco, TipoArquivo tipoArquivo, string nomeCarteira, int quantidadeBoletos, bool gerarPDF, string aceite)
+        internal static void TestarHomologacao(IBanco banco, TipoArquivo tipoArquivo, string nomeCarteira, int quantidadeBoletos, bool gerarPDF, string aceite, int NossoNumeroInicial)
         {
-            var boletos = GerarBoletos(banco, quantidadeBoletos, aceite);
+            var boletos = GerarBoletos(banco, quantidadeBoletos, aceite, NossoNumeroInicial);
             Assert.AreEqual(quantidadeBoletos, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletos);
 
             // Define os nomes dos arquivos, cria pasta e apaga arquivos anteriores

@@ -3,14 +3,16 @@
 	2 - Motivo do atributo CODIGO na carteira. (para fazer a QUERY e trazer todas as classes possíveis e montar o dicionario de classes automaticamente?)
 
 
-1 - Na classe Banco.CS:
-	Incluir no dicionario, o código do banco e classe que será implementada.
-	Se o banco já existir (pule os passos do item 2, e vá direto ao passo 3)
-
+1 - Nas classes Banco.CS e Bancos.CS:
+	No caso do banco já estar implementado, e estiver apenas criando uma nova carteira, vá direto para o passo 3.
+	1.1 - Banco.CS -> Incluir no dicionario, o código do banco e classe que será implementada.
+	1.2 - Bancos.CS -> Incluir no Enum, o código do banco que será implementado.
+	
 
 2 - Criar a classe Banco:
 		Na pasta BANCO, escolha um banco já implementado como modelo para criar a nova classe.
 		O nome do arquivo e da classe deve seguir o padrão BancoXXXXXXXXXX.cs. (Siga o exemplo dos bancos já existentes)
+		Para consulta do código do banco e seu dígito, considere a url: http://www.eurodidattica.com/html/bancos.htm
 
 2.1 - Construtor da classe:
 		- Ajuste os dados do banco que está sendo implementado.
