@@ -60,8 +60,10 @@ namespace Boleto2Net
         //      1.53 - Itaú - Carteira 112
         // Janeiro/2018
         //      1.54 - Itaú - Arquivo Remessa (Permite informar mensagem com 30 ou 40 caracteres, conforme instrução 93 ou 94)
+        // Fevereiro/2018
+        //      1.55 - Itaú - Revisão do cálculo Arquivo Remessa (Permite informar mensagem com 30 ou 40 caracteres, conforme instrução 93 ou 94)
 
-        readonly public string Versao = "1.54";
+        readonly public string Versao = "1.55";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
@@ -95,18 +97,10 @@ namespace Boleto2Net
                 {
                     mensagemErro += "Agência não informada." + Environment.NewLine;
                 }
-                //if (string.IsNullOrWhiteSpace(digitoAgencia))
-                //{
-                //    mensagemErro += "Dígito da agência não informado." + Environment.NewLine;
-                //}
                 if (string.IsNullOrWhiteSpace(conta))
                 {
                     mensagemErro += "Conta não informada." + Environment.NewLine;
                 }
-                //if (string.IsNullOrWhiteSpace(digitoConta))
-                //{
-                //    mensagemErro += "Dígito da conta não informado." + Environment.NewLine;
-                //}
                 if (string.IsNullOrWhiteSpace(carteira))
                 {
                     mensagemErro += "Carteira não informada." + Environment.NewLine;
