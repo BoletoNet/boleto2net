@@ -7,10 +7,11 @@
 Nova versão do Boleto.Net
 
 ### Carteiras Homologadas
+* Banrisul - Carteira 1
 * Bradesco - Carteira 09
 * Brasil - Carteira 17 (Variações 019 027)
 * Caixa Econômica Federal - Carteira SIG14
-* Itau - Carteira 109
+* Itau - Carteira 109, 112
 * Santander - Carteira 101
 * Sicoob - Carteira 1-01
 
