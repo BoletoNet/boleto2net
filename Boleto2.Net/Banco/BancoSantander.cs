@@ -154,6 +154,42 @@ namespace Boleto2Net
             }
         }
 
+        public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
+        {
+
+            //LAYOUT V 2.8 Fevereiro/2017
+
+
+            arquivoRetorno.Banco.Cedente = new Cedente();
+            //017 - 017 Tipo de inscrição da empresa N 001 1 = CPF, 2 = CNPJ
+            //018 - 032 Nº de inscrição da empresa N 015
+            arquivoRetorno.Banco.Cedente.CPFCNPJ = registro.Substring(16, 1) == "1" ? registro.Substring(21, 11) : registro.Substring(18, 14);
+            //053 - 061 Código do Beneficiário N 009
+            arquivoRetorno.Banco.Cedente.Codigo = registro.Substring(54, 7);
+            //073 - 102 Nome da empresa A 030
+            arquivoRetorno.Banco.Cedente.Nome = registro.Substring(72, 30).Trim();
+
+
+            ////103 - 132 Nome do Banco A 030
+            //arquivoRetorno.Banco.Nome = registro.Substring(102, 30);
+
+            arquivoRetorno.Banco.Cedente.ContaBancaria = new ContaBancaria();
+            //033 - 036 Agência do Beneficiário N 004 3 
+            arquivoRetorno.Banco.Cedente.ContaBancaria.Agencia = registro.Substring(32, 4);
+            //037 - 037 Dígito da Agência do Beneficiário N 001 3
+            arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoAgencia = registro.Substring(36, 1);
+            //038 - 046 Número da conta corrente N 009 3
+            arquivoRetorno.Banco.Cedente.ContaBancaria.Conta = registro.Substring(37, 9);
+            //047 - 047 Dígito verificador da conta N 001 3
+            arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoConta = registro.Substring(46, 1);
+
+
+            //144 - 151 Data de geração do arquivo N 008 DDMMAAAA
+            arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
+            //158 - 163 Nº seqüencial do arquivo N 006
+            arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
+        }
+
         public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             try
