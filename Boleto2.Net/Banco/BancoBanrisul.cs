@@ -129,6 +129,11 @@ namespace Boleto2Net
             }
         }
 
+        public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
+        {
+            throw new NotImplementedException();
+        }
+
         public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
