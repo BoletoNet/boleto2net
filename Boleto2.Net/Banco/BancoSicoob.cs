@@ -705,10 +705,10 @@ namespace Boleto2Net
         #region Retorno - CNAB240
         public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
         {
-            ////144 - 151 Data de geração do arquivo N 008 DDMMAAAA
-            //arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
-            ////158 - 163 Nº seqüencial do arquivo N 006
-            //arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
+            //17.0 144 151 008 - Num - Data de Geração do Arquivo
+            arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
+            //19.0 158 163 006 - Num - Seqüência (NSA)
+            arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
         }
         public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
@@ -754,6 +754,11 @@ namespace Boleto2Net
 
                 //Data Vencimento do Título
                 boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(73, 8)).ToString("##-##-####"));
+
+                //18.3T 97 99 3 - Num Banco Cobr./Receb.
+                boleto.BancoCobradorRecebedor = registro.Substring(96, 3);
+                //19.3T 100 104 5 - Num	Ag. Cobradora
+                boleto.AgenciaCobradoraRecebedora = registro.Substring(99, 6);
 
                 //Dados Sacado
                 boleto.Sacado = new Sacado();
