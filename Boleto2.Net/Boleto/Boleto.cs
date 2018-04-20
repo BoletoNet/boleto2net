@@ -11,9 +11,13 @@ namespace Boleto2Net
         public Boleto(IBanco banco)
         {
             Banco = banco;
-            Carteira = banco.Cedente.ContaBancaria.CarteiraPadrao;
-            VariacaoCarteira = banco.Cedente.ContaBancaria.VariacaoCarteiraPadrao;
-            TipoCarteira = banco.Cedente.ContaBancaria.TipoCarteiraPadrao;
+            //alteração evita erro ao processar retorno sem dados da carteira, e somente informando o banco (múltiplas carteiras no arquivo de retorno)
+            if (banco.Cedente != null)
+            {
+                Carteira = banco.Cedente.ContaBancaria.CarteiraPadrao;
+                VariacaoCarteira = banco.Cedente.ContaBancaria.VariacaoCarteiraPadrao;
+                TipoCarteira = banco.Cedente.ContaBancaria.TipoCarteiraPadrao;
+            }
         }
         public int CodigoMoeda { get; set; } = 9;
         public string EspecieMoeda { get; set; } = "R$";
