@@ -895,6 +895,12 @@ namespace Boleto2Net
         public void LerTrailerRetornoCNAB400(string registro)
         {
         }
+
+        public string FormatarNomeArquivoRemessa(int numeroSequencial)
+        {
+            return numeroSequencial.ToString();
+        }
+
         #endregion
 
         private string OcorrenciasCnab400(string codigo)

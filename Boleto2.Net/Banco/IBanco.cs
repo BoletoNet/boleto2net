@@ -53,5 +53,7 @@ namespace Boleto2Net
         void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro);
         void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro);
         void LerTrailerRetornoCNAB400(string registro);
+
+        string FormatarNomeArquivoRemessa(int numeroSequencial);
     }
 }

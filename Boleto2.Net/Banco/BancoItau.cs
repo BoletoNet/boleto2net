@@ -218,6 +218,11 @@ namespace Boleto2Net
         {
         }
 
+        public string FormatarNomeArquivoRemessa(int numeroSequencial)
+        {
+            return "";
+        }
+
         private string GerarHeaderRemessaCNAB400(int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
