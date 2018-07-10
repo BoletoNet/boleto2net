@@ -1,4 +1,5 @@
-#addin Cake.Coveralls
+///#addin Cake.Coveralls
+#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Coveralls&version=0.8.0"
 #tool "nuget:?package=NUnit.ConsoleRunner"
 #tool "nuget:?package=OpenCover"
 #tool coveralls.net
