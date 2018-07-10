@@ -1,7 +1,7 @@
 #addin Cake.Coveralls
 #tool "nuget:?package=NUnit.ConsoleRunner"
 #tool "nuget:?package=OpenCover"
-#tool coveralls.net
+///#tool coveralls.net
 using System.Xml.Linq;
 
 var target = Argument("target", "Default");
@@ -21,14 +21,14 @@ Task("RunNugetPack").WithCriteria(string.IsNullOrWhiteSpace(EnvironmentVariable(
     var nupkg = GetFiles("*.nupkg").First();
 });
 
-Task("RunCoverage").IsDependentOn("Build").Does(() =>
-{
-    OpenCover(tool => tool.NUnit3("./**/bin/Release/*.Testes.dll"),
-              new FilePath("./coverage.xml"),
-              new OpenCoverSettings().WithFilter("+[*]Boleto2Net.*").WithFilter("-[*]Boleto2Net.Testes.*")
-    );
-    CoverallsNet("coverage.xml", CoverallsNetReportType.OpenCover);
-});
+///Task("RunCoverage").IsDependentOn("Build").Does(() =>
+///{
+///    OpenCover(tool => tool.NUnit3("./**/bin/Release/*.Testes.dll"),
+///              new FilePath("./coverage.xml"),
+///              new OpenCoverSettings().WithFilter("+[*]Boleto2Net.*").WithFilter("-[*]Boleto2Net.Testes.*")
+///    );
+///    CoverallsNet("coverage.xml", CoverallsNetReportType.OpenCover);
+///});
 
 Task("RunTests").IsDependentOn("Build").Does(() =>
 {
