@@ -10,7 +10,7 @@ namespace Boleto2Net
         public TipoArquivo TipoArquivo { get; set; }
         public int NumeroArquivoRemessa { get; set; }
 
-        public string NomeArquivo => this.Banco?.FormatarNomeArquivoRemessa(this.NumeroArquivoRemessa);
+        public string NomeArquivo => this.Banco?.FormatarNomeArquivoRemessa(this.NumeroArquivoRemessa); //
 
         public ArquivoRemessa(IBanco banco, TipoArquivo tipoArquivo, int numeroArquivoRemessa)
         {
