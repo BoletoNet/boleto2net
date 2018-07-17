@@ -519,6 +519,11 @@ namespace Boleto2Net
         {
         }
 
+        public string FormatarNomeArquivoRemessa(int numeroSequencial)
+        {
+            return "";
+        }
+
         #endregion
     }
 }

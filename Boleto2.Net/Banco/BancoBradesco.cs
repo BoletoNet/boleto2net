@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.UI;
 using Boleto2Net.Exceptions;
+using Boleto2Net.Extensions;
 using static System.String;
 
 [assembly: WebResource("BoletoNet.Imagens.237.jpg", "image/jpg")]
@@ -709,6 +710,11 @@ namespace Boleto2Net
 
         public void LerTrailerRetornoCNAB400(string registro)
         {
+        }
+
+        public string FormatarNomeArquivoRemessa(int numeroSequencial)
+        {
+            return $"CB{DateTime.Now.Date.Day:00}{DateTime.Now.Date.Month:00}{numeroSequencial.ToString().PadLeft(9, '0').Right(2)}.rem";
         }
 
         private string GerarHeaderRemessaCNAB400(int numeroArquivoRemessa, ref int numeroRegistroGeral)

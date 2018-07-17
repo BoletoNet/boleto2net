@@ -820,6 +820,11 @@ namespace Boleto2Net
         {
         }
 
+        public string FormatarNomeArquivoRemessa(int numeroSequencial)
+        {
+            return numeroSequencial.ToString();
+        }
+
         private string DescricaoOcorrenciaCnab400(string codigo, string codigoRejeicao)
         {
             switch (codigo)
