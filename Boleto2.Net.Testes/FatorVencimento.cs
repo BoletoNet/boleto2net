@@ -9,16 +9,22 @@ namespace Boleto2Net.Testes
         [Test]
         public void GeracaoCorretaDeFatorVencimento()
         {
-            var inicio = new DateTime(2010, 01, 31, 0, 0, 0);
-            var fim = new DateTime(2025, 02, 21, 0, 0, 0);
-            var totalDays = (fim - inicio).TotalDays;
-            for (int i = 0; i < totalDays; i++)
+            var inicio = new DateTime(1997, 10, 07, 0, 0, 0);
+            var ajusteRange = (DateTime.Now - inicio).Days - 3000;
+            inicio = inicio.AddDays(ajusteRange);
+
+            var totalDiasAnalisados = (new DateTime(2033, 08, 15, 0, 0, 0) - inicio).Days;
+            
+            for (int i = 0; i < totalDiasAnalisados; i++)
             {
+                var fatorVencimento = ajusteRange + i;
                 var dateTime = inicio.AddDays(i);
-                Assert.AreEqual(4499 + i, dateTime.FatorVencimento());
+
+                Assert.AreEqual(fatorVencimento, dateTime.FatorVencimento());
+                if (fatorVencimento == 9999)
+                    ajusteRange = 999-i;
             }
-            Assert.AreEqual(1000, fim.AddDays(1).FatorVencimento());
-            Assert.AreEqual(1001, fim.AddDays(2).FatorVencimento());
+            
         }
     }
 }
