@@ -527,10 +527,34 @@ namespace Boleto2Net
         #region RetornoCNAB240
         public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
         {
-            ////144 - 151 Data de geração do arquivo N 008 DDMMAAAA
-            //arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
-            ////158 - 163 Nº seqüencial do arquivo N 006
-            //arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
+            //Manual de Procedimentos Nº 4008.524.0339 - Versão 04 - Elaborado em: 12 / 08 / 201
+
+            arquivoRetorno.Banco.Cedente = new Cedente();
+            //05.0 Tipo de inscrição da empresa 18 - 18 (1)
+            //06.0 Número de incrição da empresa 19 - 32 (14)
+            arquivoRetorno.Banco.Cedente.CPFCNPJ = registro.Substring(17, 1) == "1" ? registro.Substring(21, 11) : registro.Substring(18, 14);
+            //07.0 Código do convênio no banco 33 - 52 (20)
+            arquivoRetorno.Banco.Cedente.Codigo = registro.Substring(32, 20).Trim();
+            //13.0 Nome da Empresa 73 - 102 (30)
+            arquivoRetorno.Banco.Cedente.Nome = registro.Substring(72, 30).Trim();
+
+            ////14.0 Nome do Banco 103 - 132 (30)
+            //arquivoRetorno.Banco.Nome = registro.Substring(102, 30);
+
+            arquivoRetorno.Banco.Cedente.ContaBancaria = new ContaBancaria();
+            //08.0 Agência mantenedora da conta 53 - 57 (5)
+            arquivoRetorno.Banco.Cedente.ContaBancaria.Agencia = registro.Substring(52, 5);
+            //09.0 Dígito verificador da agência 58 - 58 (1)
+            arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoAgencia = registro.Substring(57, 1);
+            //10.0 Número da conta corrente 59 - 70 (12)
+            arquivoRetorno.Banco.Cedente.ContaBancaria.Conta = registro.Substring(58, 12);
+            //11.0 Dígito verificador da conta 71 - 71 (1)
+            arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoConta = registro.Substring(70, 1);
+
+            //17.0 Data de geração do arquivo 144 - 151 (8)
+            arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
+            //19.0 Número seqüencial do arquivo NSA 158 - 163 (6)
+            arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
         }
 
         public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
@@ -567,7 +591,7 @@ namespace Boleto2Net
                 //Identificação do Título no Banco
                 string tmp = registro.Substring(37,20);
                 boleto.NossoNumero = tmp.Substring(8, 11);
-                boleto.NossoNumeroDV = registro.Substring(1, 19);
+                boleto.NossoNumeroDV = tmp.Substring(19, 1);
 
                 //Identificação de Ocorrência
                 boleto.CodigoOcorrencia = registro.Substring(15, 2);
