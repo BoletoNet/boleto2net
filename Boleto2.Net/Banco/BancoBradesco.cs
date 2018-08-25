@@ -527,7 +527,7 @@ namespace Boleto2Net
         #region RetornoCNAB240
         public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
         {
-            //Manual de Procedimentos Nº 4008.524.0339 - Versão 04 - Elaborado em: 12 / 08 / 201
+            //Manual de Procedimentos Nº 4008.524.0339 - Versão 04 - Elaborado em: 12 / 08 / 2015
 
             arquivoRetorno.Banco.Cedente = new Cedente();
             //05.0 Tipo de inscrição da empresa 18 - 18 (1)
