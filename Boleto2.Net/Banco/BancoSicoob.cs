@@ -36,7 +36,7 @@ namespace Boleto2Net
             if (Cedente.CodigoDV == Empty)
                 throw new Exception($"Dígito do código do cedente ({codigoCedente}) não foi informado.");
 
-            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.", "", 8);
+            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.", "", "", 8);
 
             Cedente.Codigo = codigoCedente.Length <= 6 ? codigoCedente.PadLeft(6, '0'): throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 6);
 

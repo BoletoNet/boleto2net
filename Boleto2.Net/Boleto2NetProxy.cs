@@ -62,8 +62,14 @@ namespace Boleto2Net
         //      1.54 - Itaú - Arquivo Remessa (Permite informar mensagem com 30 ou 40 caracteres, conforme instrução 93 ou 94)
         // Fevereiro/2018
         //      1.55 - Itaú - Revisão do cálculo Arquivo Remessa (Permite informar mensagem com 30 ou 40 caracteres, conforme instrução 93 ou 94)
+        // Maio/2018
+        //      1.56 - Itaú - Carteira 112 - Ajuste no cálculo do Nosso Número
+        // Agosto/2018
+        //      1.60 - Ajuste Boleto Padrão Caixa Econônica Federal (Mensagem Fixa Sacado)
+        //             Alteração da classe Boleto: Adicionado propriedade para controlar a impressão do código da carteira no boleto
+        //             Alteração da classe ContaBancaria: Adicionado propriedade para imprimir mensagem na área de instrução do sacado.
 
-        readonly public string Versao = "1.55";
+        readonly public string Versao = "1.60a";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
@@ -590,14 +596,8 @@ namespace Boleto2Net
                 var html = new StringBuilder();
                 foreach (Boleto boletoTmp in boletos)
                 {
-                    //if (html.Length != 0)
-                    //{
-                    //    // Já existe um boleto, inclui quebra de linha.
-                    //    html.Append("</br></br></br></br></br></br></br></br></br></br>");
-                    //}
                     using (BoletoBancario imprimeBoleto = new BoletoBancario
                     {
-                        //CodigoBanco = (short)boletoTmp.Banco.Codigo,
                         Boleto = boletoTmp,
                         OcultarInstrucoes = false,
                         MostrarComprovanteEntrega = true,
