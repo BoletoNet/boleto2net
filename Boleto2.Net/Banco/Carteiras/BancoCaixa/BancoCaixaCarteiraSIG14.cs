@@ -16,6 +16,8 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
+            boleto.CarteiraImpressaoBoleto = "RG";
+
             // Carteira SIG14: Dúvida: Se o Cliente SEMPRE emite o boleto, pois o nosso número começa com 14, o que significa Título Registrado emissão Empresa:
             // O nosso número não pode ser em branco.
             if (IsNullOrWhiteSpace(boleto.NossoNumero))

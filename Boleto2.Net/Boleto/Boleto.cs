@@ -12,6 +12,7 @@ namespace Boleto2Net
         {
             Banco = banco;
             Carteira = banco.Cedente.ContaBancaria.CarteiraPadrao;
+            CarteiraImpressaoBoleto = banco.Cedente.ContaBancaria.CarteiraPadrao;
             VariacaoCarteira = banco.Cedente.ContaBancaria.VariacaoCarteiraPadrao;
             TipoCarteira = banco.Cedente.ContaBancaria.TipoCarteiraPadrao;
         }
@@ -43,6 +44,7 @@ namespace Boleto2Net
         public string Carteira { get; set; } = string.Empty;
         public string VariacaoCarteira { get; set; } = string.Empty;
         public string CarteiraComVariacao => string.IsNullOrEmpty(Carteira) || string.IsNullOrEmpty(VariacaoCarteira) ? $"{Carteira}{VariacaoCarteira}" : $"{Carteira}/{VariacaoCarteira}";
+        public string CarteiraImpressaoBoleto { get; set; } = string.Empty;
 
         public DateTime DataProcessamento { get; set; } = DateTime.Now;
         public DateTime DataEmissao { get; set; } = DateTime.Now;
