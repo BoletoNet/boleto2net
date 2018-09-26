@@ -68,8 +68,10 @@ namespace Boleto2Net
         //      1.60 - Ajuste Boleto Padrão Caixa Econônica Federal (Mensagem Fixa Sacado)
         //             Alteração da classe Boleto: Adicionado propriedade para controlar a impressão do código da carteira no boleto
         //             Alteração da classe ContaBancaria: Adicionado propriedade para imprimir mensagem na área de instrução do sacado.
+        // Setembro/2018
+        //      1.61 - Caixa Economica - Correção Retorno CNAB240 Segmento T
 
-        readonly public string Versao = "1.60a";
+        readonly public string Versao = "1.61";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
