@@ -687,11 +687,11 @@ namespace Boleto2Net
 
                 //Identificação do Título no Banco
                 boleto.NossoNumero = registro.Substring(39, 17);
-                boleto.NossoNumeroDV = "";
-                boleto.NossoNumeroFormatado = boleto.NossoNumero;
+                boleto.NossoNumeroDV = registro.Substring(56, 1);
+                boleto.NossoNumeroFormatado = Format("{0}-{1}", boleto.NossoNumero, boleto.NossoNumeroDV);
 
                 //Identificação de Ocorrência
-                boleto.CodigoOcorrencia = registro.Substring(108, 2);
+                boleto.CodigoOcorrencia = registro.Substring(15, 2);
                 boleto.DescricaoOcorrencia = Cnab.OcorrenciaCnab240(boleto.CodigoOcorrencia);
                 boleto.CodigoOcorrenciaAuxiliar = registro.Substring(213, 10);
 
