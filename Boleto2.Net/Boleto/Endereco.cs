@@ -27,7 +27,7 @@ namespace Boleto2Net
             if (LogradouroEndereco.Length + logradouroCompleto.Length <= tamanhoFinal)
                 return LogradouroEndereco + logradouroCompleto;
 
-            return LogradouroEndereco.Substring(0, tamanhoFinal - logradouroCompleto.Length);
+            return LogradouroEndereco.Substring(0, tamanhoFinal - logradouroCompleto.Length) + logradouroCompleto;
         }
     }
 }
