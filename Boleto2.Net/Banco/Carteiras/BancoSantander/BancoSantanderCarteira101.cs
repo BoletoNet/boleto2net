@@ -16,6 +16,9 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
+            //COBRANÇA SIMPLES - RCR(Rápida com Registro)
+            boleto.CarteiraImpressaoBoleto = "RCR";
+
             if (IsNullOrWhiteSpace(boleto.NossoNumero))
                 throw new Exception("Nosso Número não informado.");
 
