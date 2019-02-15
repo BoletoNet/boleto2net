@@ -8,6 +8,7 @@ namespace Boleto2Net
         Caixa = 104,
         Bradesco = 237,
         Itau = 341,
+        Safra = 422,
         Sicoob = 756
     }
 }

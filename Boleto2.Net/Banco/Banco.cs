@@ -16,6 +16,7 @@ namespace Boleto2Net
             [104] = BancoCaixa.Instance,
             [237] = BancoBradesco.Instance,
             [341] = BancoItau.Instance,
+            [422] = BancoSafra.Instance,
             [756] = BancoSicoob.Instance
         };
 
