@@ -10,68 +10,10 @@ namespace Boleto2Net
     [ComVisible(true)]
     public class Boleto2NetProxy
     {
-        // Esta classe é para permitir que essa DLL seja utilizada via COM, em linguagens que não usam o .NET - Por exemplo: Visual Fox Pro.
-        // Janeiro/2016
-        //      1.00 - Bradesco - Carteira 09
-        // Julho/2016
-        //      1.01 - Caixa Economica Federal - Carteira SIG14
-        //      1.02 - Banco do Brasil - Carteira 17 Variação 019
-        //      1.03 - Banco do Brasil - Carteira 11 Variação 019
-        // Agosto/2016
-        //      1.04 - Refatoração completa da classe ArquivoRetorno
-        // Novembro/2016
-        //      1.05 - Banco do Brasil - Retorno
-        // Dezembro/2016
-        //      1.10 - github.com/BoletoNet/boleto2net
-        //      1.11 - Sicoob - Carteira 1 Variação 01
-        //      1.12 - Classe Proxy - Métodos para definir Protesto e BaixaDevolucao / Quebra de página utilizando css - page-break-after
-        //      1.13 - Correção Carteira Bradesco com 2 dígitos no retorno.
-        //      1.14 - Correção Código da Espécie do Documento / Correções de Homologação do Sicoob
-        // Abril/2017
-        //      1.20 - Santander - Carteira 101
-        //      1.21 - Correção na impressão do CNPJ do sacado (estava formatado como CPF)
-        //      1.22 - Correção na impressão dos dados do beneficiario
-        //      1.23 - Correções Santander
-        //      1.24 - Ajuste Caixa - Carteira SIG14 - FormataNossoNumero
-        //      1.25 - Santander - Carteira 101 Homologada
-        //      1.26 - Itaú - Carteira 109 Homologada
-        // Junho/2017
-        //      1.30 - Correções no método FormataCedente e suas exceções - Quantidade de dígitos da conta e código do cedente
-        //      1.31 - Correções na leitura do retorno do Itaú
-        //      1.40 - Inclusao das propriedades Carteira, VariacaoCarteira, TipoCarteira também na classe Boleto.
-        //             As propriedades que já existiam na classe ContaCorrente, foram renomeadas para CarteiraPadrao, VariacaoCarteiraPadrao, TipoCarteiraPadrao
-        //             A classe Boleto passou a ter um construtor obrigatorio, onde recebe um objeto Banco, e já prepara as 3 propriedades com o padrão definido.
-        //             Alteração foi necessária pois existem retornos com boletos em diferentes carteiras, e do modo que estava, aceitava apenas uma carteira para toda a lista de boletos.
-        // Julho/2017
-        //      1.41 - Banco do Brasil - Carteira 17 Variação 027
-        //      1.42 - Banco do Brasil - Correção BB - Ficha de Compensação - AGÊNCIA/CÓDIGO DO BENEFICIÁRIO: Informe o prefixo da agência e número da conta de relacionamento com o BB no formato AAAA-Z / CCCCC-Z
-        // Agosto/2017
-        //      1.43 - Classe Boleto = Ajuste das propriedades ValorPago e ValorPagoCredito
-        //      1.44 - Banco do Brasil - Correção BB - Ficha de Compensação - AGÊNCIA/CÓDIGO DO BENEFICIÁRIO: Informe o prefixo da agência e número da conta de relacionamento com o BB no formato AAAA-Z / CCCCC-Z
-        //             Alteração na Impressão do Boleto Bancário: Comprovante de Entrega - Alterado de "Agência / Código do Cedente" para "Agência / Código do Beneficiário"
-        //      1.45 - Santander - Correção na posição dos campos na leitura do arquivo retorno (Cnab240), segmento T.
-        //             Santander - Correção do nosso número (de 7 para 12 posições) + dígito verificador = total 13 posições.
-        //      1.46 - PullRequest #37
-        // Novembro/2017
-        //      1.50 - Caso não for definido o Nosso Número, Boleto2Net não irá gerar o código de barras e linha digitável.
-        //      1.51 - Banrisul - Carteira 1
-        //      1.52 - ContaBancaria.MensagemFixaTopoBoleto / Permite informar uma mensagem no topo do boleto (Ex: SAC BANRISUL: 0800 ...)
-        //             IBanco.RemoveAcentosArquivoRemessa = true / Por padrão, todos os bancos retiram os acentos ao gerar o arquivo remessa.
-        //      1.53 - Itaú - Carteira 112
-        // Janeiro/2018
-        //      1.54 - Itaú - Arquivo Remessa (Permite informar mensagem com 30 ou 40 caracteres, conforme instrução 93 ou 94)
-        // Fevereiro/2018
-        //      1.55 - Itaú - Revisão do cálculo Arquivo Remessa (Permite informar mensagem com 30 ou 40 caracteres, conforme instrução 93 ou 94)
-        // Maio/2018
-        //      1.56 - Itaú - Carteira 112 - Ajuste no cálculo do Nosso Número
-        // Agosto/2018
-        //      1.60 - Ajuste Boleto Padrão Caixa Econônica Federal (Mensagem Fixa Sacado)
-        //             Alteração da classe Boleto: Adicionado propriedade para controlar a impressão do código da carteira no boleto
-        //             Alteração da classe ContaBancaria: Adicionado propriedade para imprimir mensagem na área de instrução do sacado.
-        // Setembro/2018
-        //      1.61 - Caixa Economica - Correção Retorno CNAB240 Segmento T
+        // Esta classe é para permitir que essa DLL seja utilizada
+        // via COM, em linguagens que como Visual Fox Pro.
 
-        readonly public string Versao = "1.61";
+        readonly public string Versao = "1.70H";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
