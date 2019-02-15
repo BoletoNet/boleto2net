@@ -48,6 +48,10 @@ namespace Boleto2Net
             return carteira.FormataCodigoBarraCampoLivre(boleto);
         }
 
+        public string FormatarNomeArquivoRemessa(int numeroSequencial)
+        {
+            return "";
+        }
         public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             this.NumeroArquivoRemessaCNAB400 = numeroArquivoRemessa;
@@ -115,6 +119,11 @@ namespace Boleto2Net
             {
                 throw Boleto2NetException.ErroAoGerrarRegistroTrailerDoArquivoRemessa(ex);
             }
+        }
+
+        public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
+        {
+            throw new NotImplementedException();
         }
 
         public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
@@ -456,7 +465,8 @@ namespace Boleto2Net
                     return "??";
             }
         }
-    }
+
+        }
 }
 
 
