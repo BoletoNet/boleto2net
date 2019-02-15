@@ -65,6 +65,7 @@
     <Compile Include="Banco\Banco.cs" />
     <Compile Include="Banco\BancoItau.cs" />
     <Compile Include="Banco\Bancos.cs" />
+    <Compile Include="Banco\BancoSafra.cs" />
     <Compile Include="Banco\BancoSantander.cs" />
     <Compile Include="Banco\BancoSicoob.cs" />
     <Compile Include="Banco\Carteiras\BancoBanrisul\BancoBanrisulCarteira1.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Banco\Carteiras\BancoCaixa\BancoCaixaCarteiraSIG14.cs" />
     <Compile Include="Banco\Carteiras\BancoItau\BancoItauCarteira109.cs" />
     <Compile Include="Banco\Carteiras\BancoItau\BancoItauCarteira112.cs" />
+    <Compile Include="Banco\Carteiras\BancoSafra\BancoSafraCarteira1.cs" />
     <Compile Include="Banco\Carteiras\BancoSantander\BancoSantanderCarteira101.cs" />
     <Compile Include="Banco\Carteiras\BancoSicoob\BancoSincoobCarteira1.cs" />
     <Compile Include="Banco\Carteiras\CarteiraCodigoAttribute.cs" />

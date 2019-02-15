@@ -140,5 +140,34 @@ namespace Boleto2Net.Extensions
                 digito = (10 - resto).ToString();
             return digito;
         }
+
+        public static string CalcularDVSafra(this string texto)
+        {
+            string digito;
+            int pesoMaximo = 9, soma = 0, peso = 2;
+            for (var i = texto.Length - 1; i >= 0; i--)
+            {
+                soma = soma + (int)char.GetNumericValue(texto[i]) * peso;
+                if (peso == pesoMaximo)
+                    peso = 2;
+                else
+                    peso = peso + 1;
+            }
+            var resto = soma % 11;
+            switch (resto)
+            {
+                case 0:
+                    digito = "1";
+                    break;
+                case 1:
+                    digito = "0";
+                    break;
+                default:
+                    digito = (11 - resto).ToString();
+                    break;
+            }
+            return digito;
+        }
+
     }
 }
