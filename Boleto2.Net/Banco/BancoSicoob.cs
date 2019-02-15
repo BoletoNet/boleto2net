@@ -706,6 +706,34 @@ namespace Boleto2Net
         #endregion
 
         #region Retorno - CNAB240
+        public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
+        {
+            arquivoRetorno.Banco.Cedente = new Cedente();
+            //05.0	018	018	001 - Tipo de Inscrição da Empresa: '1' = CPF '2' = CGC / CNPJ
+            //06.0	019	032	014 - Número de Inscrição da Empresa
+            arquivoRetorno.Banco.Cedente.CPFCNPJ = registro.Substring(17, 1) == "1" ? registro.Substring(21, 11) : registro.Substring(18, 14);
+
+            //arquivoRetorno.Banco.Cedente.Codigo = ?;
+            //13.0	073	102	030 - Nome da Empresa
+            arquivoRetorno.Banco.Cedente.Nome = registro.Substring(72, 30).Trim();
+
+
+            arquivoRetorno.Banco.Cedente.ContaBancaria = new ContaBancaria();
+            //08.0	053	057	005	- Prefixo da Cooperativa: vide planilha "Capa" deste arquivo
+            arquivoRetorno.Banco.Cedente.ContaBancaria.Agencia = registro.Substring(52, 5);
+            //09.0	058	058	001 - Dígito Verificador do Prefixo: vide planilha "Capa" deste arquivo
+            arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoAgencia = registro.Substring(57, 1);
+            //10.0	059	070	012 - Conta Corrente: vide planilha "Capa" deste arquivo
+            arquivoRetorno.Banco.Cedente.ContaBancaria.Conta = registro.Substring(58, 12);
+            //11.0	071	071	001 - Dígito Verificador da Conta: vide planilha "Capa" deste arquivo
+            arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoConta = registro.Substring(70, 1);
+
+
+            //17.0 144 151 008 - Num - Data de Geração do Arquivo
+            arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
+            //19.0 158 163 006 - Num - Seqüência (NSA)
+            arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
+        }
         public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             try
@@ -750,6 +778,11 @@ namespace Boleto2Net
 
                 //Data Vencimento do Título
                 boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(73, 8)).ToString("##-##-####"));
+
+                //18.3T 97 99 3 - Num Banco Cobr./Receb.
+                boleto.BancoCobradorRecebedor = registro.Substring(96, 3);
+                //19.3T 100 104 5 - Num	Ag. Cobradora
+                boleto.AgenciaCobradoraRecebedora = registro.Substring(99, 6);
 
                 //Dados Sacado
                 boleto.Sacado = new Sacado();
@@ -891,6 +924,12 @@ namespace Boleto2Net
         public void LerTrailerRetornoCNAB400(string registro)
         {
         }
+
+        public string FormatarNomeArquivoRemessa(int numeroSequencial)
+        {
+            return numeroSequencial.ToString();
+        }
+
         #endregion
 
         private string OcorrenciasCnab400(string codigo)

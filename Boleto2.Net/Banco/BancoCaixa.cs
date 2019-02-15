@@ -655,6 +655,14 @@ namespace Boleto2Net
 
         #region SIG14 - Retorno
 
+        public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
+        {
+            ////144 - 151 Data de geração do arquivo N 008 DDMMAAAA
+            //arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
+            ////158 - 163 Nº seqüencial do arquivo N 006
+            //arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
+        }
+
         public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             try
@@ -811,6 +819,11 @@ namespace Boleto2Net
 
         public void LerTrailerRetornoCNAB400(string registro)
         {
+        }
+
+        public string FormatarNomeArquivoRemessa(int numeroSequencial)
+        {
+            return numeroSequencial.ToString();
         }
 
         private string DescricaoOcorrenciaCnab400(string codigo, string codigoRejeicao)

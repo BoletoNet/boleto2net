@@ -163,6 +163,11 @@ namespace Boleto2Net
             }
         }
 
+        public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
+        {
+            throw new NotImplementedException();
+        }
+
         public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
@@ -942,6 +947,11 @@ namespace Boleto2Net
 
         public void LerTrailerRetornoCNAB400(string registro)
         {
+        }
+
+        public string FormatarNomeArquivoRemessa(int numeroSequencial)
+        {
+            return "";
         }
 
         #endregion

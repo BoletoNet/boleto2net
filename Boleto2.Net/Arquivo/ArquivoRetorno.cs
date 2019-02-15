@@ -10,12 +10,27 @@ namespace Boleto2Net
         public IBanco Banco { get; set; }
         public TipoArquivo TipoArquivo { get; set; }
         public Boletos Boletos { get; set; } = new Boletos();
+        public DateTime? DataGeracao { get; set; }
+        public int? NumeroSequencial { get; set; }
+
+        private bool _ignorarCarteiraBoleto = false;
         #region Construtores
 
-        public ArquivoRetorno(IBanco banco, TipoArquivo tipoArquivo)
+        public ArquivoRetorno(IBanco banco, TipoArquivo tipoArquivo, bool variasCarteiras = false)
         {
             Banco = banco;
             TipoArquivo = tipoArquivo;
+            _ignorarCarteiraBoleto = variasCarteiras;
+        }
+
+        /// <summary>
+        /// Neste construtor o boleto2net é responsável por atribuir o TipoArquivo e o Banco de acordo com o conteúdo do arquivo de retorno.
+        /// O próprio construtor chama o método LerArquivoRetorno2 responsável por carregar/atribuir os boletos e demais informações do arquivo de retorno
+        /// </summary>
+        /// <param name="arquivo">Stream do arquivo de retorno</param>
+        public ArquivoRetorno(Stream arquivo)
+        {
+            LerArquivoRetorno2(arquivo);
         }
 
         #endregion
@@ -51,17 +66,75 @@ namespace Boleto2Net
             return Boletos;
         }
 
+        private void LerArquivoRetorno2(Stream arquivo)
+        {
+
+            Boletos.Clear();
+            try
+            {
+                using (StreamReader arquivoRetorno = new StreamReader(arquivo, System.Text.Encoding.UTF8))
+                {
+                    if (arquivoRetorno.EndOfStream)
+                        return;
+
+                    //busca o primeiro registro do arquivo
+                    var registro = arquivoRetorno.ReadLine();
+
+                    //atribui o tipo de acordo com o conteúdo do arquivo
+                    TipoArquivo = registro.Length == 240 ? TipoArquivo.CNAB240 : TipoArquivo.CNAB400;
+
+                    if (TipoArquivo == TipoArquivo.CNAB400 && Banco.IdsRetornoCnab400RegistroDetalhe.Count == 0)
+                        throw new Exception("Banco " + Banco.Codigo.ToString() + " não implementou os Ids do Registro Retorno do CNAB400.");
+
+                    //instacia o banco de acordo com o codigo/id do banco presente no arquivo de retorno
+                    Banco = Boleto2Net.Banco.Instancia(Utils.ToInt32(registro.Substring(TipoArquivo == TipoArquivo.CNAB240 ? 0 : 76, 3)));
+
+                    //define a posicao do reader para o início
+                    arquivoRetorno.DiscardBufferedData();
+                    arquivoRetorno.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                    while (!arquivoRetorno.EndOfStream)
+                    {
+                        registro = arquivoRetorno.ReadLine();
+                        if (TipoArquivo == TipoArquivo.CNAB240)
+                        {
+                            LerLinhaDoArquivoRetornoCNAB240(registro);
+                        }else
+                        if (TipoArquivo == TipoArquivo.CNAB400)
+                        {
+                            LerLinhaDoArquivoRetornoCNAB400(registro);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler arquivo.", ex);
+            }
+
+        }
+
         private void LerLinhaDoArquivoRetornoCNAB240(string registro)
         {
             var tipoRegistro = registro.Substring(7, 1);
             var tipoSegmento = registro.Substring(13, 1);
+
+            if (tipoRegistro == "0")
+            {
+                //REGISTRO HEADER DO ARQUIVO RETORNO
+                Banco.LerHeaderRetornoCNAB240(this, registro);
+                return;
+            }
+
             if (tipoRegistro == "3" & tipoSegmento == "T")
             {
                 // Segmento T - Indica um novo boleto
-                var boleto = new Boleto(this.Banco);
+                var boleto = new Boleto(this.Banco, _ignorarCarteiraBoleto);
                 Banco.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
                 Boletos.Add(boleto);
+                return;
             }
+
             if (tipoRegistro == "3" & tipoSegmento == "U")
             {
                 // Segmento U - Continuação do segmento T anterior (localiza o último boleto da lista)
@@ -70,6 +143,7 @@ namespace Boleto2Net
                 if (boleto == null)
                     throw new Exception("Objeto boleto não identificado");
                 Banco.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
+                return;
             }
         }
 
@@ -107,7 +181,7 @@ namespace Boleto2Net
             Boleto boleto;
             if (novoBoleto)
             {
-                boleto = new Boleto(this.Banco);
+                boleto = new Boleto(this.Banco, _ignorarCarteiraBoleto);
             }
             else
             {
