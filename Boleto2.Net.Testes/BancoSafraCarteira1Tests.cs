@@ -3,6 +3,8 @@ using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
+    [TestFixture]
+    [Category("Safra Carteira 1")]
     public class BancoSafraCarteira1
     {
         readonly IBanco _banco;

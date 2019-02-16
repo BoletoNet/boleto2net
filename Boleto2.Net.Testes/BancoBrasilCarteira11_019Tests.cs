@@ -4,6 +4,7 @@ using System;
 namespace Boleto2Net.Testes
 {
     [TestFixture]
+    [Category("Brasil Carteira 11 Var 019")]
     public class BancoBrasilCarteira11019Tests
     {
         readonly IBanco _banco;
