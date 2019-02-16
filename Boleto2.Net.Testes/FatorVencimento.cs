@@ -4,6 +4,8 @@ using NUnit.Framework;
 
 namespace Boleto2Net.Testes
 {
+    [TestFixture]
+    [Category("Outros Testes")]
     public class DateTimeExtensionsTest
     {
         [Test]
