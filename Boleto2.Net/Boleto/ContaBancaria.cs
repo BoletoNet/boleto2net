@@ -18,7 +18,7 @@ namespace Boleto2Net
         public TipoFormaCadastramento TipoFormaCadastramento { get; set; } = TipoFormaCadastramento.ComRegistro;
         public TipoImpressaoBoleto TipoImpressaoBoleto { get; set; } = TipoImpressaoBoleto.Empresa;
         public TipoDocumento TipoDocumento { get; set; } = TipoDocumento.Tradicional;
-        public string LocalPagamento { get; set; } = "PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.";
+        public string LocalPagamento { get; set; } = "PAGÁVEL EM QUALQUER BANCO.";
         public string MensagemFixaTopoBoleto { get; set; } = "";
         public string MensagemFixaSacado { get; set; } = "";
         public int CodigoBancoCorrespondente { get; set; }
