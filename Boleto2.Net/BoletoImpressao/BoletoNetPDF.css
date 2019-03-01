@@ -11,9 +11,9 @@
 }
 
 table {
-	border: 0;
-	border-collapse: collapse;
-	padding: 0;
+    border: 0;
+    border-collapse: collapse;
+    padding: 0;
 }
 
 img {
@@ -76,8 +76,10 @@ img {
 }
 
 .ct td, .cp td {
-	padding-left: 6px;
-	border-left: solid 1px #000;
+    padding-left: 3px;
+    border-left: solid 1px #000;
+    padding-right: 3px;
+    border-right: solid 1px #000;
 }
 
 .cpN {
@@ -146,8 +148,12 @@ img {
 	border-top: solid 2px #000;
 }
 
+.bgcGray {
+    background-color: #e6e6e6;
+}
+
 .h1 {
-	height: 1px;
+    height: 1px;
 }
 
 .h13 {
@@ -335,9 +341,10 @@ img {
 }
 
 .rc6 td {
-	vertical-align: top;
-	border-bottom: solid 1px #000;
-	border-left: solid 1px #000;
+    vertical-align: top;
+    border-bottom: solid 1px #000;
+    border-left: solid 1px #000;
+    border-right: solid 1px #000;
 }
 
 .rc6 div {

@@ -295,44 +295,41 @@
   </data>
   <data name="CabecalhoTabelaDemonstrativo" xml:space="preserve">
     <value>
-			&lt;table class="w666"&gt;
-				&lt;tr class="rBb"&gt;
-						&lt;td class="Ac ld" colspan="4"&gt;Demonstrativo&lt;/td&gt;
-				&lt;/tr&gt;
-				&lt;tr class="ct"&gt;
-					&lt;td class="w62"&gt;&lt;/td&gt;
-					&lt;td class="w62"&gt;&lt;/td&gt;
-					&lt;td class="w62"&gt;&lt;/td&gt;
-					&lt;td class="w62"&gt;&lt;/td&gt;				
-					@ITENSDEMONSTRATIVO
-			&lt;/tr&gt;							
-		&lt;/table class="rBb td"&gt;	
+		&lt;table class="w666"&gt;
+			&lt;tr class="rBb"&gt;
+					&lt;td class="Ac ld" colspan="4"&gt;Demonstrativo&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr class="ct"&gt;
+				&lt;td class="w62"&gt;&lt;/td&gt;
+				&lt;td class="w62"&gt;&lt;/td&gt;
+				&lt;td class="w62"&gt;&lt;/td&gt;
+				&lt;td class="w62"&gt;&lt;/td&gt;				
+			&lt;/tr&gt;
+			@ITENSDEMONSTRATIVO
+		&lt;/table&gt;	
 		&lt;table class="ctN w666"&gt;
 				&lt;tr class="h13"&gt;&lt;td /&gt;&lt;/tr&gt;
 				&lt;tr&gt;&lt;td class="Ar"&gt;Corte na linha pontilhada&lt;/td&gt;&lt;/tr&gt;
 				&lt;tr&gt;&lt;td class="cut" /&gt;&lt;/tr&gt;
-		&lt;/table&gt;				
-		</value>
+		&lt;/table&gt;</value>
   </data>
   <data name="GrupoDemonstrativo" xml:space="preserve">
     <value>
-				&lt;tr class="ct"&gt;
-					&lt;td class="cp"&gt;@DESCRICAOGRUPO&lt;/td&gt;
-					&lt;td&gt;@DESCRICAOITEM&lt;/td&gt;
-					&lt;td&gt;@REFERENCIAITEM&lt;/td&gt;
-					&lt;td&gt;@VALORITEM&lt;/td&gt;
-				&lt;/tr&gt;
-		</value>
+			&lt;tr class="ct"&gt;
+				&lt;td class="cp"&gt;@DESCRICAOGRUPO&lt;/td&gt;
+				&lt;td&gt;@DESCRICAOITEM&lt;/td&gt;
+				&lt;td&gt;@REFERENCIAITEM&lt;/td&gt;
+				&lt;td&gt;@VALORITEM&lt;/td&gt;
+			&lt;/tr&gt;
+</value>
   </data>
   <data name="TotalDemonstrativo" xml:space="preserve">
-    <value>
-				&lt;tr class="cp h13 rBb"&gt;
-					&lt;td&gt;Total&lt;/td&gt;
-					&lt;td&gt;&lt;/td&gt;
-					&lt;td&gt;&lt;/td&gt;
-					&lt;td&gt;@VALORTOTALGRUPO&lt;/td&gt;
-				&lt;/tr&gt;
-		</value>
+    <value>			&lt;tr class="cp h13 rBb"&gt;
+				&lt;td&gt;Total&lt;/td&gt;
+				&lt;td&gt;&lt;/td&gt;
+				&lt;td&gt;&lt;/td&gt;
+				&lt;td&gt;@VALORTOTALGRUPO&lt;/td&gt;
+			&lt;/tr&gt;</value>
   </data>
   <data name="ReciboCedenteParte1" xml:space="preserve">
     <value>&lt;table class="w666"&gt;
@@ -380,11 +377,11 @@
     <value>&lt;table class="w666"&gt;
 				&lt;tr class="ct h13"&gt;
 						&lt;td class="w472"&gt;Local de pagamento&lt;/td&gt;
-						&lt;td class="w180"&gt;Vencimento&lt;/td&gt;
+						&lt;td class="w180 bgcGray"&gt;Vencimento&lt;/td&gt;
 				&lt;/tr&gt;
 				&lt;tr class="cp h12 rBb"&gt;
 						&lt;td&gt;@LOCALPAGAMENTO&lt;/td&gt;
-						&lt;td class="Ar"&gt;@DATAVENCIMENTO&lt;/td&gt;
+						&lt;td class="Ar bgcGray"&gt;@DATAVENCIMENTO&lt;/td&gt;
 				&lt;/tr&gt;
 		&lt;/table&gt;</value>
   </data>
@@ -429,7 +426,7 @@
 						&lt;td class="w53"&gt;Espécie&lt;/td&gt;
 						&lt;td class="w123"&gt;Quantidade&lt;/td&gt;
 						&lt;td class="w72"&gt;(x) Valor&lt;/td&gt;
-						&lt;td class="w180"&gt;(=) Valor documento&lt;/td&gt;
+						&lt;td class="w180 bgcGray"&gt;(=) Valor documento&lt;/td&gt;
 				&lt;/tr&gt;
 				&lt;tr class="cp h12 rBb"&gt;
 						&lt;td&gt;&amp;nbsp;&lt;/td&gt;
@@ -438,7 +435,7 @@
 						&lt;td class="Al"&gt;@ESPECIE&lt;/td&gt;
 						&lt;td&gt;@QUANTIDADE&lt;/td&gt;
 						&lt;td&gt;@VALORDOCUMENTO&lt;/td&gt;
-						&lt;td class="Ar"&gt;@=VALORDOCUMENTO&lt;/td&gt;
+						&lt;td class="Ar bgcGray"&gt;@=VALORDOCUMENTO&lt;/td&gt;
 				&lt;/tr&gt;
 		&lt;/table&gt;</value>
   </data>
@@ -483,8 +480,8 @@
 						&lt;td class="w478 BL"&gt;
 								&lt;div class="cpN pL6"&gt;@ENDERECOSACADO&lt;/div&gt;
 						&lt;/td&gt;
-						&lt;td class="Ab BL"&gt;
-								&lt;div class="ctN pL6"&gt;Cód. baixa&lt;/div&gt;
+						&lt;td class="w186 Ab BR"&gt;
+								&lt;div class="ctN pL6"&gt;Código de Baixa&lt;/div&gt;
 						&lt;/td&gt;
 				&lt;/tr&gt;
 		&lt;/table&gt;</value>
