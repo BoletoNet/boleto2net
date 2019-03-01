@@ -145,7 +145,7 @@ namespace Boleto2Net.Testes
             return boleto;
         }
 
-        internal static void TestarHomologacao(IBanco banco, TipoArquivo tipoArquivo, string nomeCarteira, int quantidadeBoletos, bool gerarPDF, string aceite, int NossoNumeroInicial)
+        internal static void TestarHomologacao(IBanco banco, TipoArquivo tipoArquivo, string nomeCarteira, int quantidadeBoletos, bool gerarBoletoPdfHtml, string aceite, int NossoNumeroInicial)
         {
             var boletos = GerarBoletos(banco, quantidadeBoletos, aceite, NossoNumeroInicial);
             Assert.AreEqual(quantidadeBoletos, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletos);
@@ -153,6 +153,7 @@ namespace Boleto2Net.Testes
             // Define os nomes dos arquivos, cria pasta e apaga arquivos anteriores
             var nomeArquivoREM = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.REM");
             var nomeArquivoPDF = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.PDF");
+            var nomeArquivoHTML = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.html");
             if (!Directory.Exists(Path.GetDirectoryName(nomeArquivoREM)))
                 Directory.CreateDirectory(Path.GetDirectoryName(nomeArquivoREM));
             if (File.Exists(nomeArquivoREM))
@@ -166,6 +167,12 @@ namespace Boleto2Net.Testes
                 File.Delete(nomeArquivoPDF);
                 if (File.Exists(nomeArquivoPDF))
                     Assert.Fail("Arquivo Boletos (PDF) não foi excluído: " + nomeArquivoPDF);
+            }
+            if (File.Exists(nomeArquivoHTML))
+            {
+                File.Delete(nomeArquivoHTML);
+                if (File.Exists(nomeArquivoHTML))
+                    Assert.Fail("Arquivo Boletos (HTML) não foi excluído: " + nomeArquivoHTML);
             }
 
             // Arquivo Remessa.
@@ -184,7 +191,7 @@ namespace Boleto2Net.Testes
                 Assert.Fail(e.InnerException.ToString());
             }
 
-            if (gerarPDF)
+            if (gerarBoletoPdfHtml)
             {
                 // Gera arquivo PDF
                 try
@@ -205,7 +212,10 @@ namespace Boleto2Net.Testes
                             html.Append(boletoParaImpressao.MontaHtml());
                             html.Append("</div>");
                         }
-                        var pdf = new HtmlToPdfConverter().GeneratePdf(html.ToString());
+                        var boletoHtml = html.ToString();
+                        File.WriteAllText(nomeArquivoHTML, boletoHtml);
+
+                        var pdf = new HtmlToPdfConverter().GeneratePdf(boletoHtml);
                         using (var fs = new FileStream(nomeArquivoPDF, FileMode.Create))
                             fs.Write(pdf, 0, pdf.Length);
                         if (!File.Exists(nomeArquivoPDF))
