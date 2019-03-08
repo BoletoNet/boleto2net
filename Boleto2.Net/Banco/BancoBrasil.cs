@@ -165,17 +165,128 @@ namespace Boleto2Net
 
         public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
         {
-            throw new NotImplementedException();
+            arquivoRetorno.Banco.Cedente = new Cedente();
+
+            if (registro.Substring(17, 1) == "1")
+                arquivoRetorno.Banco.Cedente.CPFCNPJ = registro.Substring(21, 11);
+            else
+                arquivoRetorno.Banco.Cedente.CPFCNPJ = registro.Substring(18, 14);
+
+            arquivoRetorno.Banco.Cedente.Nome = registro.Substring(72, 30).Trim();
+
+
+            arquivoRetorno.Banco.Cedente.ContaBancaria = new ContaBancaria();
+
+            arquivoRetorno.Banco.Cedente.ContaBancaria.Agencia = registro.Substring(52, 5);
+            arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoAgencia = registro.Substring(57, 1);
+            arquivoRetorno.Banco.Cedente.ContaBancaria.Conta = registro.Substring(58, 12);
+            arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoConta = registro.Substring(70, 1);
+
+            arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
+            arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
         }
 
         public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //Nº Controle do Participante
+                boleto.NumeroControleParticipante = registro.Substring(105, 25);
+
+                //Carteira
+                boleto.Carteira = registro.Substring(57, 1);
+                switch (boleto.Carteira)
+                {
+                    case "1":
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                        break;
+                    case "2":
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaVinculada;
+                        break;
+                    case "3":
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaCaucionada;
+                        break;
+                    case "4":
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaDescontada;
+                        break;
+                    case "5":
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaVendor;
+                        break;
+                    default:
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                        break;
+                }
+
+                //Identificação do Título no Banco
+                boleto.NossoNumero = registro.Substring(37, 20).Trim();
+                boleto.NossoNumeroDV = "";
+                boleto.NossoNumeroFormatado = boleto.NossoNumero;
+
+                //Identificação de Ocorrência
+                boleto.CodigoOcorrencia = registro.Substring(15, 2);
+                boleto.DescricaoOcorrencia = Cnab.OcorrenciaCnab240(boleto.CodigoOcorrencia);
+                boleto.CodigoOcorrenciaAuxiliar = registro.Substring(213, 10);
+
+                //Número do Documento
+                boleto.NumeroDocumento = registro.Substring(58, 15);
+                boleto.EspecieDocumento = TipoEspecieDocumento.NaoDefinido;
+
+                //Valor do Título
+                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(81, 15)) / 100;
+                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(198, 15)) / 100;
+
+                //Data Vencimento do Título
+                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(73, 8)).ToString("##-##-####"));
+
+                //18.3T 97 99 3 - Num Banco Cobr./Receb.
+                boleto.BancoCobradorRecebedor = registro.Substring(96, 3);
+                //19.3T 100 104 5 - Num	Ag. Cobradora
+                boleto.AgenciaCobradoraRecebedora = registro.Substring(99, 6);
+
+                //Dados Sacado
+                boleto.Sacado = new Sacado();
+                string str = registro.Substring(133, 15);
+                boleto.Sacado.CPFCNPJ = str.Substring(str.Length - 14, 14);
+                boleto.Sacado.Nome = registro.Substring(148, 40);
+
+
+                // Registro Retorno
+                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / T.", ex);
+            }
         }
 
         public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //Valor do Título
+                boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(17, 15)) / 100;
+                boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(32, 15)) / 100;
+                boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(47, 15)) / 100;
+                boleto.ValorIOF = Convert.ToDecimal(registro.Substring(62, 15)) / 100;
+                boleto.ValorPago = Convert.ToDecimal(registro.Substring(77, 15)) / 100;
+                boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(92, 15)) / 100;
+                boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(107, 15)) / 100;
+                boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(122, 15)) / 100;
+
+
+                //Data Ocorrência no Banco
+                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(137, 8)).ToString("##-##-####"));
+
+                // Data do Crédito
+                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(145, 8)).ToString("##-##-####"));
+
+                // Registro Retorno
+                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / U.", ex);
+            }
         }
 
         private static TipoEspecieDocumento AjustaEspecieCnab400(string codigoEspecie)
