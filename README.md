@@ -23,3 +23,7 @@ Nova versão do Boleto.Net
 
 ### Como migrar do Boleto.Net
 https://github.com/BoletoNet/boleto2net/blob/master/migracao.md
+
+### Night Builds - Build gerado a cada commit do repositorio
+Você pode adicionar a URL abaixo no seu Visual Studio mas opções de Pacote do Nuget:
+https://www.myget.org/F/boleto2netbuild/api/v3/index.json
