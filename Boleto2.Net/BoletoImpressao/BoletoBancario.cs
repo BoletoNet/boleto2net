@@ -847,12 +847,13 @@ namespace Boleto2Net
         /// de acordo com o padrão http://en.wikipedia.org/wiki/Data_URI_scheme
         /// </summary>
         /// <param name="convertLinhaDigitavelToImage">Converte a Linha Digitável para imagem, com o objetivo de evitar malwares.</param>
+        /// <param name="urlImagemLogoCedente">Url/Imagem Base64 da Logo do Cedente</param>
         /// <returns>Html do boleto gerado</returns>
         /// <desenvolvedor>Iuri André Stona</desenvolvedor>
         /// <criacao>23/01/2014</criacao>
         /// <alteracao>08/08/2014</alteracao>
 
-        public string MontaHtmlEmbedded(bool convertLinhaDigitavelToImage = false, bool usaCsspdf = false)
+        public string MontaHtmlEmbedded(bool convertLinhaDigitavelToImage = false, bool usaCsspdf = false, string urlImagemLogoCedente = null)
         {
             OnLoad(EventArgs.Empty);
 
@@ -883,6 +884,11 @@ namespace Boleto2Net
                 Boleto.CodigoBarra.LinhaDigitavel = @"<img style=""max-width:420px; margin-bottom: 2px"" src=" + fnLinha + " />";
             }
 
+            if (!string.IsNullOrEmpty(urlImagemLogoCedente))
+            {
+                _vLocalLogoCedente = urlImagemLogoCedente;
+            }
+
             var s = HtmlOffLine(null, fnLogo, fnBarra, fnCodigoBarras, usaCsspdf).ToString();
 
             if (convertLinhaDigitavelToImage)
@@ -893,10 +899,10 @@ namespace Boleto2Net
             return s;
         }
 
-        public byte[] MontaBytesPDF(bool convertLinhaDigitavelToImage = false)
+        public byte[] MontaBytesPDF(bool convertLinhaDigitavelToImage = false, string urlImagemLogoCedente = null)
         {
 
-            return (new NReco.PdfGenerator.HtmlToPdfConverter()).GeneratePdf(MontaHtmlEmbedded(convertLinhaDigitavelToImage, true));
+            return (new NReco.PdfGenerator.HtmlToPdfConverter()).GeneratePdf(MontaHtmlEmbedded(convertLinhaDigitavelToImage, true, urlImagemLogoCedente));
         }
         #endregion Geração do Html OffLine
 
