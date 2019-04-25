@@ -9,6 +9,7 @@ namespace Boleto2Net
         Bradesco = 237,
         Itau = 341,
         Safra = 422,
+        Sicredi = 748,
         Sicoob = 756
     }
 }
