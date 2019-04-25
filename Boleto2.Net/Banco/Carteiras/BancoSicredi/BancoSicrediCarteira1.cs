@@ -2,7 +2,7 @@
 
 namespace Boleto2Net
 {
-    [CarteiraCodigo("1")]
+    [CarteiraCodigo("1/A")]
     internal class BancoSicrediCarteira1 : ICarteira<BancoSicredi>
     {
         internal static Lazy<ICarteira<BancoSicredi>> Instance { get; } = new Lazy<ICarteira<BancoSicredi>>(() => new BancoSicrediCarteira1());
