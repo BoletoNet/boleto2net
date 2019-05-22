@@ -957,6 +957,8 @@ namespace Boleto2Net
                     return "Vencimento Alterado";
                 case "15":
                     return "Liquidação em Cartório";
+                case "16":
+                    return "Título Pago em Cheque – Vinculado";
                 case "17":
                     return "Liquidação após baixa ou Título não registrado";
                 case "18":
