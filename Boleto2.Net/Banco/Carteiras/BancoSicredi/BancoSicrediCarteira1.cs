@@ -27,15 +27,29 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var DataDocumento = boleto.DataEmissao.ToString("yy");
-            var nossoNumero = boleto.NossoNumero;
-
-            boleto.NossoNumero = string.Format("{0}2{1}", DataDocumento, nossoNumero.PadLeft(5, '0'));
-
-            boleto.NossoNumeroDV = Mod11(Sequencial(boleto)).ToString();
-            boleto.NossoNumero = string.Concat(boleto.NossoNumero, Mod11(Sequencial(boleto)));
-
-            boleto.NossoNumeroFormatado = string.Format("{0}/{1}-{2}", boleto.NossoNumero.Substring(0, 2), boleto.NossoNumero.Substring(2, 6), boleto.NossoNumero.Substring(8));
+            if(String.IsNullOrEmpty(boleto.NossoNumero))
+            {
+                var DataDocumento = boleto.DataEmissao.ToString("yy");
+                var nossoNumero = boleto.NossoNumero;
+                boleto.NossoNumero = string.Format("{0}2{1}", DataDocumento, nossoNumero.PadLeft(5, '0'));
+            }
+            //  alguns sistemas fornecem o NossoNumero apenas sem o DV
+            //  cobrindo essas exceções aqui
+            if(boleto.NossoNumero.Length == 8)
+            {
+                boleto.NossoNumeroDV = Mod11(Sequencial(boleto)).ToString();
+                boleto.NossoNumero = string.Concat(boleto.NossoNumero, Mod11(Sequencial(boleto)));
+            }
+            else if (boleto.NossoNumero.Length != 9)
+            {
+                throw new Exception($"Nosso número ({boleto.NossoNumero}) deve conter 9 dígitos.");
+            }
+            //  formatar independente da origem do NossoNumero
+            boleto.NossoNumeroFormatado = string.Format(
+                "{0}/{1}-{2}", 
+                boleto.NossoNumero.Substring(0, 2), 
+                boleto.NossoNumero.Substring(2, 6), 
+                boleto.NossoNumero.Substring(8));
         }
 
         public int Mod11(string seq)
