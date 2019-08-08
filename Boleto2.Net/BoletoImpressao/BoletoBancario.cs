@@ -25,6 +25,11 @@ namespace Boleto2Net
     {
         String _vLocalLogoCedente = String.Empty;
 
+        #region Constantes
+        private const int _withBarras = 2;
+        private const int _heightBarras = 60;
+        #endregion Constantes
+
         #region Variaveis
 
         private string _instrucoesHtml = string.Empty;
@@ -645,7 +650,7 @@ namespace Boleto2Net
                 ContentId = "barra" + randomSufix
             };
 
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
+            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, Boleto.CodigoBarra.CodigoDeBarras.Length);
             ms = new MemoryStream(Utils.ConvertImageToByte(cb.ToBitmap()));
 
             lrImagemCodigoBarra = new LinkedResource(ms, MediaTypeNames.Image.Gif)
@@ -724,7 +729,7 @@ namespace Boleto2Net
             }
 
             var fnCodigoBarras = Path.GetTempFileName();
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
+            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, Boleto.CodigoBarra.CodigoDeBarras.Length);
             cb.ToBitmap().Save(fnCodigoBarras);
 
             //return HtmlOffLine(fnCorte, fnLogo, fnBarra, fnPonto, fnBarraInterna, fnCodigoBarras).ToString();
@@ -833,7 +838,7 @@ namespace Boleto2Net
             //Prepara o arquivo do código de barras para ser usado no html
             var fnCodigoBarrasUrl = string.Format("{0}{1}_codigoBarras.jpg", url, fileName);
 
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
+            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, Boleto.CodigoBarra.CodigoDeBarras.Length);
 
             //Salva o arquivo conforme o fileName
             cb.ToBitmap().Save(fnCodigoBarras);
@@ -867,7 +872,7 @@ namespace Boleto2Net
             var base64Barra = Convert.ToBase64String(new BinaryReader(streamBarra).ReadBytes((int)streamBarra.Length));
             var fnBarra = string.Format("data:image/gif;base64,{0}", base64Barra);
 
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
+            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, Boleto.CodigoBarra.CodigoDeBarras.Length);
             var base64CodigoBarras = Convert.ToBase64String(cb.ToByte());
             var fnCodigoBarras = string.Format("data:image/gif;base64,{0}", base64CodigoBarras);
 
@@ -908,7 +913,7 @@ namespace Boleto2Net
 
         public Image GeraImagemCodigoBarras(Boleto boleto)
         {
-            var cb = new BarCode2of5i(boleto.CodigoBarra.CodigoDeBarras, 1, 50, boleto.CodigoBarra.CodigoDeBarras.Length);
+            var cb = new BarCode2of5i(boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, boleto.CodigoBarra.CodigoDeBarras.Length);
             return cb.ToBitmap();
         }
 
