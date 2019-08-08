@@ -26,8 +26,8 @@ namespace Boleto2Net
         String _vLocalLogoCedente = String.Empty;
 
         #region Constantes
-        private const int _withBarras = 1;
-        private const int _heightBarras = 50;
+        private const int _withBarras = 2;
+        private const int _heightBarras = 60;
         #endregion Constantes
 
         #region Variaveis

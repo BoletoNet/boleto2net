@@ -77,14 +77,14 @@ namespace Boleto2Net
                     int temp = value;
                     _thin = temp;
                     //					_half = temp * 2;
-                    _full = temp * 3;
+                    _full = temp * 2;
                 }
                 catch
                 {
                     int temp = 1;
                     _thin = temp;
                     //					_half = temp * 2;
-                    _full = temp * 3;
+                    _full = temp * 2;
                 }
             }
         }

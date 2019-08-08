@@ -8,8 +8,8 @@ namespace Boleto2Net
     internal class ImagemCodigoBarraHandler : IHttpHandler
     {
         #region Constantes
-        private const int _withBarras = 1;
-        private const int _heightBarras = 50;
+        private const int _withBarras = 2;
+        private const int _heightBarras = 60;
         #endregion Constantes
 
         #region IHttpHandler Members
