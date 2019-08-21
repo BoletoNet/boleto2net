@@ -27,7 +27,11 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            if(String.IsNullOrEmpty(boleto.NossoNumero))
+            var criarNossoNumero = String.IsNullOrEmpty(boleto.NossoNumero)
+                ? true
+                : boleto.NossoNumero.Length < 8;
+
+            if (criarNossoNumero)
             {
                 var DataDocumento = boleto.DataEmissao.ToString("yy");
                 var nossoNumero = boleto.NossoNumero;
@@ -35,7 +39,7 @@ namespace Boleto2Net
             }
             //  alguns sistemas fornecem o NossoNumero apenas sem o DV
             //  cobrindo essas exceções aqui
-            if(boleto.NossoNumero.Length == 8)
+            if (boleto.NossoNumero.Length == 8)
             {
                 boleto.NossoNumeroDV = Mod11(Sequencial(boleto)).ToString();
                 boleto.NossoNumero = string.Concat(boleto.NossoNumero, Mod11(Sequencial(boleto)));
