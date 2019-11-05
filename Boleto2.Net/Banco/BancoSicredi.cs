@@ -374,12 +374,15 @@ namespace Boleto2Net
                 // Identificação de Ocorrência
                 boleto.CodigoOcorrencia = registro.Substring(108, 2);
                 boleto.DescricaoOcorrencia = DescricaoOcorrenciaCnab400(boleto.CodigoOcorrencia);
-
+                
                 // Data Ocorrência no Banco
                 boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
 
                 // Número do Documento
                 boleto.NumeroDocumento = registro.Substring(116, 10).Trim();
+
+                // Retorna o mesmo número enviado na Remessa
+                boleto.NumeroControleParticipante = registro.Substring(116, 10).Trim();
 
                 //Data Vencimento do Título
                 boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
