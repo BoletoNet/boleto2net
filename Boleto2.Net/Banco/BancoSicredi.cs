@@ -394,7 +394,7 @@ namespace Boleto2Net
                 boleto.ValorPago += boleto.ValorJurosDia;
 
                 // Data do Crédito
-                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(294, 6)).ToString("##-##-##"));
+                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(328, 8)).ToString("####-##-##"));
 
                 // Identificação de Ocorrência - Código Auxiliar
                 boleto.CodigoOcorrenciaAuxiliar = registro.Substring(381, 10);
