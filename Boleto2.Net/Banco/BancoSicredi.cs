@@ -380,6 +380,9 @@ namespace Boleto2Net
                 // Número do Documento
                 boleto.NumeroDocumento = registro.Substring(116, 10).Trim();
 
+                // Seu número - Seu número enviado na Remessa
+                boleto.NumeroControleParticipante = registro.Substring(116, 10).Trim();
+
                 //Data Vencimento do Título
                 boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
 
