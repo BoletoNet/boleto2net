@@ -59,7 +59,10 @@ namespace Boleto2Net.Testes
             //Ação
             boleto.ValidarDados();
 
+
             //Assertivas
+            const string LOCAL_DE_PAGAMENTO_ESPERADO = "Pagável em qualquer Banco do Sistema de Compensação";
+            StringAssert.AreEqualIgnoringCase(LOCAL_DE_PAGAMENTO_ESPERADO, boleto.Banco.Cedente.ContaBancaria.LocalPagamento, $"Local de pagamento diferente de {LOCAL_DE_PAGAMENTO_ESPERADO}");
             Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}");
             Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido");
             Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido");
