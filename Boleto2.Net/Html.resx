@@ -448,15 +448,15 @@
 						&lt;/td&gt;
 						&lt;td class="w186"&gt;
 								&lt;div class="t"&gt;(-) Desconto / Abatimentos&lt;/div&gt;
-								&lt;div class="c BB"&gt;@DESCONTOS&lt;/div&gt;
+								&lt;div class="c BB Ar"&gt;@DESCONTOS&lt;/div&gt;
 								&lt;div class="t"&gt;(-) Outras deduções&lt;/div&gt;
-								&lt;div class="c BB"&gt;@OUTRASDEDUCOES&lt;/div&gt;
+								&lt;div class="c BB Ar"&gt;@OUTRASDEDUCOES&lt;/div&gt;
 								&lt;div class="t"&gt;(+) Mora / Multa&lt;/div&gt;
-								&lt;div class="c BB"&gt;@MORAMULTA&lt;/div&gt;
+								&lt;div class="c BB Ar"&gt;@MORAMULTA&lt;/div&gt;
 								&lt;div class="t"&gt;(+) Outros acréscimos&lt;/div&gt;
-								&lt;div class="c BB"&gt;@OUTROSACRESCIMOS&lt;/div&gt;
+								&lt;div class="c BB Ar"&gt;@OUTROSACRESCIMOS&lt;/div&gt;
 								&lt;div class="t"&gt;(=) Valor cobrado&lt;/div&gt;
-								&lt;div class="c"&gt;@VALORCOBRADO&lt;/div&gt;
+								&lt;div class="c Ar"&gt;@VALORCOBRADO&lt;/div&gt;
 						&lt;/td&gt;
 				&lt;/tr&gt;
 		&lt;/table&gt;</value>
