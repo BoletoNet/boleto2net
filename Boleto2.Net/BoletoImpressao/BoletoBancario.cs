@@ -415,6 +415,9 @@ namespace Boleto2Net
             if (String.IsNullOrWhiteSpace(_vLocalLogoCedente))
                 _vLocalLogoCedente = urlImagemLogo;
 
+            if (String.IsNullOrWhiteSpace(Boleto.Banco.Cedente.CodigoFormatado))
+                Boleto.Banco.FormataCedente();
+
             return html
                 .Replace("@CODIGOBANCO", Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3))
                 .Replace("@DIGITOBANCO", Boleto.Banco.Digito.ToString())
