@@ -504,12 +504,20 @@ namespace Boleto2Net
             throw new NotImplementedException();
         }
 
-        public void LerHeaderRetornoCNAB400(string registro)
+        public void LerHeaderRetornoCNAB400(ArquivoRetorno arquivoRetorno, string registro)
         {
             try
             {
                 if (registro.Substring(0, 9) != "02RETORNO")
                     throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+
+                var dataStr = Utils.ToInt32(registro.Substring(94, 8)).ToString("####-##-##").Split('-');
+                var ano = Utils.ToInt32(dataStr[0]);
+                var mes = Utils.ToInt32(dataStr[1]);
+                var dia = Utils.ToInt32(dataStr[2]);
+
+                //095 a 102 008 Data de gravação do arquivo AAAAMMDD
+                arquivoRetorno.DataGeracao = new DateTime(ano, mes, dia);
             }
             catch (Exception ex)
             {
