@@ -840,23 +840,20 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0150, 001, 0, boleto.Aceite, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0151, 006, 0, boleto.DataEmissao, ' ');
 
-                //Instruções de protesto
-                string vInstrucao1 = "";
-                string vInstrucao2 = "";
-                switch (boleto.CodigoProtesto)
+                string vInstrucao1, vInstrucao2;
+                if (boleto.CodigoProtesto == TipoCodigoProtesto.ProtestarDiasCorridos && boleto.DiasProtesto > 0
+                    && boleto.CodigoInstrucao1.PadLeft(2, '0') == "00" && boleto.CodigoInstrucao2.PadLeft(2, '0') == "00" )
                 {
-                    case TipoCodigoProtesto.NaoProtestar:
-                        vInstrucao1 = "00";
-                        vInstrucao2 = "0";
-                        break;
-                    case TipoCodigoProtesto.ProtestarDiasCorridos:
-                        vInstrucao1 = "06";
-                        vInstrucao2 = boleto.DiasProtesto.ToString();
-                        break;
+                    vInstrucao1 = "06";
+                    vInstrucao2 = boleto.DiasProtesto.ToString();
+                }
+                else
+                {
+                    vInstrucao1 = boleto.CodigoInstrucao1;
+                    vInstrucao2 = boleto.CodigoInstrucao2;
                 }
                 reg.Adicionar(TTiposDadoEDI.ediInteiro______________, 0157, 002, 0, vInstrucao1, '0');                                           //157-158
                 reg.Adicionar(TTiposDadoEDI.ediInteiro______________, 0159, 002, 0, vInstrucao2, '0');                                           //159-160
-
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0161, 013, 2, boleto.ValorJurosDia, '0');
 
                 if (boleto.ValorDesconto == 0)
