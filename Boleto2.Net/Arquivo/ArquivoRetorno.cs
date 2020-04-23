@@ -155,7 +155,7 @@ namespace Boleto2Net
             // Registro HEADER
             if (tipoRegistro == "0")
             {
-                Banco.LerHeaderRetornoCNAB400(registro);
+                Banco.LerHeaderRetornoCNAB400(this, registro);
                 return;
             }
 

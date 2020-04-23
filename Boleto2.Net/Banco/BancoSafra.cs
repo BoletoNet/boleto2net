@@ -136,12 +136,15 @@ namespace Boleto2Net
             throw new NotImplementedException();
         }
 
-        public void LerHeaderRetornoCNAB400(string registro)
+        public void LerHeaderRetornoCNAB400(ArquivoRetorno arquivoRetorno, string registro)
         {
             try
             {
                 if (registro.Substring(0, 9) != "02RETORNO")
                     throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+
+                arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(94, 6)).ToString("##-##-##"));
+
             }
             catch (Exception ex)
             {
