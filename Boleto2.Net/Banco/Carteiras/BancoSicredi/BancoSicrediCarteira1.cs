@@ -20,22 +20,51 @@ namespace Boleto2Net
                 boleto.Banco.Cedente.ContaBancaria.OperacaoConta +
                 boleto.Banco.Cedente.Codigo + "10";
 
-            CampoLivre += Mod11(CampoLivre); 
+            CampoLivre += Mod11(CampoLivre);
 
             return CampoLivre;
         }
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var DataDocumento = boleto.DataEmissao.ToString("yy");
+            var dataDocumento = boleto.DataEmissao.ToString("yy");
             var nossoNumero = boleto.NossoNumero;
 
-            boleto.NossoNumero = string.Format("{0}2{1}", DataDocumento, nossoNumero.PadLeft(5, '0'));
+            var numeroOpcional = "2";
+
+            if (ValidarNumeroOpcional(boleto.CodigoInstrucao1))
+            {
+                numeroOpcional = boleto.CodigoInstrucao1;
+            }
+
+            boleto.NossoNumero = $"{dataDocumento}{numeroOpcional}{nossoNumero.PadLeft(5, '0')}";
 
             boleto.NossoNumeroDV = Mod11(Sequencial(boleto)).ToString();
             boleto.NossoNumero = string.Concat(boleto.NossoNumero, Mod11(Sequencial(boleto)));
 
             boleto.NossoNumeroFormatado = string.Format("{0}/{1}-{2}", boleto.NossoNumero.Substring(0, 2), boleto.NossoNumero.Substring(2, 6), boleto.NossoNumero.Substring(8));
+        }
+
+
+        private bool ValidarNumeroOpcional(string numeroOpcional)
+        {
+            if (!int.TryParse(numeroOpcional, out var valorOpcional))
+            {
+                return false;
+            }
+
+            /*
+             * Página 7, seção 5.3 (váriavel B)
+             * https://www.sicredi.com.br/html/para-voce/recebimentos/cobranca/arquivos/manual-cnab-400---2019.pdf
+             *
+             * Valor 1 só pode ser utilizado pelo banco (e menor impossível), e deve ser no máximo 9
+             */
+            if (valorOpcional <= 1 || valorOpcional > 9)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public int Mod11(string seq)
