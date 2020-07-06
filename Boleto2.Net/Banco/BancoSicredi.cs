@@ -69,7 +69,7 @@ namespace Boleto2Net
                 switch (tipoArquivo)
                 {
                     case TipoArquivo.CNAB400:
-                        _detalhe = GerarDetalheRemessaCNAB400(boleto, numeroRegistro, tipoArquivo);
+                        _detalhe = GerarDetalheRemessaCNAB400(boleto, ref numeroRegistro, tipoArquivo);
                         break;
                     case TipoArquivo.CNAB240:
                         // Segmento P (Obrigatório)
@@ -106,8 +106,9 @@ namespace Boleto2Net
             }
         }
 
-        public string GerarDetalheRemessaCNAB400(Boleto boleto, int numeroRegistro, TipoArquivo tipoArquivo)
+        public string GerarDetalheRemessaCNAB400(Boleto boleto, ref int numeroRegistro, TipoArquivo tipoArquivo)
         {
+            //COM A INCLUSAO DO CNAB240 DEVEMOS INCREMENTAR AQUI DENTRO
             numeroRegistro++;
 
             string detalhe = string.Empty;
@@ -283,7 +284,7 @@ namespace Boleto2Net
                 switch (tipoArquivo)
                 {
                     case TipoArquivo.CNAB400:
-                        _header = GerarHeaderRemessaCNAB400(0, numeroArquivoRemessa);
+                        _header = GerarHeaderRemessaCNAB400(numeroArquivoRemessa, ref numeroRegistro);
                         break;
                     case TipoArquivo.CNAB240:
                         _header = GerarHeaderRemessaCNAB240(numeroArquivoRemessa, ref numeroRegistro);
@@ -303,12 +304,12 @@ namespace Boleto2Net
             }
         }
 
-        private string GerarHeaderRemessaCNAB400(int numeroConvenio, int numeroArquivoRemessa)
+        private string GerarHeaderRemessaCNAB400(int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
                 //COM A INCLUSAO DO CNAB240 DEVEMOS INCREMENTAR AQUI DENTRO
-                numeroArquivoRemessa++;
+                numeroRegistroGeral++;
 
                 TRegistroEDI reg = new TRegistroEDI();
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "0", ' '));                             //001-001
@@ -326,8 +327,7 @@ namespace Boleto2Net
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0111, 007, 0, numeroArquivoRemessa.ToString(), '0')); //111-117
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0118, 273, 0, "", ' '));                              //118-390
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0391, 004, 0, "2.00", ' '));                          //391-394
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0395, 006, 0, "000001", ' '));                        //395-400
-
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0'));             //395-400
                 reg.CodificarLinha();
 
                 string vLinha = reg.LinhaRegistro;
@@ -353,7 +353,7 @@ namespace Boleto2Net
                 switch (tipoArquivo)
                 {
                     case TipoArquivo.CNAB400:
-                        trailer = GerarTrailerRemessa400(numeroRegistroGeral);
+                        trailer = GerarTrailerRemessa400(ref numeroRegistroGeral);
                         break;
                     case TipoArquivo.CNAB240:
                         // Trailler do Lote
@@ -376,10 +376,11 @@ namespace Boleto2Net
             }
         }
 
-        private string GerarTrailerRemessa400(int numeroRegistroGeral)
+        private string GerarTrailerRemessa400(ref int numeroRegistroGeral)
         {
             try
             {
+                //COM A INCLUSAO DO CNAB240 DEVEMOS INCREMENTAR AQUI DENTRO
                 numeroRegistroGeral++;
 
                 TRegistroEDI reg = new TRegistroEDI();
