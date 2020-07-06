@@ -29,6 +29,12 @@ namespace Boleto2Net.Testes
         }
 
         [Test]
+        public void Sicredi_1_REM240()
+        {
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSicrediCarteira1Tests), 9, true, "N", 00001);
+        }
+
+        [Test]
         public void Sicredi_1_REM400()
         {
             Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSicrediCarteira1Tests), 9, true, "N", 00001);
