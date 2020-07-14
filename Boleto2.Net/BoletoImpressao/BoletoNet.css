@@ -162,6 +162,14 @@ img {
 	height: 1px;
 }
 
+.h10 {
+	height: 10px;
+}
+
+.h10 td {
+	vertical-align: top;
+}
+
 .h13 {
 	height: 13px;
 }
@@ -385,7 +393,7 @@ img {
 
 .ebc {
 	width: 4px;
-	height: 440px;
+	height: 420px;
 	border-right: dotted 1px #000000;
 	margin-right: 4px;
 }

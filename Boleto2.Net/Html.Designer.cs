@@ -19,7 +19,7 @@ namespace Boleto2Net {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Html {
@@ -417,17 +417,9 @@ namespace Boleto2Net {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;table class=&quot;ctN w666&quot;&gt;
-        ///				&lt;tr class=&quot;h13&quot;&gt;&lt;td /&gt;&lt;/tr&gt;
+        ///				&lt;tr class=&quot;h10&quot;&gt;&lt;td /&gt;&lt;/tr&gt;
         ///				&lt;tr&gt;&lt;td class=&quot;Ar&quot;&gt;Corte na linha pontilhada&lt;/td&gt;&lt;/tr&gt;
         ///				&lt;tr&gt;&lt;td class=&quot;cut&quot; /&gt;&lt;/tr&gt;
-        ///		&lt;/table&gt;
-        ///		&lt;table class=&quot;ctN w666&quot;&gt;
-        ///				&lt;tr class=&quot;h13&quot;&gt;&lt;td /&gt;&lt;/tr&gt;
-        ///				&lt;tr class=&quot;h13&quot;&gt;&lt;td /&gt;&lt;/tr&gt;
-        ///				&lt;tr class=&quot;h13&quot;&gt;&lt;td /&gt;&lt;/tr&gt;
-        ///				&lt;tr class=&quot;h13&quot;&gt;&lt;td /&gt;&lt;/tr&gt;
-        ///				&lt;tr class=&quot;h13&quot;&gt;&lt;td /&gt;&lt;/tr&gt;
-        ///				&lt;tr class=&quot;h13&quot;&gt;&lt;td /&gt;&lt;/tr&gt;
         ///		&lt;/table&gt;.
         /// </summary>
         internal static string ReciboCedenteParte12 {
@@ -528,11 +520,11 @@ namespace Boleto2Net {
         ///						&lt;/td&gt;
         ///						&lt;td class=&quot;w186&quot;&gt;
         ///								&lt;div class=&quot;t&quot;&gt;(-) Desconto / Abatimentos&lt;/div&gt;
-        ///								&lt;div class=&quot;c BB&quot;&gt;@DESCONTOS&lt;/div&gt;
+        ///								&lt;div class=&quot;c BB Ar&quot;&gt;@DESCONTOS&lt;/div&gt;
         ///								&lt;div class=&quot;t&quot;&gt;(-) Outras deduções&lt;/div&gt;
-        ///								&lt;div class=&quot;c BB&quot;&gt;@OUTRASDEDUCOES&lt;/div&gt;
+        ///								&lt;div class=&quot;c BB Ar&quot;&gt;@OUTRASDEDUCOES&lt;/div&gt;
         ///								&lt;div class=&quot;t&quot;&gt;(+) Mora / Multa&lt;/div&gt;
-        ///								&lt;div clas [rest of string was truncated]&quot;;.
+        ///								&lt;di [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ReciboCedenteParte6 {
             get {
