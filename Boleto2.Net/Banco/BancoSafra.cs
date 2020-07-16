@@ -316,7 +316,16 @@ namespace Boleto2Net
 
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0180, 013, 2, boleto.ValorDesconto, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0193, 013, 2, boleto.ValorIOF, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0206, 013, 2, boleto.ValorAbatimento, '0');
+
+                if (boleto.CodigoOcorrencia == "01" && boleto.CodigoInstrucao1 == "16")
+                {
+                    // Conforme manual, item 6.1.8, quando operação for "entrada de título" e a primeira ocorrência for "16", utiliza campo para informar Multa
+                    reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0206, 006, 0, boleto.DataMulta, ' ');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0212, 004, 2, boleto.PercentualMulta, '0');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0216, 003, 0, "000", '0');
+                }
+                else
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0206, 013, 2, boleto.ValorAbatimento, '0');
 
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0219, 002, 0, boleto.Sacado.TipoCPFCNPJ("00"), '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 014, 0, boleto.Sacado.CPFCNPJ, '0');
