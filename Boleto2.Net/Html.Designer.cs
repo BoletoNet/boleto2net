@@ -124,8 +124,7 @@ namespace Boleto2Net {
         ///														&lt;/td&gt;
         ///												&lt;/tr&gt;
         ///												&lt;tr class=&quot;cp h12 At rBb&quot;&gt;
-        ///														&lt;td&gt;
-        ///																@ [rest of string was truncated]&quot;;.
+        ///														&lt;td&gt;        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Carne {
             get {
@@ -263,7 +262,7 @@ namespace Boleto2Net {
         ///												&lt;td class=&quot;w104&quot;&gt;(&amp;nbsp;&amp;nbsp;)&amp;nbsp;Ausente&lt;/td&gt;
         ///												&lt;td&gt;(&amp;nbsp;&amp;nbsp;)&amp;nbsp;Não existe n. indicado&lt;/td&gt;
         ///												&lt;td&gt;(&amp;nbsp;&amp;nbsp;)&amp;nbsp;Recusado&lt;/td&gt;
-        ///												&lt;td class=&quot;w104&quot;&gt;(&amp;nbsp;&amp;nbsp;)&amp;nbsp;Não Procurad [rest of string was truncated]&quot;;.
+        ///												&lt;td class=&quot;w104&quot;&gt;(&amp;nbsp;&amp;nbsp;)&amp;nbsp; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ComprovanteEntrega7 {
             get {
@@ -291,9 +290,7 @@ namespace Boleto2Net {
         ///							 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
         ///							 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
         ///							 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
-        ///							 &lt;td&gt;&amp;nbsp;&lt;/td&gt;
-        ///						&lt;/tr&gt;
-        ///			 [rest of string was truncated]&quot;;.
+        ///							 &lt;td&gt;&amp;nbsp;&lt;/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ComprovanteEntrega71 {
             get {
@@ -482,8 +479,7 @@ namespace Boleto2Net {
         ///						&lt;td&gt;@NUMERODOCUMENTO&lt;/td&gt;
         ///						&lt;td&gt;@ESPECIEDOCUMENTO&lt;/td&gt;
         ///						&lt;td&gt;@ACEITE&lt;/td&gt;
-        ///						&lt;td&gt;@DATAPROCESSAMENTO&lt;/td&gt;
-        ///						&lt;td c [rest of string was truncated]&quot;;.
+        ///						&lt;td&gt;@DATAPROCESSAMENTO&lt;/t [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ReciboCedenteParte4 {
             get {
@@ -507,8 +503,7 @@ namespace Boleto2Net {
         ///						&lt;td&gt;&amp;nbsp;&lt;/td&gt;
         ///						&lt;td class=&quot;Al&quot;&gt;@CARTEIRA&lt;/td&gt;
         ///						&lt;td class=&quot;Al&quot;&gt;@ESPECIE&lt;/td&gt;
-        ///						&lt;td&gt;@QUANTIDADE&lt;/td&gt;
-        ///						&lt;td&gt;@ [rest of string was truncated]&quot;;.
+        ///						&lt;td&gt;@QUANTIDADE&lt;/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ReciboCedenteParte5 {
             get {
@@ -529,7 +524,7 @@ namespace Boleto2Net {
         ///								&lt;div class=&quot;t&quot;&gt;(-) Outras deduções&lt;/div&gt;
         ///								&lt;div class=&quot;c BB Ar&quot;&gt;@OUTRASDEDUCOES&lt;/div&gt;
         ///								&lt;div class=&quot;t&quot;&gt;(+) Mora / Multa&lt;/div&gt;
-        ///								&lt;div class=&quot;c B [rest of string was truncated]&quot;;.
+        ///								&lt;di [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ReciboCedenteParte6 {
             get {
@@ -595,8 +590,7 @@ namespace Boleto2Net {
         ///				&lt;tr class=&quot;ct h13&quot;&gt;
         ///						&lt;td&gt;Local de pagamento&lt;/td&gt;
         ///						&lt;td&gt;&lt;/td&gt;
-        ///				&lt;/tr&gt;						
-        ///				&lt;tr cl [rest of string was truncated]&quot;;.
+        ///				&lt;/tr&gt;			 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ReciboCedenteRelatorioValores {
             get {
@@ -715,12 +709,27 @@ namespace Boleto2Net {
         ///						&lt;td&gt;@MORAMULTA&lt;/td&gt;
         ///						&lt;td&gt;@OUTROSACRESCIMOS&lt;/td&gt;
         ///						&lt;td class=&quot;Ar&quot;&gt;&amp;nbsp;@VALORCOBRADO&lt;/td&gt;
-        ///				&lt;/tr&gt;
-        ///		&lt;/table&gt;.
+        ///				&lt;/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ReciboSacadoParte5 {
             get {
                 return ResourceManager.GetString("ReciboSacadoParte5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;table class=&quot;w666&quot;&gt;
+        ///				&lt;tr class=&quot;ctN h13&quot;&gt;
+        ///						&lt;td class=&quot;pL6 bleft bright&quot;&gt;Instruções&lt;/td&gt;
+        ///				&lt;/tr&gt;
+        ///				&lt;tr class=&quot;cpN h12&quot;&gt;
+        ///						&lt;td class=&quot;pL6 bleft bright bbottom&quot;&gt;@MENSAGEMFIXASACADO@INSTRUCOES&lt;/td&gt;
+        ///				&lt;/tr&gt;
+        ///		&lt;/table&gt;.
+        /// </summary>
+        internal static string ReciboSacadoParte6 {
+            get {
+                return ResourceManager.GetString("ReciboSacadoParte6", resourceCulture);
             }
         }
         
@@ -737,24 +746,6 @@ namespace Boleto2Net {
         ///				&lt;/tr&gt;
         ///		&lt;/table&gt;.
         /// </summary>
-        internal static string ReciboSacadoParte6 {
-            get {
-                return ResourceManager.GetString("ReciboSacadoParte6", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;table class=&quot;w666&quot;&gt;
-        ///				&lt;tr class=&quot;ctN h13&quot;&gt;
-        ///						&lt;td class=&quot;pL6&quot;&gt;Instruções&lt;/td&gt;
-        ///						&lt;td class=&quot;w180 Ar&quot;&gt;Autenticação mecânica&lt;/td&gt;
-        ///				&lt;/tr&gt;
-        ///				&lt;tr class=&quot;cpN h12&quot;&gt;
-        ///						&lt;td class=&quot;pL6&quot;&gt;@MENSAGEMFIXASACADO@INSTRUCOES&lt;/td&gt;
-        ///						&lt;td class=&quot;pL6 Ar&quot;&gt;@AUTENTICACAOMECANICA&lt;/td&gt;
-        ///				&lt;/tr&gt;
-        ///		&lt;/table&gt;.
-        /// </summary>
         internal static string ReciboSacadoParte7 {
             get {
                 return ResourceManager.GetString("ReciboSacadoParte7", resourceCulture);
@@ -763,7 +754,7 @@ namespace Boleto2Net {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;table class=&quot;ctN w666&quot;&gt;
-        ///				&lt;tr class=&quot;h13&quot;&gt;&lt;td /&gt;&lt;/tr&gt;
+        ///				&lt;tr class=&quot;h13&quot;&gt;Autenticação mecânica&lt;td /&gt;&lt;/tr&gt;
         ///				&lt;tr class=&quot;h13&quot;&gt;&lt;td /&gt;&lt;/tr&gt;
         ///				&lt;tr&gt;&lt;td class=&quot;Ar&quot;&gt;Corte na linha pontilhada&lt;/td&gt;&lt;/tr&gt;
         ///				&lt;tr&gt;&lt;td class=&quot;cut&quot; /&gt;&lt;/tr&gt;
