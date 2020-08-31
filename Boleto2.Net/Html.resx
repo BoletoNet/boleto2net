@@ -283,7 +283,7 @@
 						&lt;td&gt;&lt;/td&gt;						
 				&lt;/tr&gt;						
 				&lt;tr class="ct h13"&gt;
-						&lt;td class="w472"&gt;Beneficiário&lt;/td&gt;
+						&lt;td class="w455"&gt;Beneficiário&lt;/td&gt;
 						&lt;td class="w180"&gt;Agência / Código Beneficiário&lt;/td&gt;
 				&lt;/tr&gt;
 				&lt;tr class="cp h12 rBb"&gt;
@@ -380,7 +380,7 @@
   <data name="ReciboCedenteParte3" xml:space="preserve">
     <value>&lt;table class="w666"&gt;
 				&lt;tr class="ct h13"&gt;
-						&lt;td class="w472"&gt;Beneficiário&lt;/td&gt;
+						&lt;td class="w465"&gt;Beneficiário&lt;/td&gt;
 						&lt;td class="w180"&gt;Agência / Código Beneficiário&lt;/td&gt;
 				&lt;/tr&gt;
 				&lt;tr class="cp h12 rBb"&gt;
@@ -396,7 +396,7 @@
 						&lt;td class="w163"&gt;N&lt;u&gt;o&lt;/u&gt; documento&lt;/td&gt;
 						&lt;td class="w62"&gt;Espécie doc.&lt;/td&gt;
 						&lt;td class="w34"&gt;Aceite&lt;/td&gt;
-						&lt;td class="w72"&gt;Data processamento&lt;/td&gt;
+						&lt;td class="w74"&gt;Data processamento&lt;/td&gt;
 						&lt;td class="w180"&gt;Carteira / Nosso número&lt;/td&gt;
 				&lt;/tr&gt;
 				&lt;tr class="cp h12 rBb"&gt;
@@ -417,7 +417,7 @@
 						&lt;td class="w83"&gt;Carteira&lt;/td&gt;
 						&lt;td class="w53"&gt;Espécie&lt;/td&gt;
 						&lt;td class="w123"&gt;Quantidade&lt;/td&gt;
-						&lt;td class="w72"&gt;(x) Valor&lt;/td&gt;
+						&lt;td class="w74"&gt;(x) Valor&lt;/td&gt;
 						&lt;td class="w180 bgcGray"&gt;(=) Valor documento&lt;/td&gt;
 				&lt;/tr&gt;
 				&lt;tr class="cp h12 rBb"&gt;
@@ -524,7 +524,7 @@
 						&lt;td class="w192"&gt;Número do documento&lt;/td&gt;
 						&lt;td class="w132"&gt;CPF/CNPJ&lt;/td&gt;
 						&lt;td class="w134"&gt;Vencimento&lt;/td&gt;
-						&lt;td class="w180"&gt;Valor documento&lt;/td&gt;
+						&lt;td class="w182"&gt;Valor documento&lt;/td&gt;
 				&lt;/tr&gt;
 				&lt;tr class="cp h12 rBb"&gt;
 						&lt;td&gt;@NUMERODOCUMENTO&lt;/td&gt;
@@ -554,6 +554,16 @@
   </data>
   <data name="ReciboSacadoParte6" xml:space="preserve">
     <value>&lt;table class="w666"&gt;
+				&lt;tr class="ctN h13"&gt;
+						&lt;td class="pL6 bleft bright"&gt;Instruções&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr class="cpN h12"&gt;
+						&lt;td class="pL6 bleft bright bbottom"&gt;@MENSAGEMFIXASACADO@INSTRUCOES&lt;/td&gt;
+				&lt;/tr&gt;
+		&lt;/table&gt;</value>
+  </data>
+  <data name="ReciboSacadoParte7" xml:space="preserve">
+    <value>&lt;table class="w666"&gt;
 				&lt;tr class="ct h13"&gt;
 						&lt;td class="w659"&gt;Pagador&lt;/td&gt;
 				&lt;/tr&gt;
@@ -565,27 +575,17 @@
 				&lt;/tr&gt;
 		&lt;/table&gt;</value>
   </data>
-  <data name="ReciboSacadoParte7" xml:space="preserve">
-    <value>&lt;table class="w666"&gt;
-				&lt;tr class="ctN h13"&gt;
-						&lt;td class="pL6"&gt;Instruções&lt;/td&gt;
-						&lt;td class="w180 Ar"&gt;Autenticação mecânica&lt;/td&gt;
-				&lt;/tr&gt;
-				&lt;tr class="cpN h12"&gt;
-						&lt;td class="pL6"&gt;@MENSAGEMFIXASACADO@INSTRUCOES&lt;/td&gt;
-						&lt;td class="pL6 Ar"&gt;@AUTENTICACAOMECANICA&lt;/td&gt;
-				&lt;/tr&gt;
-		&lt;/table&gt;</value>
-  </data>
   <data name="ReciboSacadoParte8" xml:space="preserve">
-    <value>&lt;table class="ctN w666"&gt;
-				&lt;tr class="h13"&gt;&lt;td /&gt;&lt;/tr&gt;
+    <value>
+	&lt;table class="ctN w666"&gt;
+				&lt;tr&gt;&lt;td class="Ar"&gt;Autenticação mecânica&lt;/td&gt;&lt;/tr&gt;
 				&lt;tr class="h13"&gt;&lt;td /&gt;&lt;/tr&gt;
 				&lt;tr&gt;&lt;td class="Ar"&gt;Corte na linha pontilhada&lt;/td&gt;&lt;/tr&gt;
 				&lt;tr&gt;&lt;td class="cut" /&gt;&lt;/tr&gt;
 				&lt;tr class="h13"&gt;&lt;td /&gt;&lt;/tr&gt;
 				&lt;tr class="h13"&gt;&lt;td /&gt;&lt;/tr&gt;
-		&lt;/table&gt;</value>
+		&lt;/table&gt;
+		</value>
   </data>
   <data name="ComprovanteEntrega71" xml:space="preserve">
     <value>&lt;table class="w666"&gt;
