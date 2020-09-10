@@ -21,7 +21,7 @@ namespace Boleto2Net
         {
             Banco = banco;
             //se o arquivo de retorno for criado par multiplas carteiras, ignora a carteira (para compatibilidade)
-            if (!ignorarCarteira)
+            if ((!ignorarCarteira) && (banco.Cedente != null))
             {
                 Carteira = banco.Cedente.ContaBancaria.CarteiraPadrao;
                 VariacaoCarteira = banco.Cedente.ContaBancaria.VariacaoCarteiraPadrao;
@@ -60,8 +60,8 @@ namespace Boleto2Net
         public decimal ValorTitulo { get; set; }
 
         public bool ImprimirValoresAuxiliares { get; set; } = false;
-        public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o sacado pagou. Se n„o existir essa informaÁ„o no arquivo retorno, deixar zerada.
-        public decimal ValorPagoCredito { get; set; } // ValorPagoCredito deve ser preenchido com o valor que ser· creditado na conta corrente. Se n„o existir essa informaÁ„o no arquivo retorno, deixar zerada.
+        public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o sacado pagou. Se n√£o existir essa informa√ß√£o no arquivo retorno, deixar zerada.
+        public decimal ValorPagoCredito { get; set; } // ValorPagoCredito deve ser preenchido com o valor que ser√° creditado na conta corrente. Se n√£o existir essa informa√ß√£o no arquivo retorno, deixar zerada.
         public decimal ValorJurosDia { get; set; }
         public decimal ValorMulta { get; set; }
         public decimal ValorDesconto { get; set; }
@@ -85,12 +85,12 @@ namespace Boleto2Net
         public DateTime DataDesconto { get; set; }
 
         /// <summary>
-        /// Banco no qual o boleto/tÌtulo foi quitado/recolhido
+        /// Banco no qual o boleto/t√≠tulo foi quitado/recolhido
         /// </summary>
         public string BancoCobradorRecebedor { get; set; }
         
         /// <summary>
-        /// AgÍncia na qual o boleto/tÌtulo foi quitado/recolhido
+        /// Ag√™ncia na qual o boleto/t√≠tulo foi quitado/recolhido
         /// </summary>
         public string AgenciaCobradoraRecebedora { get; set; }
 
@@ -122,27 +122,27 @@ namespace Boleto2Net
 
         public void ValidarDados()
         {
-            // Banco ObrigatÛrio
+            // Banco Obrigat√≥rio
             if (Banco == null)
-                throw new Exception("Boleto n„o possui Banco.");
+                throw new Exception("Boleto n√£o possui Banco.");
 
-            // Cedente ObrigatÛrio
+            // Cedente Obrigat√≥rio
             if (Banco.Cedente == null)
-                throw new Exception("Boleto n„o possui cedente.");
+                throw new Exception("Boleto n√£o possui cedente.");
 
-            // Conta Banc·ria ObrigatÛria
+            // Conta Banc√°ria Obrigat√≥ria
             if (Banco.Cedente.ContaBancaria == null)
-                throw new Exception("Boleto n„o possui conta banc·ria.");
+                throw new Exception("Boleto n√£o possui conta banc√°ria.");
 
-            // Sacado ObrigatÛrio
+            // Sacado Obrigat√≥rio
             if (Sacado == null)
-                throw new Exception("Boleto n„o possui sacado.");
+                throw new Exception("Boleto n√£o possui sacado.");
 
-            // Verifica se data do processamento È valida
+            // Verifica se data do processamento √© valida
             if (DataProcessamento == DateTime.MinValue)
                 DataProcessamento = DateTime.Now;
 
-            // Verifica se data de emiss„o È valida
+            // Verifica se data de emiss√£o √© valida
             if (DataEmissao == DateTime.MinValue)
                 DataEmissao = DateTime.Now;
 
