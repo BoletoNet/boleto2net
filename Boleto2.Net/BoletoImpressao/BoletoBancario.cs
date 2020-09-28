@@ -32,7 +32,7 @@ namespace Boleto2Net
 
         #region Variaveis
 
-        private string _instrucoesHtml = string.Empty;
+       // private string _instrucoesHtml = string.Empty;
         private bool _mostrarCodigoCarteira = false;
         private bool _formatoCarne = false;
         #endregion Variaveis
@@ -51,6 +51,9 @@ namespace Boleto2Net
 
         [Browsable(true), Description("Gera um relatório com os valores que deram origem ao boleto")]
         public bool ExibirDemonstrativo { get; set; }
+
+        [Browsable(true), Description("Oculta a última linha pontilhada (para boletos alinhados no rodapé da folha")]
+        public bool OcultarLinhaPontilhadaCodigoBarras { get; set; } = false;
 
         /// <summary>
         /// Mostra o código da carteira
@@ -243,7 +246,8 @@ namespace Boleto2Net
                 html.Append(Html.ReciboCedenteParte9);
                 html.Append(Html.ReciboCedenteParte10);
                 html.Append(Html.ReciboCedenteParte11);
-                html.Append(Html.ReciboCedenteParte12);
+                if (OcultarLinhaPontilhadaCodigoBarras == false)
+                    html.Append(Html.ReciboCedenteParte12);
                 return html.ToString();
             }
             catch (Exception ex)
