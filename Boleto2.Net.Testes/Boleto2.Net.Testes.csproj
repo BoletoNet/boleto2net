@@ -105,6 +105,7 @@
     <Compile Include="BancoBrasilCarteira17_019Tests.cs" />
     <Compile Include="BancoItauCarteira109Tests.cs" />
     <Compile Include="BancoItauCarteira112Tests.cs" />
+    <Compile Include="BancoSafraCarteira2Tests.cs" />
     <Compile Include="BancoSafraCarteira1Tests.cs" />
     <Compile Include="BancoSantanderCarteira101Tests.cs" />
     <Compile Include="BancoSicrediCarteira1Tests.cs" />

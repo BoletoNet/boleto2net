@@ -13,7 +13,7 @@ namespace Boleto2Net
         // Esta classe é para permitir que essa DLL seja utilizada
         // via COM, em linguagens que como Visual Fox Pro.
 
-        readonly public string Versao = "1.80";
+        readonly public string Versao = "1.81";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
