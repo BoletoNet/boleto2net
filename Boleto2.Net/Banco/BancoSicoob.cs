@@ -432,10 +432,6 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0043, 008, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0051, 015, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 001, 0, codMulta, '0');
-                // Campo 15.3R - Manual diz que a data deverá ser maior que a data de vencimento do título.
-                // Caso seja inválida ou igual a data de vencimento, será considerada a data do vencimento acrescida de um dia.
-                if (boleto.DataMulta <= boleto.DataVencimento)
-                    boleto.DataMulta = boleto.DataVencimento.AddDays(1);
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0067, 008, 0, boleto.DataMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0075, 015, 2, boleto.ValorMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0090, 010, 0, Empty, ' ');
