@@ -235,7 +235,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0059, 001, 0, Cedente.ContaBancaria.DigitoAgencia, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0060, 012, 0, Cedente.ContaBancaria.Conta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0072, 001, 0, Cedente.ContaBancaria.DigitoConta, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0073, 001, 0, Empty, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0073, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0074, 030, 0, Cedente.Nome, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0104, 040, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0144, 040, 0, Empty, ' ');
@@ -826,7 +826,7 @@ namespace Boleto2Net
         #endregion
 
         #region Retorno - CNAB400
-        public void LerHeaderRetornoCNAB400(string registro)
+        public void LerHeaderRetornoCNAB400(ArquivoRetorno arquivoRetorno, string registro)
         {
             try
             {
@@ -834,6 +834,10 @@ namespace Boleto2Net
                 {
                     throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
                 }
+
+                //095 a 100 Data de Gravação do Arquivo 006 DDMMAA
+                arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(94, 6)).ToString("##-##-##"));
+
             }
             catch (Exception ex)
             {

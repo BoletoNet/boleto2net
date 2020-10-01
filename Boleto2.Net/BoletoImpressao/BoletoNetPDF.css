@@ -77,9 +77,9 @@ img {
 }
 
 .ct td, .cp td {
-    padding-left: 3px;
+    padding-left: 3.5px;
     border-left: solid 1px #000;
-    padding-right: 3px;
+    padding-right: 3.5px;
     border-right: solid 1px #000;
 }
 
@@ -103,6 +103,18 @@ img {
 
 .pL10 {
 	padding-left: 10px;
+}
+
+.bleft {
+	border-left: solid 1px #000;
+}
+
+.bright {
+	border-right: solid 1px #000;
+}
+
+.bbottom {
+	border-bottom: solid 1px #000;
 }
 
 .imgLogo {
@@ -205,6 +217,14 @@ img {
 	width: 65px;
 }
 
+.w74 {
+	width: 74px;
+}
+
+.w76 {
+	width: 76px;
+}
+
 .w72 {
 	width: 72px;
 }
@@ -295,6 +315,14 @@ img {
 
 .w409 {
 	width: 409px;
+}
+
+.w465 {
+	width: 465px;
+}
+
+.w455 {
+	width: 455px;
 }
 
 .w472 {

@@ -13,7 +13,7 @@ namespace Boleto2Net
         // Esta classe é para permitir que essa DLL seja utilizada
         // via COM, em linguagens que como Visual Fox Pro.
 
-        readonly public string Versao = "1.76";
+        readonly public string Versao = "1.80";
 
         private Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
@@ -512,7 +512,22 @@ namespace Boleto2Net
                 return false;
             }
         }
-        public bool GerarBoletos(string nomeArquivo, ref string mensagemErro)
+
+        public bool GerarBoletos(string nomeArquivo,
+                                    bool formatoCarne,
+                                    bool ocultarInstrucoes,
+                                    bool mostrarDemonstrativo,
+                                    bool mostrarComprovanteEntrega,
+                                    bool mostrarComprovanteEntregaLivre,
+                                    bool ocultarReciboSacado,
+                                    bool mostrarEnderecoCedente,
+                                    bool ocultarEnderecoSacado,
+                                    bool mostrarCodigoCarteira,
+                                    bool ocultarLinhaPontilhadaCodigoBarras,
+                                    bool adicionarQuebraPagina,
+                                    string htmlHeader,
+                                    string htmlFooter,
+                                    ref string mensagemErro)
         {
             mensagemErro = "";
             try
@@ -544,14 +559,27 @@ namespace Boleto2Net
                     using (BoletoBancario imprimeBoleto = new BoletoBancario
                     {
                         Boleto = boletoTmp,
-                        OcultarInstrucoes = false,
-                        MostrarComprovanteEntrega = true,
-                        MostrarEnderecoCedente = true
+                        FormatoCarne = formatoCarne,
+                        OcultarInstrucoes = ocultarInstrucoes,
+                        ExibirDemonstrativo = mostrarDemonstrativo,
+                        MostrarComprovanteEntrega = mostrarComprovanteEntrega,
+                        MostrarComprovanteEntregaLivre = mostrarComprovanteEntregaLivre,
+                        MostrarEnderecoCedente = mostrarEnderecoCedente,
+                        OcultarEnderecoSacado = ocultarEnderecoSacado,
+                        OcultarReciboSacado = ocultarReciboSacado,
+                        MostrarCodigoCarteira = mostrarCodigoCarteira,
+                        OcultarLinhaPontilhadaCodigoBarras = ocultarLinhaPontilhadaCodigoBarras
                     })
                     {
-                        html.Append("<div style=\"page-break-after: always;\">");
+                        if (adicionarQuebraPagina)
+                            html.Append("<div style=\"page-break-after: always;\">");
+                        if (htmlHeader != "")
+                            html.Append(htmlHeader);
                         html.Append(imprimeBoleto.MontaHtml());
-                        html.Append("</div>");
+                        if (htmlFooter != "")
+                            html.Append(htmlFooter);
+                        if (adicionarQuebraPagina)
+                            html.Append("</div>");
                     }
                 }
                 switch (extensaoArquivo.ToUpper())
