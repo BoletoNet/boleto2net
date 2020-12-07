@@ -33,3 +33,7 @@ https://www.myget.org/F/boleto2netbuild/api/v3/index.json
 
 ### Pre requisitos
 Visual Studio 2017 ou superior
+
+### Por onde comecar
+Olhe os projetos de testes, eles contem muita informacao sobre o uso do componente.
+
