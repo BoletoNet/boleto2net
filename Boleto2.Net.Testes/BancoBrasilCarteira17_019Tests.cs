@@ -10,7 +10,8 @@ namespace Boleto2Net.Testes
         readonly IBanco _banco;
         public BancoBrasilCarteira17019Tests()
         {
-            var contaBancaria = new ContaBancaria
+            //Código de cedente com 4 dígitos
+            var contaBancariaCed4Digitos = new ContaBancaria
             {
                 Agencia = "1234",
                 DigitoAgencia = "X",
@@ -23,7 +24,41 @@ namespace Boleto2Net.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
             _banco = Banco.Instancia(Bancos.BancoDoBrasil);
-            _banco.Cedente = Utils.GerarCedente("1234567", "", "", contaBancaria);
+            _banco.Cedente = Utils.GerarCedente("1234", "", "", contaBancariaCed4Digitos);
+            _banco.FormataCedente();
+
+            //Código de cedente com 6 dígitos
+            var contaBancariaCed6Digitos = new ContaBancaria
+            {
+                Agencia = "1234",
+                DigitoAgencia = "X",
+                Conta = "123456",
+                DigitoConta = "X",
+                CarteiraPadrao = "17",
+                VariacaoCarteiraPadrao = "019",
+                TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaSimples,
+                TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
+                TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
+            };
+            _banco = Banco.Instancia(Bancos.BancoDoBrasil);
+            _banco.Cedente = Utils.GerarCedente("123456", "", "", contaBancariaCed6Digitos);
+            _banco.FormataCedente();
+
+            //Código de cedente com 7 dígitos
+            var contaBancariaCed7Digitos = new ContaBancaria
+            {
+                Agencia = "1234",
+                DigitoAgencia = "X",
+                Conta = "123456",
+                DigitoConta = "X",
+                CarteiraPadrao = "17",
+                VariacaoCarteiraPadrao = "019",
+                TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaSimples,
+                TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
+                TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
+            };
+            _banco = Banco.Instancia(Bancos.BancoDoBrasil);
+            _banco.Cedente = Utils.GerarCedente("1234567", "", "", contaBancariaCed7Digitos);
             _banco.FormataCedente();
         }
 

@@ -290,7 +290,7 @@ namespace Boleto2Net
             }
         }
 
-        public void LerHeaderRetornoCNAB400(string registro)
+        public void LerHeaderRetornoCNAB400(ArquivoRetorno arquivoRetorno, string registro)
         {
             throw new NotImplementedException();
         }

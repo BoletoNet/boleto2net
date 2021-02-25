@@ -66,6 +66,7 @@ img {
 
 .Ar {
 	text-align: right;
+	padding-right: 3px;
 }
 
 .Al {
@@ -81,9 +82,9 @@ img {
 }
 
 .ct td, .cp td {
-    padding-left: 3px;
+    padding-left: 3.5px;
     border-left: solid 1px #000;
-    padding-right: 3px;
+    padding-right: 3.5px;
     border-right: solid 1px #000;
 }
 
@@ -107,6 +108,18 @@ img {
 
 .pL10 {
 	padding-left: 10px;
+}
+
+.bleft {
+	border-left: solid 1px #000;
+}
+
+.bright {
+	border-right: solid 1px #000;
+}
+
+.bbottom {
+	border-bottom: solid 1px #000;
 }
 
 .imgLogo {
@@ -169,6 +182,22 @@ img {
 	height: 12px;
 }
 
+.h5 {
+	height: 5px;
+}
+
+	.h5 td {
+		vertical-align: top;
+	}
+
+.h10 {
+	height: 10px;
+}
+
+.h10 td {
+	vertical-align: top;
+}
+
 .h13 td {
 	vertical-align: top;
 }
@@ -207,6 +236,14 @@ img {
 
 .w65 {
 	width: 65px;
+}
+
+.w74 {
+	width: 74px;
+}
+
+.w76 {
+	width: 76px;
 }
 
 .w72 {
@@ -305,6 +342,14 @@ img {
     width: 409px;
 }
 
+.w465 {
+	width: 465px;
+}
+
+.w455 {
+	width: 455px;
+}
+
 .w472 {
 	width: 472px;
 }
@@ -384,7 +429,7 @@ img {
 
 .ebc {
 	width: 4px;
-	height: 440px;
+	height: 420px;
 	border-right: dotted 1px #000000;
 	margin-right: 4px;
 }

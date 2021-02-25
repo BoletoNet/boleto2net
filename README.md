@@ -12,9 +12,11 @@ Nova versão do Boleto.Net
 * Brasil (001) - Carteira 17 (Variações 019 027)
 * Caixa Econômica Federal (104) - Carteira SIG14
 * Itau (341) - Carteira 109, 112
-* Safra (422) - Carteira 1
+* Safra (422) - Carteira 1 e 2
 * Santander (033) - Carteira 101
 * Sicoob (756) - Carteira 1-01
+
+### Carteiras Implementadas (Falta teste unitário)
 * Sicredi (748) - Carteira 1-A
 
 ### Carteiras Implementadas (Não foi homologada. Falta teste unitário)
@@ -31,3 +33,7 @@ https://www.myget.org/F/boleto2netbuild/api/v3/index.json
 
 ### Pre requisitos
 Visual Studio 2017 ou superior
+
+### Por onde comecar
+Olhe os projetos de testes, eles contem muita informacao sobre o uso do componente.
+

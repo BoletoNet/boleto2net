@@ -434,7 +434,8 @@ namespace Boleto2Net
 
         #region Retorno - CNAB400
 
-        public void LerHeaderRetornoCNAB400(string registro)
+        
+        public void LerHeaderRetornoCNAB400(ArquivoRetorno arquivoRetorno, string registro)
         {
             try
             {
@@ -442,6 +443,9 @@ namespace Boleto2Net
                     throw new Exception("O arquivo não é do tipo \"02RETORNO01COBRANCA\"");
                 if (registro.Substring(76, 11) != "041BANRISUL")
                     throw new Exception("O arquivo não é do tipo \"041BANRISUL\"");
+
+                //095 100 DATA DA GRAVAÇÃO DO ARQUIVO
+                arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(94, 6)).ToString("##-##-##"));
             }
             catch (Exception ex)
             {
