@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.UI;
 using Boleto2Net.Exceptions;
 using Boleto2Net.Extensions;
@@ -28,7 +29,7 @@ namespace Boleto2Net
 
             contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO.", "", "", 8);
 
-            if (Cedente.Codigo.Length != 7)
+            if (!new[] { 4, 6, 7 }.Contains(Cedente.Codigo.Length))
                 throw Boleto2NetException.CodigoCedenteInvalido(Cedente.Codigo, 7);
 
             Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
@@ -550,7 +551,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0024, 012, 0, boleto.Banco.Cedente.ContaBancaria.Conta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0036, 001, 0, boleto.Banco.Cedente.ContaBancaria.DigitoConta, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0037, 001, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 020, 0, boleto.NossoNumero, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 020, 0, boleto.NossoNumeroFormatado, ' ');
                 var tipoCarteira = (int)boleto.TipoCarteira;
                 if ((boleto.Carteira == "17") & (tipoCarteira == 1))
                     tipoCarteira = 7; // Informar 7 – para carteira 17 modalidade Simples.
