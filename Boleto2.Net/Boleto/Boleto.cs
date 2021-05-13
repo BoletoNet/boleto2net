@@ -120,6 +120,9 @@ namespace Boleto2Net
         public CodigoBarra CodigoBarra { get; } = new CodigoBarra();
         public ObservableCollection<GrupoDemonstrativo> Demonstrativos { get; } = new ObservableCollection<GrupoDemonstrativo>();
 
+        public string IdentificadorDebitoAutomatico { get; set; } = string.Empty;
+        public string AvisoDebitoAutomatico { get; set; } = string.Empty;
+
         public void ValidarDados()
         {
             // Banco Obrigatório
