@@ -29,12 +29,12 @@ namespace Boleto2Net
         {
             var DataDocumento = boleto.DataEmissao.ToString("yy");
             var nossoNumero = boleto.NossoNumero;
-            var codigoDV = "2";
+            var dv = boleto.Banco.Cedente.CodigoDV;
 
-            if (!string.IsNullOrEmpty(boleto.Banco.Cedente.CodigoDV))
-                codigoDV = boleto.Banco.Cedente.CodigoDV;
+            if (string.IsNullOrEmpty(dv))
+                dv = "2";
 
-            boleto.NossoNumero = string.Format("{0}{1}{2}", DataDocumento, codigoDV, nossoNumero.PadLeft(5, '0'));
+            boleto.NossoNumero = string.Format("{0}{1}{2}", DataDocumento, dv, nossoNumero.PadLeft(5, '0'));
 
             boleto.NossoNumeroDV = Mod11(Sequencial(boleto)).ToString();
             boleto.NossoNumero = string.Concat(boleto.NossoNumero, Mod11(Sequencial(boleto)));

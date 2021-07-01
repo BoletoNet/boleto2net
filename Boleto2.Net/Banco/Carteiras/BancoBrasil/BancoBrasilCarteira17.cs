@@ -3,7 +3,7 @@ using static System.String;
 
 namespace Boleto2Net
 {
-    [CarteiraCodigo("17/019", "17/027")]
+    [CarteiraCodigo("17/019", "17/027", "17/035", "17/043")]
     internal class BancoBrasilCarteira17 : ICarteira<BancoBrasil>
     {
         internal static Lazy<ICarteira<BancoBrasil>> Instance { get; } = new Lazy<ICarteira<BancoBrasil>>(() => new BancoBrasilCarteira17());
@@ -15,7 +15,7 @@ namespace Boleto2Net
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            // Carteira 17 - Variação 019/027: Cliente emite o boleto
+            // Carteira 17 - Variação 019/027/035/043: Cliente emite o boleto
             // O nosso número não pode ser em branco.
             if (IsNullOrWhiteSpace(boleto.NossoNumero))
                 throw new Exception("Nosso Número não informado.");
@@ -53,7 +53,7 @@ namespace Boleto2Net
                     throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve iniciar com \"{boleto.Banco.Cedente.Codigo}\" e conter 7 dígitos.");
                 boleto.NossoNumero = $"{boleto.Banco.Cedente.Codigo}{boleto.NossoNumero.PadLeft(7, '0')}";
             }
-
+            
             boleto.NossoNumeroFormatado = boleto.NossoNumero + boleto.NossoNumeroDV;
         }
 
