@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.UI;
 using Boleto2Net.Exceptions;
 using Boleto2Net.Extensions;
@@ -28,7 +29,7 @@ namespace Boleto2Net
 
             contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO.", "", "", 8);
 
-            if (Cedente.Codigo.Length != 7)
+            if (!new[] { 4, 6, 7 }.Contains(Cedente.Codigo.Length))
                 throw Boleto2NetException.CodigoCedenteInvalido(Cedente.Codigo, 7);
 
             Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
@@ -536,6 +537,10 @@ namespace Boleto2Net
         {
             try
             {
+                var percJurosMensal = 1m;
+                if (boleto.PercentualJurosDia != 0.033m)
+                    percJurosMensal = boleto.PercentualJurosDia * 30;
+
                 numeroRegistroGeral++;
                 var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "001", '0');
@@ -550,7 +555,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0024, 012, 0, boleto.Banco.Cedente.ContaBancaria.Conta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0036, 001, 0, boleto.Banco.Cedente.ContaBancaria.DigitoConta, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0037, 001, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 020, 0, boleto.NossoNumero, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 020, 0, boleto.NossoNumeroFormatado, ' ');
                 var tipoCarteira = (int)boleto.TipoCarteira;
                 if ((boleto.Carteira == "17") & (tipoCarteira == 1))
                     tipoCarteira = 7; // Informar 7 – para carteira 17 modalidade Simples.
@@ -567,7 +572,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0107, 002, 0, (int)boleto.EspecieDocumento, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 001, 0, boleto.Aceite, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0110, 008, 0, boleto.DataEmissao, '0');
-                if (boleto.ValorJurosDia == 0)
+                if (percJurosMensal == 0)
                 {
                     // Sem Juros Mora
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0118, 001, 0, "3", '0');
@@ -577,9 +582,9 @@ namespace Boleto2Net
                 else
                 {
                     // Com Juros Mora ($)
-                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0118, 001, 0, "1", '0');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0118, 001, 0, "2", '0');
                     reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0119, 008, 0, boleto.DataJuros, '0');
-                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 015, 2, boleto.ValorJurosDia, '0');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 015, 2, percJurosMensal, '0');
                 }
                 if (boleto.ValorDesconto == 0)
                 {
@@ -682,8 +687,8 @@ namespace Boleto2Net
             try
             {
                 var codMulta = "0";
-                if (boleto.ValorMulta > 0)
-                    codMulta = "1";
+                if (boleto.PercentualMulta > 0)
+                    codMulta = "2";
                 var msg3 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(00, 40).FitStringLength(40, ' ');
                 if ((codMulta == "0") & string.IsNullOrWhiteSpace(msg3))
                     return "";
@@ -705,7 +710,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0051, 015, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 001, 0, codMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0067, 008, 0, boleto.DataMulta, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0075, 015, 2, boleto.ValorMulta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0075, 015, 2, boleto.PercentualMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0090, 010, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0100, 040, 0, msg3, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0140, 040, 0, string.Empty, ' ');
