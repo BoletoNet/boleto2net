@@ -20,7 +20,7 @@ namespace Boleto2Net
                 boleto.Banco.Cedente.ContaBancaria.OperacaoConta +
                 boleto.Banco.Cedente.Codigo + "10";
 
-            CampoLivre += Mod11(CampoLivre);
+            CampoLivre += Mod11(CampoLivre); 
 
             return CampoLivre;
         }
