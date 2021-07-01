@@ -98,9 +98,47 @@ namespace Boleto2Net
             boleto.NossoNumeroFormatado = boleto.NossoNumero;
         }
 
+        private int Mod11(string seq)
+        {
+            /* Variáveis
+             * -------------
+             * d - Dígito
+             * s - Soma
+             * p - Peso
+             * b - Base
+             * r - Resto
+             */
+
+            int d, s = 0, p = 2, b = 9;
+
+            for (int i = seq.Length - 1; i >= 0; i--)
+            {
+                s = s + (Convert.ToInt32(seq.Substring(i, 1)) * p);
+                if (p < b)
+                    p = p + 1;
+                else
+                    p = 2;
+            }
+
+            d = 11 - (s % 11);
+            if (d > 9)
+                d = 0;
+            return d;
+        }
+
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            return $"000000{boleto.NossoNumero}{boleto.Carteira}";
+            switch (boleto.Banco.Cedente.Codigo.Length)
+            {
+                case 4:
+                    return $"{boleto.NossoNumero}{boleto.Banco.Cedente.ContaBancaria.Agencia.PadLeft(4, '0')}{boleto.Banco.Cedente.ContaBancaria.Conta.PadLeft(8, '0')}{boleto.Carteira}";
+                case 6:
+                    return $"{boleto.NossoNumero}{boleto.Banco.Cedente.ContaBancaria.Agencia.PadLeft(4, '0')}{boleto.Banco.Cedente.ContaBancaria.Conta.PadLeft(8, '0')}{boleto.Carteira}";
+                case 7:
+                    return $"000000{boleto.NossoNumeroFormatado}{boleto.Carteira}";
+                default:
+                    throw new NotImplementedException("Código do Cedente deve conter 4, 6 ou 7 dígitos.");
+            }
         }
     }
 }
