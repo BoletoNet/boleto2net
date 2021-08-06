@@ -26,7 +26,7 @@ namespace Boleto2Net
 
             contaBancaria.FormatarDados("PREFERENCIALMENTE EM CANAIS ELETRÔNICOS DA SUA INSTITUIÇÃO FINANCEIRA.", "", "", 9);
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}.{contaBancaria.DigitoAgencia}.{Cedente.Codigo}";
+            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}.{contaBancaria.OperacaoConta}.{Cedente.Codigo}";
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
