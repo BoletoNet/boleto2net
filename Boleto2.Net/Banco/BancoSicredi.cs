@@ -52,7 +52,7 @@ namespace Boleto2Net
             var dia = agora.Day.ToString().PadLeft(2, '0');
 
             //Caso for gerado mais de um arquivo de remessa alterar a extensão do aquivo para "RM" + o contador do numero do arquivo de remessa gerado no dia
-            var nomeArquivoRemessa = string.Format("{0}{1}{2}.{3}", Cedente.Codigo, mes, dia, "CRM");
+            var nomeArquivoRemessa = string.Format("{0}{1}{2}.{3}", Cedente.Codigo, mes, dia, sequencial > 1 ? $"RM{sequencial}" : "REM");
 
             return nomeArquivoRemessa;
         }
