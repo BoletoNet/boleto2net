@@ -34,6 +34,10 @@ namespace Boleto2Net
 
         public void ValidaBoleto(Boleto boleto)
         {
+            if (boleto.Banco.Cedente.ContaBancaria.Conta.Length != 6)
+            {
+                throw Boleto2NetException.ContaInvalida(boleto.Banco.Cedente.ContaBancaria.Conta, 6);
+            }
         }
 
         public void FormataNossoNumero(Boleto boleto)
