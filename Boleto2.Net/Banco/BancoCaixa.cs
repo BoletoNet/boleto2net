@@ -34,7 +34,7 @@ namespace Boleto2Net
             contaBancaria.FormatarDados("PREFERENCIALMENTE NAS CASAS LOTERICAS ATE O VALOR LIMITE", "", "SAC CAIXA: 0800 726 0101 (informações, reclamações, sugestões e elogios)<br>Para pessoas com deficiência auditiva ou de fala: 0800 726 2492<br>Ouvidoria: 0800 725 7474<br>caixa.gov.br<br>", 6);
 
             var codigoCedente = Cedente.Codigo;
-            Cedente.Codigo = codigoCedente.Length <= 6 ? codigoCedente.PadLeft(6, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 9);
+            Cedente.Codigo = codigoCedente.Length == 6 || codigoCedente.Length == 7 ? Cedente.Codigo : throw new ArgumentException($"O código do cedente ({codigoCedente}) deve conter 6 ou 7 dígitos."); //#329
 
             if (Cedente.CodigoDV == Empty)
                 throw new Exception($"Dígito do código do cedente ({codigoCedente}) não foi informado.");
@@ -313,8 +313,18 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0033, 020, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0053, 005, 0, Cedente.ContaBancaria.Agencia, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0058, 001, 0, Cedente.ContaBancaria.DigitoAgencia, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0059, 006, 0, Cedente.Codigo, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0065, 007, 0, "0", '0');
+
+                if (Cedente.Codigo.Length == 6)
+                {
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0059, 006, 0, Cedente.Codigo, '0');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0065, 007, 0, "0", '0');
+                }
+                else if (Cedente.Codigo.Length == 7)
+                {
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0059, 007, 0, Cedente.Codigo, '0');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 006, 0, "0", '0');
+                }
+
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0072, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0073, 030, 0, Cedente.Nome, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0103, 030, 0, "CAIXA ECONOMICA FEDERAL", ' ');
@@ -323,7 +333,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0144, 008, 0, DateTime.Now, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediHoraHHMMSS___________, 0152, 006, 0, DateTime.Now, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0158, 006, 0, numeroArquivoRemessa, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0164, 003, 0, "050", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0164, 003, 0, Cedente.Codigo.Length == 6 ? "101" : "102", '0'); //#329
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0167, 005, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0172, 020, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0192, 020, 0, "REMESSA-PRODUCAO", ' ');
@@ -349,7 +359,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 001, 0, "R", ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0010, 002, 0, "01", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0012, 002, 0, "00", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0014, 003, 0, "030", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0014, 003, 0, Cedente.Codigo.Length == 6 ? "060" : "067", '0'); //#329
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0017, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, Cedente.TipoCPFCNPJ("0"), '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 015, 0, Cedente.CPFCNPJ, '0');
