@@ -44,8 +44,18 @@ namespace Boleto2Net
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
             var cedente = boleto.Banco.Cedente;
-            var contaBancaria = cedente.ContaBancaria;
-            var formataCampoLivre = $"{cedente.Codigo}{cedente.CodigoDV}{boleto.NossoNumero.Substring(2, 3)}1{boleto.NossoNumero.Substring(5, 3)}4{boleto.NossoNumero.Substring(8, 9)}";
+
+            //https://www.caixa.gov.br/Downloads/cobranca-caixa/ESP_COD_BARRAS_SIGCB_COBRANCA_CAIXA.pdf páginas 24 e 25 
+            string formataCampoLivre;
+            if (cedente.Codigo.Length == 6)
+                formataCampoLivre = $"{cedente.Codigo}{cedente.CodigoDV}";
+            else if (cedente.Codigo.Length == 7)
+                formataCampoLivre = $"{cedente.Codigo}";
+            else
+                throw new ArgumentException("O código do cedente deve ter 6 ou 7 dígitos");
+
+            formataCampoLivre += $"{boleto.NossoNumero.Substring(2, 3)}1{boleto.NossoNumero.Substring(5, 3)}4{boleto.NossoNumero.Substring(8, 9)}";
+
             formataCampoLivre += formataCampoLivre.CalcularDVCaixa();
             return formataCampoLivre;
         }
