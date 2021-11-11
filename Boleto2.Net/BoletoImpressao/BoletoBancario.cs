@@ -643,7 +643,8 @@ namespace Boleto2Net
         {
             OnLoad(EventArgs.Empty);
 
-            var randomSufix = new Random().Next().ToString(); // para podermos colocar no mesmo email varios boletos diferentes
+            
+            var randomSufix = string.Concat(new Random().Next().ToString(), System.IO.Path.GetRandomFileName().Replace(".", string.Empty));
 
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
             lrImagemLogo = new LinkedResource(stream, MediaTypeNames.Image.Jpeg)
