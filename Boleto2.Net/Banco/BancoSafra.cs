@@ -34,6 +34,7 @@ namespace Boleto2Net
 
         public void ValidaBoleto(Boleto boleto)
         {
+            
         }
 
         public void FormataNossoNumero(Boleto boleto)
