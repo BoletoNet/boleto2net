@@ -53,7 +53,7 @@ namespace Boleto2Net
             var dia = agora.Day.ToString().PadLeft(2, '0');
 
             //Caso for gerado mais de um arquivo de remessa alterar a extensão do aquivo para "RM" + o contador do numero do arquivo de remessa gerado no dia
-            var nomeArquivoRemessa = string.Format("{0}{1}{2}.{3}", Cedente.Codigo, mes, dia, "CRM");
+            var nomeArquivoRemessa = string.Format("{0}{1}{2}.{3}", Cedente.Codigo, mes, dia, sequencial > 1 ? $"RM{sequencial}" : "REM");
 
             return nomeArquivoRemessa;
         }
@@ -594,8 +594,8 @@ namespace Boleto2Net
 
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0072, 001, 0, String.Empty, ' ');
 
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0073, 030, 0, Cedente.Nome, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0103, 030, 0, "SICRED", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0073, 030, 0, Cedente.Nome, ' ');                
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0103, 030, 0, "SICREDI", ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0133, 010, 0, String.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0143, 001, 0, "1", '0');
 
@@ -1109,7 +1109,57 @@ namespace Boleto2Net
 
         public void ValidaBoleto(Boleto boleto)
         {
+            switch (boleto.EspecieDocumento) 
+            {
+                case TipoEspecieDocumento.DMI:
+                case TipoEspecieDocumento.DR:
+                case TipoEspecieDocumento.NP:
+                case TipoEspecieDocumento.NPR:
+                case TipoEspecieDocumento.NS:
+                case TipoEspecieDocumento.RC:
+                case TipoEspecieDocumento.LC:
+                case TipoEspecieDocumento.ND:
+                case TipoEspecieDocumento.DSI:
+                case TipoEspecieDocumento.OU:
+                    break; //TIPOS POSSÍVEIS DE ACORDO COM A DOCUMENTAÇÃO DO SICREDI
+                default:
+                    throw new Exception($"Especie de documento: {boleto.EspecieDocumento} inválida para o banco {Nome}.");
+            }
 
+            if (boleto.Sacado.Endereco == null)
+            {
+                throw new Exception("O endereço do sacado não foi informado.");
+            }
+            
+            if (string.IsNullOrEmpty(boleto.Sacado.Endereco.LogradouroEndereco))
+            {
+                throw new Exception("O logradouro do sacado não foi informado.");
+            }
+            
+            if (string.IsNullOrEmpty(boleto.Sacado.Endereco.LogradouroNumero))
+            {
+                throw new Exception("O número do logradouro do sacado não foi informado.");
+            }
+            
+            if (string.IsNullOrEmpty(boleto.Sacado.Endereco.Bairro))
+            {
+                throw new Exception("O bairro do sacado não foi informado.");
+            }
+
+            if (string.IsNullOrEmpty(boleto.Sacado.Endereco.UF))
+            {
+                throw new Exception("A UF do sacado não foi informada.");
+            }
+            
+            if (string.IsNullOrEmpty(boleto.Sacado.Endereco.Cidade))
+            {
+                throw new Exception("A cidade do sacado não foi informada.");
+            }
+            
+            if (string.IsNullOrEmpty(boleto.Sacado.Endereco.CEP))
+            {
+                throw new Exception("O CEP do sacado não foi informado.");
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Boleto2Net
         {
             Banco = banco;
             //se o arquivo de retorno for criado par multiplas carteiras, ignora a carteira (para compatibilidade)
-            if (!ignorarCarteira)
+            if ((!ignorarCarteira) && (banco.Cedente != null))
             {
                 Carteira = banco.Cedente.ContaBancaria.CarteiraPadrao;
                 VariacaoCarteira = banco.Cedente.ContaBancaria.VariacaoCarteiraPadrao;
@@ -42,10 +42,10 @@ namespace Boleto2Net
         public DateTime DataLimiteRecebimento { get; set; }
 
         /// <summary>
-        /// Quantidade de dias para recebimento após o vencimento (exclusivo BB)
-        /// Prazo permitido para recebimento do boleto após o vencimento. Após este prazo, o boleto será baixado.
-        /// Este registro deve ser utilizado somente quando o campo 21.2 (Carteira de Cobrança) – Comando – for igual a "01" - Registro de Título
-        /// Este Registro deve, obrigatoriamente, ser inserido após o Registro Detalhe Obrigatório correspondente ao título
+        /// Quantidade de dias para recebimento apï¿½s o vencimento (exclusivo BB)
+        /// Prazo permitido para recebimento do boleto apï¿½s o vencimento. Apï¿½s este prazo, o boleto serï¿½ baixado.
+        /// Este registro deve ser utilizado somente quando o campo 21.2 (Carteira de Cobranï¿½a) ï¿½ Comando ï¿½ for igual a "01" - Registro de Tï¿½tulo
+        /// Este Registro deve, obrigatoriamente, ser inserido apï¿½s o Registro Detalhe Obrigatï¿½rio correspondente ao tï¿½tulo
         /// </summary>
         public int? DiasLimiteRecebimento { get; set; } = null;
 
@@ -69,8 +69,8 @@ namespace Boleto2Net
         public decimal ValorTitulo { get; set; }
 
         public bool ImprimirValoresAuxiliares { get; set; } = false;
-        public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o sacado pagou. Se não existir essa informação no arquivo retorno, deixar zerada.
-        public decimal ValorPagoCredito { get; set; } // ValorPagoCredito deve ser preenchido com o valor que será creditado na conta corrente. Se não existir essa informação no arquivo retorno, deixar zerada.
+        public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o sacado pagou. Se nÃ£o existir essa informaÃ§Ã£o no arquivo retorno, deixar zerada.
+        public decimal ValorPagoCredito { get; set; } // ValorPagoCredito deve ser preenchido com o valor que serÃ¡ creditado na conta corrente. Se nÃ£o existir essa informaÃ§Ã£o no arquivo retorno, deixar zerada.
         public decimal ValorJurosDia { get; set; }
         public decimal ValorMulta { get; set; }
         public decimal ValorDesconto { get; set; }
@@ -94,12 +94,12 @@ namespace Boleto2Net
         public DateTime DataDesconto { get; set; }
 
         /// <summary>
-        /// Banco no qual o boleto/título foi quitado/recolhido
+        /// Banco no qual o boleto/tÃ­tulo foi quitado/recolhido
         /// </summary>
         public string BancoCobradorRecebedor { get; set; }
         
         /// <summary>
-        /// Agência na qual o boleto/título foi quitado/recolhido
+        /// AgÃªncia na qual o boleto/tÃ­tulo foi quitado/recolhido
         /// </summary>
         public string AgenciaCobradoraRecebedora { get; set; }
 
@@ -131,29 +131,32 @@ namespace Boleto2Net
         public CodigoBarra CodigoBarra { get; } = new CodigoBarra();
         public ObservableCollection<GrupoDemonstrativo> Demonstrativos { get; } = new ObservableCollection<GrupoDemonstrativo>();
 
+        public string IdentificadorDebitoAutomatico { get; set; } = string.Empty;
+        public string AvisoDebitoAutomatico { get; set; } = string.Empty;
+
         public void ValidarDados()
         {
-            // Banco Obrigatório
+            // Banco ObrigatÃ³rio
             if (Banco == null)
-                throw new Exception("Boleto não possui Banco.");
+                throw new Exception("Boleto nÃ£o possui Banco.");
 
-            // Cedente Obrigatório
+            // Cedente ObrigatÃ³rio
             if (Banco.Cedente == null)
-                throw new Exception("Boleto não possui cedente.");
+                throw new Exception("Boleto nÃ£o possui cedente.");
 
-            // Conta Bancária Obrigatória
+            // Conta BancÃ¡ria ObrigatÃ³ria
             if (Banco.Cedente.ContaBancaria == null)
-                throw new Exception("Boleto não possui conta bancária.");
+                throw new Exception("Boleto nÃ£o possui conta bancÃ¡ria.");
 
-            // Sacado Obrigatório
+            // Sacado ObrigatÃ³rio
             if (Sacado == null)
-                throw new Exception("Boleto não possui sacado.");
+                throw new Exception("Boleto nÃ£o possui sacado.");
 
-            // Verifica se data do processamento é valida
+            // Verifica se data do processamento Ã© valida
             if (DataProcessamento == DateTime.MinValue)
                 DataProcessamento = DateTime.Now;
 
-            // Verifica se data de emissão é valida
+            // Verifica se data de emissÃ£o Ã© valida
             if (DataEmissao == DateTime.MinValue)
                 DataEmissao = DateTime.Now;
 

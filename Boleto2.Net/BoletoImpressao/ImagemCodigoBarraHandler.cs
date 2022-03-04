@@ -7,6 +7,10 @@ namespace Boleto2Net
 {
     internal class ImagemCodigoBarraHandler : IHttpHandler
     {
+        #region Constantes
+        private const int _withBarras = 2;
+        private const int _heightBarras = 60;
+        #endregion Constantes
 
         #region IHttpHandler Members
 
@@ -26,7 +30,7 @@ namespace Boleto2Net
             context.Response.ContentType = contentType;
             context.Response.AddHeader("content-disposition", "outline;filename=" + filename);
 
-            System.Drawing.Bitmap img = new BarCode2of5i(code, 1, 50, code.Length).ToBitmap();
+            System.Drawing.Bitmap img = new BarCode2of5i(code, _withBarras, _heightBarras, code.Length).ToBitmap();
 
             //img = img.GetThumbnailImage(460, 61, null, new IntPtr()) as System.Drawing.Bitmap;
 

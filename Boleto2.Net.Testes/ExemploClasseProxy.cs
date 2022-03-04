@@ -49,7 +49,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual(true, retorno, "DefinirDesconto: " + mensagemErro);
 
             // Define instruções de cobrança para o arquivo remessa e para ser impresso no boleto
-            retorno = classeProxy.DefinirInstrucoes("Mensagem para ser impressa no boleto","Mensagem para o arquivo remessa", "01", "02", "03", "04", "05", "06", ref mensagemErro);
+            retorno = classeProxy.DefinirInstrucoes("Mensagem para ser impressa no boleto","Mensagem para o arquivo remessa", "01", "02", "03", "04", "05", "06", true, ref mensagemErro);
             Assert.AreEqual(true, retorno, "DefinirInstrucoes: " + mensagemErro);
 
             // Fecha o boleto atual, valida os dados, etc.
@@ -69,7 +69,7 @@ namespace Boleto2Net.Testes
             Assert.AreEqual(true, retorno, "GerarRemessa: " + mensagemErro);
 
             // Para gerar o arquivo PDF
-            classeProxy.GerarBoletos(nomePasta + @"ClasseProxy_Boleto.Pdf", ref mensagemErro);
+            classeProxy.GerarBoletos(nomePasta + @"ClasseProxy_Boleto.Pdf", false, false, true, true, false, false, true, false, true, false, true, "", "", ref mensagemErro);
             Assert.AreEqual(true, retorno, "GerarBoletos: " + mensagemErro);
 
         }

@@ -43,11 +43,23 @@ namespace Boleto2Net.Exceptions
         public static Exception AgenciaInvalida(string agencia, int digitos)
             => new Boleto2NetException($"O número da agência ({agencia}) deve conter {digitos} dígitos.");
 
+        public static Exception AgenciaDigitoInvalido(string agenciaDigito, int digitos)
+            => new Boleto2NetException($"O dígito da agência({agenciaDigito}) deve contar {digitos} dígitos.");
+
         public static Exception ContaInvalida(string conta, int digitos)
             => new Boleto2NetException($"O número da conta ({conta}) deve conter {digitos} dígitos.");
 
+        public static Exception ContaDigitoInvalido(string contaDigito, int digitos)
+            => new Boleto2NetException($"O dígito da conta ({contaDigito}) deve conter {digitos} dígitos.");
+
         public static Exception CodigoCedenteInvalido(string codigoCedente, int digitos)
             => new Boleto2NetException($"O código do cedente ({codigoCedente}) deve conter {digitos} dígitos.");
+
+        public static Exception NossoNumeroInvalido(string nossoNumero, int digitos)
+            => new Boleto2NetException($"O nosso número ({nossoNumero}) deve conter {digitos} dígitos.");
+        
+        public static Exception NossoNumeroDigitoInvalido(string nossoNumeroDigito, int digitos)
+            => new Boleto2NetException($"O dígito do nosso número ({nossoNumeroDigito}) deve conter {digitos} dígitos.");
 
         public static Exception CarteiraNaoImplementada(string carteiraComVariacao)
             => new Boleto2NetException($"Carteira não implementada: {carteiraComVariacao}");

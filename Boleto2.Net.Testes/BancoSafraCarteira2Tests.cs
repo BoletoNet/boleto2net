@@ -4,11 +4,11 @@ using NUnit.Framework;
 namespace Boleto2Net.Testes
 {
     [TestFixture]
-    [Category("Safra Carteira 1")]
-    public class BancoSafraCarteira1
+    [Category("Safra Carteira 2")]
+    public class BancoSafraCarteira2
     {
         readonly IBanco _banco;
-        public BancoSafraCarteira1()
+        public BancoSafraCarteira2()
         {
             var contaBancaria = new ContaBancaria
             {
@@ -16,8 +16,8 @@ namespace Boleto2Net.Testes
                 DigitoAgencia = "5",
                 Conta = "123456",
                 DigitoConta = "7",
-                CarteiraPadrao = "1",
-                TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaSimples,
+                CarteiraPadrao = "2",
+                TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaVinculada,
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
@@ -27,9 +27,9 @@ namespace Boleto2Net.Testes
         }
 
         [Test]
-        public void Safra_1_REM400()
+        public void Safra_2_REM400()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSafraCarteira1), 5, true, "?", 223344);
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSafraCarteira2), 5, true, "?", 223344);
         }
 
 
@@ -43,7 +43,7 @@ namespace Boleto2Net.Testes
         [TestCase(293.21, "468", "BB856A", "8", "00000468-5", "42298693500000293217123450012345670000046852", "42297.12346 50012.345679 00000.468520 8 69350000029321", 2016, 10, 2)]
         [TestCase(276, "561", "BB932A", "9", "00000561-4", "42299702600000276007123450012345670000056142", "42297.12346 50012.345679 00000.561423 9 70260000027600", 2017, 1, 1)]
 
-        public void Safra_1_BoletoOK(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
+        public void Safra_2_BoletoOK(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
             var boleto = new Boleto(_banco)

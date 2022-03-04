@@ -25,9 +25,14 @@ namespace Boleto2Net
     {
         String _vLocalLogoCedente = String.Empty;
 
+        #region Constantes
+        private const int _withBarras = 2;
+        private const int _heightBarras = 60;
+        #endregion Constantes
+
         #region Variaveis
 
-        private string _instrucoesHtml = string.Empty;
+       // private string _instrucoesHtml = string.Empty;
         private bool _mostrarCodigoCarteira = false;
         private bool _formatoCarne = false;
         #endregion Variaveis
@@ -46,6 +51,9 @@ namespace Boleto2Net
 
         [Browsable(true), Description("Gera um relatório com os valores que deram origem ao boleto")]
         public bool ExibirDemonstrativo { get; set; }
+
+        [Browsable(true), Description("Oculta a última linha pontilhada (para boletos alinhados no rodapé da folha")]
+        public bool OcultarLinhaPontilhadaCodigoBarras { get; set; } = false;
 
         /// <summary>
         /// Mostra o código da carteira
@@ -238,7 +246,8 @@ namespace Boleto2Net
                 html.Append(Html.ReciboCedenteParte9);
                 html.Append(Html.ReciboCedenteParte10);
                 html.Append(Html.ReciboCedenteParte11);
-                html.Append(Html.ReciboCedenteParte12);
+                if (OcultarLinhaPontilhadaCodigoBarras == false)
+                    html.Append(Html.ReciboCedenteParte12);
                 return html.ToString();
             }
             catch (Exception ex)
@@ -410,6 +419,9 @@ namespace Boleto2Net
             if (String.IsNullOrWhiteSpace(_vLocalLogoCedente))
                 _vLocalLogoCedente = urlImagemLogo;
 
+            if (String.IsNullOrWhiteSpace(Boleto.Banco.Cedente.CodigoFormatado))
+                Boleto.Banco.FormataCedente();
+
             return html
                 .Replace("@CODIGOBANCO", Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3))
                 .Replace("@DIGITOBANCO", Boleto.Banco.Digito.ToString())
@@ -433,17 +445,17 @@ namespace Boleto2Net
                 .Replace("@QUANTIDADE", (Boleto.QuantidadeMoeda == 0 ? "" : Boleto.QuantidadeMoeda.ToString()))
                 .Replace("@VALORDOCUMENTO", Boleto.ValorMoeda)
                 .Replace("@=VALORDOCUMENTO", (Boleto.ValorTitulo == 0 ? "" : Boleto.ValorTitulo.ToString("R$ ##,##0.00")))
-                .Replace("@VALORCOBRADO", "")
-                .Replace("@OUTROSACRESCIMOS", "")
-                .Replace("@OUTRASDEDUCOES", "")
-                .Replace("@DESCONTOS", "")
+                .Replace("@DESCONTOS", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorDesconto == 0 ? "" : Boleto.ValorDesconto.ToString("R$ ##,##0.00")))
+                .Replace("@OUTRASDEDUCOES", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorAbatimento == 0 ? "" : Boleto.ValorAbatimento.ToString("R$ ##,##0.00")))
+                .Replace("@MORAMULTA", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorMulta == 0 ? "" : Boleto.ValorMulta.ToString("R$ ##,##0.00")))
+                .Replace("@OUTROSACRESCIMOS", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorOutrasDespesas == 0 ? "" : Boleto.ValorOutrasDespesas.ToString("R$ ##,##0.00")))
+                .Replace("@VALORCOBRADO", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorPago == 0 ? "" : Boleto.ValorPago.ToString("R$ ##,##0.00")))
                 .Replace("@AGENCIACONTA", Boleto.Banco.Cedente.CodigoFormatado)
                 .Replace("@SACADO", sacado)
                 .Replace("@ENDERECOSACADO", enderecoSacado)
                 .Replace("@AVALISTA", avalista)
                 .Replace("@AGENCIACODIGOCEDENTE", Boleto.Banco.Cedente.CodigoFormatado)
                 .Replace("@CPFCNPJ", Boleto.Banco.Cedente.CPFCNPJ)
-                .Replace("@MORAMULTA", "")
                 .Replace("@AUTENTICACAOMECANICA", "")
                 .Replace("@USODOBANCO", Boleto.UsoBanco)
                 .Replace("@IMAGEMCODIGOBARRA", imagemCodigoBarras)
@@ -631,7 +643,8 @@ namespace Boleto2Net
         {
             OnLoad(EventArgs.Empty);
 
-            var randomSufix = new Random().Next().ToString(); // para podermos colocar no mesmo email varios boletos diferentes
+            
+            var randomSufix = string.Concat(new Random().Next().ToString(), System.IO.Path.GetRandomFileName().Replace(".", string.Empty));
 
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
             lrImagemLogo = new LinkedResource(stream, MediaTypeNames.Image.Jpeg)
@@ -645,7 +658,7 @@ namespace Boleto2Net
                 ContentId = "barra" + randomSufix
             };
 
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
+            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, Boleto.CodigoBarra.CodigoDeBarras.Length);
             ms = new MemoryStream(Utils.ConvertImageToByte(cb.ToBitmap()));
 
             lrImagemCodigoBarra = new LinkedResource(ms, MediaTypeNames.Image.Gif)
@@ -724,7 +737,7 @@ namespace Boleto2Net
             }
 
             var fnCodigoBarras = Path.GetTempFileName();
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
+            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, Boleto.CodigoBarra.CodigoDeBarras.Length);
             cb.ToBitmap().Save(fnCodigoBarras);
 
             //return HtmlOffLine(fnCorte, fnLogo, fnBarra, fnPonto, fnBarraInterna, fnCodigoBarras).ToString();
@@ -833,7 +846,7 @@ namespace Boleto2Net
             //Prepara o arquivo do código de barras para ser usado no html
             var fnCodigoBarrasUrl = string.Format("{0}{1}_codigoBarras.jpg", url, fileName);
 
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
+            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, Boleto.CodigoBarra.CodigoDeBarras.Length);
 
             //Salva o arquivo conforme o fileName
             cb.ToBitmap().Save(fnCodigoBarras);
@@ -867,7 +880,7 @@ namespace Boleto2Net
             var base64Barra = Convert.ToBase64String(new BinaryReader(streamBarra).ReadBytes((int)streamBarra.Length));
             var fnBarra = string.Format("data:image/gif;base64,{0}", base64Barra);
 
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
+            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, Boleto.CodigoBarra.CodigoDeBarras.Length);
             var base64CodigoBarras = Convert.ToBase64String(cb.ToByte());
             var fnCodigoBarras = string.Format("data:image/gif;base64,{0}", base64CodigoBarras);
 
@@ -908,7 +921,7 @@ namespace Boleto2Net
 
         public Image GeraImagemCodigoBarras(Boleto boleto)
         {
-            var cb = new BarCode2of5i(boleto.CodigoBarra.CodigoDeBarras, 1, 50, boleto.CodigoBarra.CodigoDeBarras.Length);
+            var cb = new BarCode2of5i(boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, boleto.CodigoBarra.CodigoDeBarras.Length);
             return cb.ToBitmap();
         }
 
