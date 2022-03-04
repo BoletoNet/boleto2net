@@ -14,6 +14,7 @@ namespace Boleto2Net
         internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoCaixa());
 
         public Cedente Cedente { get; set; }
+        public byte[] Logo { get; set; }
         public int Codigo { get; } = 104;
         public string Nome { get; } = "Caixa Econômica Federal";
         public string Digito { get; } = "0";
@@ -745,12 +746,16 @@ namespace Boleto2Net
             }
         }
 
-        public void LerHeaderRetornoCNAB400(string registro)
+        public void LerHeaderRetornoCNAB400(ArquivoRetorno arquivoRetorno, string registro)
         {
             try
             {
                 if (registro.Substring(0, 9) != "02RETORNO")
                     throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+
+                //12.0 Data de Geração Data de Geração do Arquivo 95 100 9(006) NE008
+                arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(94, 6)).ToString("##-##-##"));
+
             }
             catch (Exception ex)
             {

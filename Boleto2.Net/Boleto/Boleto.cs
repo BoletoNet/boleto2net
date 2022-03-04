@@ -39,6 +39,15 @@ namespace Boleto2Net
         public string NossoNumero { get; set; } = string.Empty;
         public string NossoNumeroDV { get; set; } = string.Empty;
         public string NossoNumeroFormatado { get; set; } = string.Empty;
+        public DateTime DataLimiteRecebimento { get; set; }
+
+        /// <summary>
+        /// Quantidade de dias para recebimento após o vencimento (exclusivo BB)
+        /// Prazo permitido para recebimento do boleto após o vencimento. Após este prazo, o boleto será baixado.
+        /// Este registro deve ser utilizado somente quando o campo 21.2 (Carteira de Cobrança) – Comando – for igual a "01" - Registro de Título
+        /// Este Registro deve, obrigatoriamente, ser inserido após o Registro Detalhe Obrigatório correspondente ao título
+        /// </summary>
+        public int? DiasLimiteRecebimento { get; set; } = null;
 
         public TipoCarteira TipoCarteira { get; set; } = TipoCarteira.CarteiraCobrancaSimples;
         public string Carteira { get; set; } = string.Empty;
@@ -59,6 +68,7 @@ namespace Boleto2Net
         // Valores do Boleto
         public decimal ValorTitulo { get; set; }
 
+        public bool ImprimirValoresAuxiliares { get; set; } = false;
         public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o sacado pagou. Se não existir essa informação no arquivo retorno, deixar zerada.
         public decimal ValorPagoCredito { get; set; } // ValorPagoCredito deve ser preenchido com o valor que será creditado na conta corrente. Se não existir essa informação no arquivo retorno, deixar zerada.
         public decimal ValorJurosDia { get; set; }
@@ -110,8 +120,10 @@ namespace Boleto2Net
         public string ComplementoInstrucao3 { get; set; } = string.Empty;
 
         public string MensagemInstrucoesCaixa { get; set; } = string.Empty;
+        public string MensagemInstrucoesCaixaFormatado { get; set; } = string.Empty;
         public string MensagemArquivoRemessa { get; set; } = string.Empty;
         public string RegistroArquivoRetorno { get; set; } = string.Empty;
+        public bool ImprimirMensagemInstrucao { get; set; }
 
         public IBanco Banco { get; set; }
         public Sacado Sacado { get; set; } = new Sacado();
@@ -153,6 +165,7 @@ namespace Boleto2Net
             Banco.FormataNossoNumero(this);
             Boleto2Net.Banco.FormataCodigoBarra(this);
             Boleto2Net.Banco.FormataLinhaDigitavel(this);
+            Boleto2Net.Banco.FormataMensagemInstrucao(this);
         }
     }
 }

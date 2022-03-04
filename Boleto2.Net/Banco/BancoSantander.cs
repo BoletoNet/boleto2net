@@ -13,6 +13,7 @@ namespace Boleto2Net
         internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoSantander());
 
         public Cedente Cedente { get; set; }
+        public byte[] Logo { get; set; }
         public int Codigo { get; } = 033;
         public string Nome { get; } = "Santander";
         public string Digito { get; } = "7";
@@ -26,7 +27,7 @@ namespace Boleto2Net
             if (!CarteiraFactory<BancoSantander>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
                 throw Boleto2NetException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
-            contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO SANTANDER.", "", "", digitosConta: 9);
+            contaBancaria.FormatarDados("PAGÁVEL PREFERENCIALMENTE NO BANCO SANTANDER.", "", "", digitosConta: 9);
 
             var codigoCedente = Cedente.Codigo;
             Cedente.Codigo = codigoCedente.Length <= 7 ? codigoCedente.PadLeft(7, '0') : throw Boleto2NetException.CodigoCedenteInvalido(codigoCedente, 7);
@@ -290,7 +291,7 @@ namespace Boleto2Net
             }
         }
 
-        public void LerHeaderRetornoCNAB400(string registro)
+        public void LerHeaderRetornoCNAB400(ArquivoRetorno arquivoRetorno, string registro)
         {
             throw new NotImplementedException();
         }

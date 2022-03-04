@@ -18,6 +18,7 @@ namespace Boleto2Net
         }
 
         public Cedente Cedente { get; set; }
+        public byte[] Logo { get; set; }
 
         public int Codigo { get; } = 756;
         public string Nome { get; } = "Sicoob";
@@ -344,18 +345,13 @@ namespace Boleto2Net
                         break;
                 }
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0222, 002, 0, boleto.DiasProtesto, '0');
-                switch (boleto.CodigoBaixaDevolucao)
-                {
-                    case TipoCodigoBaixaDevolucao.NaoBaixarNaoDevolver:
-                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, 2, '0');
-                        break;
-                    case TipoCodigoBaixaDevolucao.BaixarDevolver:
-                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, 1, '0');
-                        break;
-                    default:
-                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, 0, '0');
-                        break;
-                }
+
+                #region
+                //Seq       De      Até     Dig     Dec     Form    Campo/Descrição             Conteudo
+                //38.3P     224     224     001     -       Num     Código p/ Baixa/Devolução   Código para Baixa/Devolução: "0"
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, "0", '0');
+                #endregion
+
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0225, 003, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0228, 002, 0, "09", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0230, 010, 2, "0", '0');
@@ -509,15 +505,15 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 009, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 006, 0, numeroRegistrosNoLote, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0024, 006, 0, numeroRegistroCobrancaSimples, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0030, 015, 2, valorCobrancaSimples, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0045, 006, 0, numeroRegistroCobrancaVinculada, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0051, 015, 2, valorCobrancaVinculada, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 006, 0, numeroRegistroCobrancaCaucionada, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0072, 015, 2, valorCobrancaCaucionada, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0087, 006, 0, numeroRegistroCobrancaDescontada, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0093, 015, 2, valorCobrancaDescontada, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0108, 008, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0116, 125, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0030, 017, 2, valorCobrancaSimples, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0047, 006, 0, numeroRegistroCobrancaVinculada, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0053, 017, 2, valorCobrancaVinculada, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0070, 006, 0, numeroRegistroCobrancaCaucionada, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0076, 017, 2, valorCobrancaCaucionada, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0093, 006, 0, numeroRegistroCobrancaDescontada, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0099, 017, 2, valorCobrancaDescontada, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0116, 008, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0124, 117, 0, Empty, ' ');
                 reg.CodificarLinha();
                 return reg.LinhaRegistro;
             }
@@ -831,7 +827,7 @@ namespace Boleto2Net
         #endregion
 
         #region Retorno - CNAB400
-        public void LerHeaderRetornoCNAB400(string registro)
+        public void LerHeaderRetornoCNAB400(ArquivoRetorno arquivoRetorno, string registro)
         {
             try
             {
@@ -839,6 +835,10 @@ namespace Boleto2Net
                 {
                     throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
                 }
+
+                //095 a 100 Data de Gravação do Arquivo 006 DDMMAA
+                arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(94, 6)).ToString("##-##-##"));
+
             }
             catch (Exception ex)
             {
