@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.UI;
 using Boleto2Net.Exceptions;
 using Boleto2Net.Extensions;
 
+#if (NET40_OR_GREATER)
+
+using System.Web.UI;
+
 [assembly: WebResource("BoletoNet.Imagens.001.jpg", "image/jpg")]
+
+#endif
 
 namespace Boleto2Net
 {

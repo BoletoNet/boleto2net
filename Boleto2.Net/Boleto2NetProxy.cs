@@ -556,6 +556,7 @@ namespace Boleto2Net
                 var html = new StringBuilder();
                 foreach (Boleto boletoTmp in boletos)
                 {
+#if (NET40_OR_GREATER)
                     using (BoletoBancario imprimeBoleto = new BoletoBancario
                     {
                         Boleto = boletoTmp,
@@ -581,6 +582,32 @@ namespace Boleto2Net
                         if (adicionarQuebraPagina)
                             html.Append("</div>");
                     }
+#else
+                    BoletoBancario imprimeBoleto = new BoletoBancario
+                    {
+                        Boleto = boletoTmp,
+                        FormatoCarne = formatoCarne,
+                        OcultarInstrucoes = ocultarInstrucoes,
+                        ExibirDemonstrativo = mostrarDemonstrativo,
+                        MostrarComprovanteEntrega = mostrarComprovanteEntrega,
+                        MostrarComprovanteEntregaLivre = mostrarComprovanteEntregaLivre,
+                        MostrarEnderecoCedente = mostrarEnderecoCedente,
+                        OcultarEnderecoSacado = ocultarEnderecoSacado,
+                        OcultarReciboSacado = ocultarReciboSacado,
+                        MostrarCodigoCarteira = mostrarCodigoCarteira,
+                        OcultarLinhaPontilhadaCodigoBarras = ocultarLinhaPontilhadaCodigoBarras
+                    };
+
+                    if (adicionarQuebraPagina)
+                        html.Append("<div style=\"page-break-after: always;\">");
+                    if (htmlHeader != "")
+                        html.Append(htmlHeader);
+                    html.Append(imprimeBoleto.MontaHtml());
+                    if (htmlFooter != "")
+                        html.Append(htmlFooter);
+                    if (adicionarQuebraPagina)
+                        html.Append("</div>");
+#endif
                 }
                 switch (extensaoArquivo.ToUpper())
                 {
@@ -687,12 +714,19 @@ namespace Boleto2Net
         }
         private void GerarArquivoPDF(string html, string nomeArquivo)
         {
+#if (NET40_OR_GREATER)
             var pdf = new NReco.PdfGenerator.HtmlToPdfConverter().GeneratePdf(html);
+
             using (FileStream fs = new FileStream(nomeArquivo, FileMode.Create))
             {
                 fs.Write(pdf, 0, pdf.Length);
                 fs.Close();
             }
+#else
+            throw new NotImplementedException();
+#endif
+
+            
         }
     }
 

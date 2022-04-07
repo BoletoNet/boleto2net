@@ -5,7 +5,9 @@ using System.ComponentModel;
 namespace Boleto2Net
 {
     [Serializable]
+#if NET40_OR_GREATER
     [Browsable(false)]
+#endif
     public class Boleto
     {
         public Boleto(IBanco banco)

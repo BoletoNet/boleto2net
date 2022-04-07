@@ -1,0 +1,183 @@
+﻿@using Boleto2.Net.AppTesteCore.Models
+@model GeraBoletoViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    .linha {
+        display: flex;
+        flex-direction: row;
+        max-width: 1400px;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        padding: 10px 0;
+        max-height: 90px;
+    }
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">Gerar Boleto</h1>
+</div>
+
+@{
+        Html.BeginForm("GeraBoleto", "Home", Model, FormMethod.Post);
+
+        <div class="linha">
+            <div class="content" style="flex: 2">
+                @Html.LabelFor(x => x.Cnpj)
+                @Html.TextBoxFor(x => x.Cnpj)
+            </div>
+        
+            <div class="content" style= "flex: 10">
+                @Html.LabelFor(x => x.RazaoSocial)
+                @Html.TextBoxFor(x => x.RazaoSocial)
+            </div>
+        </div>
+
+        <div class="linha">
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.EnderecoLogradouro)
+                @Html.TextBoxFor(x => x.EnderecoLogradouro)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.EnderecoNumero)
+                @Html.TextBoxFor(x => x.EnderecoNumero)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.EnderecoComplemento)
+                @Html.TextBoxFor(x => x.EnderecoComplemento)
+            </div>
+
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.EnderecoBairro)
+                @Html.TextBoxFor(x => x.EnderecoBairro)
+            </div>
+        </div>
+
+        <div class="linha">
+            <div class="content" style="flex: 4">
+                @Html.LabelFor(x => x.EnderecoCidade)
+                @Html.TextBoxFor(x => x.EnderecoCidade)
+            </div>
+        
+            <div class="content" style="flex: 4">
+                @Html.LabelFor(x => x.EnderecoEstado)
+                @Html.TextBoxFor(x => x.EnderecoEstado)
+            </div>
+        
+            <div class="content" style="flex: 4">
+                @Html.LabelFor(x => x.EnderecoCep)
+                @Html.TextBoxFor(x => x.EnderecoCep)
+            </div>
+        </div>
+
+        <div class="linha">
+            <div class="content" style="flex: 12">
+                @Html.LabelFor(x => x.Observacoes)
+                @Html.TextBoxFor(x => x.Observacoes)
+            </div>
+        </div>
+        
+        <div class="linha">
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.NumeroBanco)
+                @Html.TextBoxFor(x => x.NumeroBanco)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.Agencia)
+                @Html.TextBoxFor(x => x.Agencia)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.DigitoAgencia)
+                @Html.TextBoxFor(x => x.DigitoAgencia)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.OperacaoConta)
+                @Html.TextBoxFor(x => x.OperacaoConta)
+            </div>
+        </div>
+
+        <div class="linha">
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.Conta)
+                @Html.TextBoxFor(x => x.Conta)
+            </div>
+
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.DigitoConta)
+                @Html.TextBoxFor(x => x.DigitoConta)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.DigitoAgencia)
+                @Html.TextBoxFor(x => x.DigitoAgencia)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.CodigoCedente)
+                @Html.TextBoxFor(x => x.CodigoCedente)
+            </div>
+        </div>
+
+        <div class="linha">
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.DigitoCodigoCedente)
+                @Html.TextBoxFor(x => x.DigitoCodigoCedente)
+            </div>
+       
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.CodigoTransmissao)
+                @Html.TextBoxFor(x => x.CodigoTransmissao)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.Carteira)
+                @Html.TextBoxFor(x => x.Carteira)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.VariacaoCarteira)
+                @Html.TextBoxFor(x => x.VariacaoCarteira)
+            </div>
+        </div>
+
+        <div class="linha">
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.TipoCarteira)
+                @Html.TextBoxFor(x => x.TipoCarteira)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.TipoFormaCadastramento)
+                @Html.TextBoxFor(x => x.TipoFormaCadastramento)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.TipoImpressaoBoleto)
+                @Html.TextBoxFor(x => x.TipoImpressaoBoleto)
+            </div>
+        
+            <div class="content" style="flex: 3">
+                @Html.LabelFor(x => x.TipoDocumento)
+                @Html.TextBoxFor(x => x.TipoDocumento)
+            </div>
+        </div>
+        
+        <button type="submit">Gerar</button>
+
+        Html.EndForm();
+    }
+

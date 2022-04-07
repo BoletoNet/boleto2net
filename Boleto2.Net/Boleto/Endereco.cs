@@ -1,3 +1,5 @@
+using System;
+
 namespace Boleto2Net
 {
     /// <summary>
@@ -12,6 +14,39 @@ namespace Boleto2Net
         public string Cidade { get; set; } = string.Empty;
         public string UF { get; set; } = string.Empty;
         public string CEP { get; set; } = string.Empty;
+
+        public string EnderecoFormatado
+        {
+            get
+            {
+                return string.Format("{0} - {1} - {2}/{3} - CEP: {4}",
+                                                            this.FormataLogradouro(0),
+                                                            this.Bairro,
+                                                            this.Cidade,
+                                                            this.UF,
+                                                            Utils.FormataCEP(this.CEP));
+            }
+        }
+
+        public string EnderecoFormatadoDuasLinhas 
+        { 
+            get
+            {
+                var endereco = this.FormataLogradouro(0) + "<br />" + string.Format("{0} - {1}/{2}", this.Bairro, this.Cidade, this.UF);
+                if (this.CEP != String.Empty)
+                    endereco += string.Format(" - CEP: {0}", Utils.FormataCEP(this.CEP));
+
+                return endereco;
+            } 
+        }
+
+        public string EnderecoFormatadoCompacto
+        {
+            get
+            {
+                return string.Format("{0} - CEP: {1}", this.FormataLogradouro(25), Utils.FormataCEP(this.CEP));
+            }
+        }
 
         public string FormataLogradouro(int tamanhoFinal)
         {

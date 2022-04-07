@@ -1,0 +1,377 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="04/05/2022 13:42:11" ReportInfo.Modified="04/07/2022 15:07:52" ReportInfo.CreatorVersion="2022.2.0.0">
+  <Dictionary>
+    <BusinessObjectDataSource Name="Boleto" ReferenceName="Boleto" DataType="null" Enabled="true">
+      <Column Name="CodigoMoeda" DataType="System.Int32"/>
+      <Column Name="EspecieMoeda" DataType="System.String"/>
+      <Column Name="QuantidadeMoeda" DataType="System.Int32"/>
+      <Column Name="ValorMoeda" DataType="System.String"/>
+      <Column Name="EspecieDocumento" DataType="null"/>
+      <Column Name="NossoNumero" DataType="System.String"/>
+      <Column Name="NossoNumeroDV" DataType="System.String"/>
+      <Column Name="NossoNumeroFormatado" DataType="System.String"/>
+      <Column Name="TipoCarteira" DataType="null"/>
+      <Column Name="Carteira" DataType="System.String"/>
+      <Column Name="VariacaoCarteira" DataType="System.String"/>
+      <Column Name="CarteiraComVariacao" DataType="System.String"/>
+      <Column Name="CarteiraImpressaoBoleto" DataType="System.String"/>
+      <Column Name="DataProcessamento" DataType="System.DateTime"/>
+      <Column Name="DataEmissao" DataType="System.DateTime"/>
+      <Column Name="DataVencimento" DataType="System.DateTime"/>
+      <Column Name="DataCredito" DataType="System.DateTime"/>
+      <Column Name="NumeroDocumento" DataType="System.String"/>
+      <Column Name="NumeroControleParticipante" DataType="System.String"/>
+      <Column Name="Aceite" DataType="System.String"/>
+      <Column Name="UsoBanco" DataType="System.String"/>
+      <Column Name="ValorTitulo" DataType="System.Decimal"/>
+      <Column Name="ImprimirValoresAuxiliares" DataType="System.Boolean" BindableControl="CheckBox"/>
+      <Column Name="ValorPago" DataType="System.Decimal"/>
+      <Column Name="ValorPagoCredito" DataType="System.Decimal"/>
+      <Column Name="ValorJurosDia" DataType="System.Decimal"/>
+      <Column Name="ValorMulta" DataType="System.Decimal"/>
+      <Column Name="ValorDesconto" DataType="System.Decimal"/>
+      <Column Name="ValorTarifas" DataType="System.Decimal"/>
+      <Column Name="ValorOutrasDespesas" DataType="System.Decimal"/>
+      <Column Name="ValorOutrosCreditos" DataType="System.Decimal"/>
+      <Column Name="ValorIOF" DataType="System.Decimal"/>
+      <Column Name="ValorAbatimento" DataType="System.Decimal"/>
+      <Column Name="PercentualJurosDia" DataType="System.Decimal"/>
+      <Column Name="DataJuros" DataType="System.DateTime"/>
+      <Column Name="PercentualMulta" DataType="System.Decimal"/>
+      <Column Name="DataMulta" DataType="System.DateTime"/>
+      <Column Name="DataDesconto" DataType="System.DateTime"/>
+      <Column Name="BancoCobradorRecebedor" DataType="System.String"/>
+      <Column Name="AgenciaCobradoraRecebedora" DataType="System.String"/>
+      <Column Name="CodigoOcorrencia" DataType="System.String"/>
+      <Column Name="DescricaoOcorrencia" DataType="System.String"/>
+      <Column Name="CodigoOcorrenciaAuxiliar" DataType="System.String"/>
+      <Column Name="CodigoProtesto" DataType="null"/>
+      <Column Name="DiasProtesto" DataType="System.Int32"/>
+      <Column Name="CodigoBaixaDevolucao" DataType="null"/>
+      <Column Name="DiasBaixaDevolucao" DataType="System.Int32"/>
+      <Column Name="CodigoInstrucao1" DataType="System.String"/>
+      <Column Name="ComplementoInstrucao1" DataType="System.String"/>
+      <Column Name="CodigoInstrucao2" DataType="System.String"/>
+      <Column Name="ComplementoInstrucao2" DataType="System.String"/>
+      <Column Name="CodigoInstrucao3" DataType="System.String"/>
+      <Column Name="ComplementoInstrucao3" DataType="System.String"/>
+      <Column Name="MensagemInstrucoesCaixa" DataType="System.String"/>
+      <Column Name="MensagemArquivoRemessa" DataType="System.String"/>
+      <Column Name="RegistroArquivoRetorno" DataType="System.String"/>
+      <Column Name="Banco" DataType="null">
+        <Column Name="Cedente" DataType="null">
+          <Column Name="Codigo" DataType="System.String"/>
+          <Column Name="CodigoDV" DataType="System.String"/>
+          <Column Name="CodigoFormatado" DataType="System.String"/>
+          <Column Name="CodigoTransmissao" DataType="System.String"/>
+          <Column Name="CPFCNPJ" DataType="System.String"/>
+          <Column Name="Nome" DataType="System.String"/>
+          <Column Name="Observacoes" DataType="System.String"/>
+          <Column Name="ContaBancaria" DataType="null">
+            <Column Name="TipoCarteiraPadrao" DataType="null"/>
+            <Column Name="CarteiraPadrao" DataType="System.String"/>
+            <Column Name="VariacaoCarteiraPadrao" DataType="System.String"/>
+            <Column Name="CarteiraComVariacaoPadrao" DataType="System.String"/>
+            <Column Name="Agencia" DataType="System.String"/>
+            <Column Name="DigitoAgencia" DataType="System.String"/>
+            <Column Name="Conta" DataType="System.String"/>
+            <Column Name="DigitoConta" DataType="System.String"/>
+            <Column Name="OperacaoConta" DataType="System.String"/>
+            <Column Name="TipoFormaCadastramento" DataType="null"/>
+            <Column Name="TipoImpressaoBoleto" DataType="null"/>
+            <Column Name="TipoDocumento" DataType="null"/>
+            <Column Name="LocalPagamento" DataType="System.String"/>
+            <Column Name="MensagemFixaTopoBoleto" DataType="System.String"/>
+            <Column Name="MensagemFixaSacado" DataType="System.String"/>
+            <Column Name="CodigoBancoCorrespondente" DataType="System.Int32"/>
+            <Column Name="NossoNumeroBancoCorrespondente" DataType="System.String"/>
+            <Column Name="TipoDistribuicao" DataType="null"/>
+          </Column>
+          <Column Name="Endereco" DataType="null">
+            <Column Name="LogradouroEndereco" DataType="System.String"/>
+            <Column Name="LogradouroNumero" DataType="System.String"/>
+            <Column Name="LogradouroComplemento" DataType="System.String"/>
+            <Column Name="Bairro" DataType="System.String"/>
+            <Column Name="Cidade" DataType="System.String"/>
+            <Column Name="UF" DataType="System.String"/>
+            <Column Name="CEP" DataType="System.String"/>
+            <Column Name="EnderecoFormatado" DataType="System.String"/>
+            <Column Name="EnderecoFormatadoDuasLinhas" DataType="System.String"/>
+            <Column Name="EnderecoFormatadoCompacto" DataType="System.String"/>
+          </Column>
+          <Column Name="MostrarCNPJnoBoleto" DataType="System.Boolean" BindableControl="CheckBox"/>
+        </Column>
+        <Column Name="Codigo" DataType="System.Int32"/>
+        <Column Name="Nome" DataType="System.String"/>
+        <Column Name="Digito" DataType="System.String"/>
+        <BusinessObjectDataSource Name="IdsRetornoCnab400RegistroDetalhe" DataType="null" Enabled="true">
+          <Column Name="Length" DataType="System.Int32"/>
+        </BusinessObjectDataSource>
+        <Column Name="RemoveAcentosArquivoRemessa" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </Column>
+      <Column Name="Sacado" DataType="null">
+        <Column Name="Nome" DataType="System.String"/>
+        <Column Name="NomeFormatadoParaBoleto" DataType="System.String"/>
+        <Column Name="Observacoes" DataType="System.String"/>
+        <Column Name="Endereco" DataType="null">
+          <Column Name="LogradouroEndereco" DataType="System.String"/>
+          <Column Name="LogradouroNumero" DataType="System.String"/>
+          <Column Name="LogradouroComplemento" DataType="System.String"/>
+          <Column Name="Bairro" DataType="System.String"/>
+          <Column Name="Cidade" DataType="System.String"/>
+          <Column Name="UF" DataType="System.String"/>
+          <Column Name="CEP" DataType="System.String"/>
+          <Column Name="EnderecoFormatado" DataType="System.String"/>
+          <Column Name="EnderecoFormatadoDuasLinhas" DataType="System.String"/>
+          <Column Name="EnderecoFormatadoCompacto" DataType="System.String"/>
+        </Column>
+        <Column Name="CPFCNPJ" DataType="System.String"/>
+      </Column>
+      <Column Name="Avalista" DataType="null">
+        <Column Name="Nome" DataType="System.String"/>
+        <Column Name="Observacoes" DataType="System.String"/>
+        <Column Name="Endereco" DataType="null">
+          <Column Name="LogradouroEndereco" DataType="System.String"/>
+          <Column Name="LogradouroNumero" DataType="System.String"/>
+          <Column Name="LogradouroComplemento" DataType="System.String"/>
+          <Column Name="Bairro" DataType="System.String"/>
+          <Column Name="Cidade" DataType="System.String"/>
+          <Column Name="UF" DataType="System.String"/>
+          <Column Name="CEP" DataType="System.String"/>
+          <Column Name="EnderecoFormatado" DataType="System.String"/>
+          <Column Name="EnderecoFormatadoDuasLinhas" DataType="System.String"/>
+          <Column Name="EnderecoFormatadoCompacto" DataType="System.String"/>
+        </Column>
+        <Column Name="CPFCNPJ" DataType="System.String"/>
+      </Column>
+      <Column Name="CodigoBarra" DataType="null">
+        <Column Name="CodigoDeBarras" DataType="System.String"/>
+        <Column Name="LinhaDigitavel" DataType="System.String"/>
+        <Column Name="CodigoBanco" DataType="System.String"/>
+        <Column Name="Moeda" DataType="System.Int32"/>
+        <Column Name="CampoLivre" DataType="System.String"/>
+        <Column Name="FatorVencimento" DataType="System.Int64"/>
+        <Column Name="ValorDocumento" DataType="System.String"/>
+        <Column Name="DigitoVerificador" DataType="System.String"/>
+      </Column>
+      <BusinessObjectDataSource Name="Demonstrativos" DataType="null" Enabled="true">
+        <Column Name="Descricao" DataType="System.String"/>
+        <BusinessObjectDataSource Name="Itens" DataType="null" Enabled="true">
+          <Column Name="Descricao" DataType="System.String"/>
+          <Column Name="Referencia" DataType="System.String"/>
+          <Column Name="Valor" DataType="System.Decimal"/>
+        </BusinessObjectDataSource>
+      </BusinessObjectDataSource>
+      <Column Name="IdentificadorDebitoAutomatico" DataType="System.String"/>
+      <Column Name="AvisoDebitoAutomatico" DataType="System.String"/>
+    </BusinessObjectDataSource>
+    <Parameter Name="MostrarCodigoCarteira" DataType="System.Boolean"/>
+    <Parameter Name="ExibirDemonstrativo" DataType="System.Boolean"/>
+    <Parameter Name="OcultarLinhaPontilhadaCodigoBarras" DataType="System.Boolean"/>
+    <Parameter Name="FormatoCarne" DataType="System.Boolean"/>
+    <Parameter Name="MostrarComprovanteEntregaLivre" DataType="System.Boolean"/>
+    <Parameter Name="MostrarComprovanteEntrega" DataType="System.Boolean"/>
+    <Parameter Name="OcultarEnderecoSacado" DataType="System.Boolean"/>
+    <Parameter Name="OcultarInstrucoes" DataType="System.Boolean"/>
+    <Parameter Name="OcultarReciboSacado" DataType="System.Boolean"/>
+  </Dictionary>
+  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
+    <DataBand Name="PageBoleto" Width="718.2" Height="9.45" Visible="false" CanShrink="true" DataSource="Boleto">
+      <DataBand Name="PageComprovanteEntrega" Top="13.45" Width="718.2" Height="9.45" Visible="false" DataSource="Boleto">
+        <DataBand Name="ComprovanteEntregaHeader" Top="26.9" Width="718.2" Height="47.25" VisibleExpression="[MostrarComprovanteEntrega] == true" DataSource="Boleto">
+          <PictureObject Name="imgBanco1" Left="9.45" Top="9.45" Width="160.65" Height="37.8" IsIntersectedWithOtherObject="true" SizeMode="StretchImage" Image=""/>
+          <TextObject Name="Text4" Left="500.85" Top="28.35" Width="207.9" Height="18.9" Text="Comprovante de Entrega" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
+          <TextObject Name="Text5" Left="9.45" Width="699.3" Height="18.9" Border.Lines="Top" Border.TopLine.Style="Dot" IsIntersectedWithOtherObject="true" Text="Comprovante de Entrega" HorzAlign="Right" Font="Arial, 6.75pt, style=Bold"/>
+          <TextObject Name="Text122" Left="170.1" Top="18.9" Width="85.05" Height="28.35" Border.Lines="Left, Right" Border.LeftLine.Width="2" Border.RightLine.Width="2" Text="[ToString([Boleto.Banco.Codigo]) + &quot;-&quot; + ToString([Boleto.Banco.Digito])]" HorzAlign="Center" VertAlign="Bottom" Font="Arial, 17.25pt, style=Bold"/>
+        </DataBand>
+        <DataBand Name="ComprovanteEntregaContents" Top="78.15" Width="718.2" Height="85.05" VisibleExpression="[MostrarComprovanteEntrega] == true" DataSource="Boleto">
+          <TextObject Name="Text6" Left="9.45" Width="292.95" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Beneficiário" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text7" Left="302.4" Width="160.65" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Agência / Código do Beneficiário" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text8" Left="463.05" Width="132.3" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Vencimento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text9" Left="595.35" Width="113.4" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Nº do Documento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text10" Left="9.45" Top="9.45" Width="292.95" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Banco.Cedente.Nome]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text11" Left="302.4" Top="9.45" Width="160.65" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Banco.Cedente.CodigoFormatado]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text12" Left="463.05" Top="9.45" Width="132.3" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[FormatDateTime([Boleto.DataVencimento], &quot;dd/MM/yyyy&quot;)]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text13" Left="595.35" Top="9.45" Width="113.4" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.NumeroDocumento]" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text16" Left="9.45" Top="28.35" Width="292.95" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Pagador" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text17" Left="9.45" Top="37.8" Width="292.95" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Sacado.NomeFormatadoParaBoleto]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text18" Left="302.4" Top="28.35" Width="160.65" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Carteira / Nosso Número" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text19" Left="302.4" Top="37.8" Width="160.65" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.NossoNumeroFormatado]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text20" Left="463.05" Top="28.35" Width="132.3" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Espécie" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text21" Left="463.05" Top="37.8" Width="132.3" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.EspecieMoeda]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text22" Left="595.35" Top="28.35" Width="113.4" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Valor do Documento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text23" Left="595.35" Top="37.8" Width="113.4" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.ValorTitulo]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text24" Left="9.45" Top="56.7" Width="585.9" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Local de Pagamento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text25" Left="9.45" Top="66.15" Width="585.9" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Banco.Cedente.ContaBancaria.LocalPagamento]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text26" Left="595.35" Top="66.15" Width="113.4" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[FormatDateTime([Boleto.DataProcessamento], &quot;dd/MM/yyyy&quot;)]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text27" Left="595.35" Top="56.7" Width="113.4" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Data do Processamento" Font="Arial, 6.75pt"/>
+        </DataBand>
+        <DataBand Name="ComprovanteEntregaFooter" Top="167.2" Width="718.2" Height="85.05" VisibleExpression="[MostrarComprovanteEntrega] == true" DataSource="Boleto">
+          <ContainerObject Name="containerComprovanteEntrega" Left="9.45" Width="699.3" Height="37.8" CanShrink="true">
+            <TextObject Name="Text29" Top="9.45" Width="236.25" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" VertAlign="Center" Font="Arial, 8.25pt"/>
+            <TextObject Name="Text34" Left="236.25" Top="9.45" Width="113.4" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" VertAlign="Center" Font="Arial, 8.25pt"/>
+            <TextObject Name="Text30" Left="236.25" Width="113.4" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Data" Font="Arial, 6.75pt"/>
+            <TextObject Name="Text35" Left="349.65" Top="9.45" Width="113.4" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" VertAlign="Center" Font="Arial, 8.25pt"/>
+            <TextObject Name="Text31" Left="349.65" Width="113.4" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Assinatura" Font="Arial, 6.75pt"/>
+            <TextObject Name="Text36" Left="463.05" Top="9.45" Width="122.85" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" VertAlign="Center" Font="Arial, 8.25pt"/>
+            <TextObject Name="Text32" Left="463.05" Width="122.85" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Data" Font="Arial, 6.75pt"/>
+            <TextObject Name="Text37" Left="585.9" Top="9.45" Width="113.4" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" VertAlign="Center" Font="Arial, 8.25pt"/>
+            <TextObject Name="Text33" Left="585.9" Width="113.4" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Entregador" Font="Arial, 6.75pt"/>
+            <TextObject Name="Text28" Width="236.25" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Recebi(emos) o bloqueto" Font="Arial, 6.75pt"/>
+            <TextObject Name="txtObservacaoComprovanteEntrega" Top="28.35" Width="217.35" Height="37.8" VisibleExpression="[MostrarComprovanteEntregaLivre] == true" CanShrink="true" Text="Observações para uso da empresa entregadora" Font="Arial, 6.75pt"/>
+            <ContainerObject Name="containerMotivoNaoEntrega" Top="28.35" Width="699.3" Height="47.25" VisibleExpression="[MostrarComprovanteEntregaLivre] == false" ShiftMode="WhenOverlapped">
+              <TextObject Name="Text39" Top="9.45" Width="94.5" Height="18.9" Text="(  ) Mudou-se" VertAlign="Center" Font="Arial, 6pt, style=Bold"/>
+              <TextObject Name="Text40" Top="22.68" Width="94.5" Height="18.9" Text="(  ) Desconhecido" VertAlign="Center" Font="Arial, 6pt, style=Bold"/>
+              <TextObject Name="Text41" Left="94.5" Top="9.45" Width="94.5" Height="18.9" Text="(  ) Ausente" VertAlign="Center" Font="Arial, 6pt, style=Bold"/>
+              <TextObject Name="Text42" Left="94.5" Top="22.68" Width="94.5" Height="18.9" Text="(  ) Falecido" VertAlign="Center" Font="Arial, 6pt, style=Bold"/>
+              <TextObject Name="Text43" Left="189" Top="9.45" Width="122.85" Height="18.9" Text="(  ) Não existe n. indicado" VertAlign="Center" Font="Arial, 6pt, style=Bold"/>
+              <TextObject Name="Text44" Left="189" Top="22.68" Width="122.85" Height="18.9" Text="(  ) Endereço insuficiente" VertAlign="Center" Font="Arial, 6pt, style=Bold"/>
+              <TextObject Name="Text46" Left="406.35" Top="22.68" Width="132.3" Height="18.9" Text="(  ) Outros (Anotar no verso)" VertAlign="Center" Font="Arial, 6pt, style=Bold"/>
+              <TextObject Name="Text45" Left="406.35" Top="9.45" Width="132.3" Height="18.9" Text="(  ) Recusado" VertAlign="Center" Font="Arial, 6pt, style=Bold"/>
+              <TextObject Name="Text47" Left="604.8" Top="9.45" Width="94.5" Height="18.9" Text="(  ) Não procurado" VertAlign="Center" Font="Arial, 6pt, style=Bold"/>
+              <TextObject Name="Text38" Width="264.6" Height="9.45" Text="Motivo de não entrega (para uso da empresa entregadora)" Font="Arial, 6.75pt"/>
+            </ContainerObject>
+          </ContainerObject>
+        </DataBand>
+      </DataBand>
+      <DataBand Name="PageReciboPagador" Top="256.25" Width="718.2" Height="18.9" Visible="false" DataSource="Boleto">
+        <DataBand Name="ReciboSacadoHeader" Top="279.15" Width="718.2" Height="47.25" VisibleExpression="[OcultarReciboSacado] == false" DataSource="Boleto">
+          <TextObject Name="Text49" Left="255.15" Top="28.35" Width="453.6" Height="18.9" Text="[Boleto.CodigoBarra.LinhaDigitavel]" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
+          <TextObject Name="Text121" Left="170.1" Top="18.9" Width="85.05" Height="28.35" Border.Lines="Left, Right" Border.LeftLine.Width="2" Border.RightLine.Width="2" Text="[ToString([Boleto.Banco.Codigo]) + &quot;-&quot; + ToString([Boleto.Banco.Digito])]" HorzAlign="Center" VertAlign="Bottom" Font="Arial, 17.25pt, style=Bold"/>
+          <PictureObject Name="imgBanco2" Left="9.45" Top="9.45" Width="160.65" Height="37.8" IsIntersectedWithOtherObject="true" SizeMode="StretchImage" Image=""/>
+          <TextObject Name="Text93" Left="9.45" Width="699.3" Height="18.9" Border.Lines="Top" Border.TopLine.Style="Dot" IsIntersectedWithOtherObject="true" Text="Recibo do Pagador" HorzAlign="Right" Font="Arial, 6.75pt, style=Bold"/>
+        </DataBand>
+        <DataBand Name="ReciboSacadoContent" Top="330.4" Width="718.2" Height="113.4" VisibleExpression="[OcultarReciboSacado] == false" DataSource="Boleto">
+          <TextObject Name="Text106" Left="481.95" Top="94.5" Width="226.8" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[IIf([Boleto.ImprimirValoresAuxiliares] == true, [Boleto.ValorPago], 0)]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text107" Left="481.95" Top="85.05" Width="226.8" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="(=) Valor Cobrado" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text108" Left="359.1" Top="94.5" Width="122.85" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[IIf([Boleto.ImprimirValoresAuxiliares] == true, [Boleto.ValorOutrasDespesas], 0)]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text109" Left="359.1" Top="85.05" Width="122.85" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="(+) Outros Acréscimos" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text110" Left="255.15" Top="94.5" Width="103.95" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[IIf([Boleto.ImprimirValoresAuxiliares] == true, [Boleto.ValorMulta], 0)]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text111" Left="255.15" Top="85.05" Width="103.95" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="(+) Mora / Multa" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text112" Left="132.3" Top="94.5" Width="122.85" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[IIf([Boleto.ImprimirValoresAuxiliares] == true, [Boleto.ValorAbatimento], 0)]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text113" Left="132.3" Top="85.05" Width="122.85" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="(-) Outras deduções" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text114" Left="9.45" Top="94.5" Width="122.85" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[IIf([Boleto.ImprimirValoresAuxiliares] == true, [Boleto.ValorDesconto], 0)]" HideZeros="true" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt">
+            <Formats>
+              <CurrencyFormat/>
+              <GeneralFormat/>
+            </Formats>
+          </TextObject>
+          <TextObject Name="Text115" Left="9.45" Top="85.05" Width="122.85" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="(-) Desconto / Abatimentos" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text99" Left="9.45" Top="66.15" Width="179.55" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.NumeroDocumento]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text101" Left="189" Top="66.15" Width="160.65" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Banco.Cedente.CPFCNPJ]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text102" Left="349.65" Top="66.15" Width="132.3" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[FormatDateTime([Boleto.DataVencimento], &quot;dd/MM/yyyy&quot;)]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text104" Left="481.95" Top="66.15" Width="226.8" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.ValorTitulo]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text98" Left="9.45" Top="56.7" Width="179.55" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Número do Documento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text100" Left="189" Top="56.7" Width="160.65" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="CPF/CNPJ" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text103" Left="349.65" Top="56.7" Width="132.3" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Vencimento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text105" Left="481.95" Top="56.7" Width="226.8" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Valor do Documento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text97" Left="9.45" Top="37.8" Width="699.3" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Banco.Cedente.Endereco.EnderecoFormatado]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text96" Left="9.45" Top="28.35" Width="699.3" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Endereço do Beneficiário" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text54" Left="9.45" Top="9.45" Width="292.95" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Banco.Cedente.Nome]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text55" Left="302.4" Top="9.45" Width="160.65" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Banco.Cedente.CodigoFormatado]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text56" Left="463.05" Top="9.45" Width="66.15" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.EspecieMoeda]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text57" Left="595.35" Top="9.45" Width="113.4" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.NossoNumeroFormatado]" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text95" Left="529.2" Top="9.45" Width="66.15" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.QuantidadeMoeda]" HideZeros="true" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text50" Left="9.45" Width="292.95" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Beneficiário" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text51" Left="302.4" Width="160.65" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Agência / Código do Beneficiário" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text52" Left="463.05" Width="66.15" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Espécie" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text53" Left="595.35" Width="113.4" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Carteira / Nosso número" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text94" Left="529.2" Width="66.15" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Quantidade" Font="Arial, 6.75pt"/>
+        </DataBand>
+        <DataBand Name="ReciboSacadoInstrucoes" Top="447.8" Width="718.2" Height="75.6" VisibleExpression="[OcultarReciboSacado] == false" CanGrow="true" CanShrink="true" CanBreak="true" DataSource="Boleto">
+          <ContainerObject Name="ContainerInstrucoesSacado" Left="9.45" Width="699.3" Height="75.6" Border.Lines="All" Border.Width="1.5" CanGrow="true">
+            <TextObject Name="lblInstrucoesSacado" Width="699.3" Height="9.45" Dock="Top" Anchor="Top, Left, Right" CanBreak="false" Text="Instruções (Texto de responsabilidade do beneficiário)" Font="Arial, 6.75pt"/>
+            <TextObject Name="txtMensagemFixaSacado" Top="9.45" Width="699.3" Height="17.01" Dock="Top" Anchor="Top, Left, Right" VisibleExpression="[Boleto.Banco.Cedente.ContaBancaria.MensagemFixaSacado] != &quot;&quot;" CanShrink="true" CanBreak="false" Text="[Boleto.Banco.Cedente.ContaBancaria.MensagemFixaSacado]" Padding="2, 2, 2, 0" Font="Arial, 8.25pt"/>
+            <TextObject Name="txtMensagemInstrucoesCaixa" Top="26.46" Width="699.3" Height="49.14" Dock="Fill" Anchor="Top, Left, Right" CanGrow="true" CanShrink="true" Text="[Boleto.MensagemInstrucoesCaixa]" Font="Arial, 8.25pt" TextRenderType="HtmlTags"/>
+          </ContainerObject>
+        </DataBand>
+        <DataBand Name="ReciboSacadoPagador" Top="527.4" Width="718.2" Height="94.5" VisibleExpression="[OcultarReciboSacado] == false" CanGrow="true" DataSource="Boleto">
+          <ContainerObject Name="ContainerPagadorSacado" Left="9.45" Width="699.3" Height="56.7" Border.Lines="All" Border.Width="1.5" CanGrow="true">
+            <TextObject Name="lblPagadorSacado" Width="699.3" Height="9.45" Dock="Top" Anchor="Top, Left, Right" Text="Pagador" Font="Arial, 6.75pt"/>
+            <TextObject Name="txtNomePagadorSacado" Top="9.45" Width="699.3" Height="18.9" Dock="Top" Anchor="Top, Left, Right" Text="[Boleto.Sacado.NomeFormatadoParaBoleto]" Padding="2, 3, 2, 0" Font="Arial, 8.25pt"/>
+            <TextObject Name="txtEnderecoPagadorSacado" Top="28.35" Width="699.3" Height="28.35" Dock="Fill" Anchor="Top, Left, Right" VisibleExpression="[OcultarEnderecoSacado] == false" CanGrow="true" Text="[Boleto.Sacado.Endereco.EnderecoFormatadoDuasLinhas]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" Font="Arial, 8.25pt" TextRenderType="HtmlTags"/>
+          </ContainerObject>
+          <TextObject Name="Text124" Left="9.45" Top="75.6" Width="699.3" Height="9.45" Border.Lines="Bottom" Border.TopLine.Style="Dash" Border.BottomLine.Style="Dash" Text="Corte na linha pontilhada" HorzAlign="Right" Font="Arial, 6pt"/>
+          <TextObject Name="Text120" Left="444.15" Top="56.7" Width="264.6" Height="9.45" Text="Autenticação Mecânica" Padding="2, 2, 2, 0" HorzAlign="Right" Font="Arial, 6pt"/>
+        </DataBand>
+      </DataBand>
+      <DataBand Name="PageReciboCedente" Top="625.9" Width="718.2" Height="9.45" Visible="false" DataSource="Boleto">
+        <DataBand Name="ReciboCedenteHeader" Top="639.35" Width="718.2" Height="37.8" DataSource="Boleto">
+          <PictureObject Name="imgBanco3" Left="9.45" Width="160.65" Height="37.8" SizeMode="StretchImage" Image=""/>
+          <TextObject Name="Text126" Left="255.15" Top="18.9" Width="453.6" Height="18.9" Text="[Boleto.CodigoBarra.LinhaDigitavel]" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
+          <TextObject Name="Text163" Left="170.1" Top="9.45" Width="85.05" Height="28.35" Border.Lines="Left, Right" Border.LeftLine.Width="2" Border.RightLine.Width="2" Text="[ToString([Boleto.Banco.Codigo]) + &quot;-&quot; + ToString([Boleto.Banco.Digito])]" HorzAlign="Center" VertAlign="Bottom" Font="Arial, 17.25pt, style=Bold"/>
+        </DataBand>
+        <DataBand Name="ReciboCedenteContents" Top="681.15" Width="718.2" Height="113.4" DataSource="Boleto">
+          <TextObject Name="Text127" Left="9.45" Top="85.05" Width="94.5" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Uso do Banco" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text128" Left="103.95" Top="85.05" Width="37.8" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="CIP" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text129" Left="236.25" Top="85.05" Width="66.15" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Espécie" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text130" Left="538.65" Top="56.7" Width="170.1" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Carteira / Nosso número" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text131" Left="9.45" Top="94.5" Width="94.5" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text132" Left="103.95" Top="94.5" Width="37.8" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text133" Left="236.25" Top="94.5" Width="66.15" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.EspecieMoeda]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text134" Left="538.65" Top="66.15" Width="170.1" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.NossoNumeroFormatado]" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text138" Left="302.4" Top="85.05" Width="122.85" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Quantidade" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text139" Left="302.4" Top="94.5" Width="122.85" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.QuantidadeMoeda]" HideZeros="true" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text148" Left="538.65" Top="94.5" Width="170.1" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Fill.Color="230, 230, 230" Text="[Boleto.ValorTitulo]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text149" Left="538.65" Top="85.05" Width="170.1" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Fill.Color="230, 230, 230" Text="(=) Valor do Documento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text166" Left="9.45" Width="529.2" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Local de Pagamento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text167" Left="9.45" Top="9.45" Width="529.2" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Banco.Cedente.ContaBancaria.LocalPagamento]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text168" Left="538.65" Width="170.1" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Fill.Color="230, 230, 230" Text="Vencimento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text169" Left="538.65" Top="9.45" Width="170.1" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Fill.Color="230, 230, 230" Text="[FormatDateTime([Boleto.DataVencimento], &quot;dd/MM/yyyy&quot;)]" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text170" Left="9.45" Top="28.35" Width="529.2" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Beneficiário" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text171" Left="9.45" Top="37.8" Width="529.2" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Banco.Cedente.Nome]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text172" Left="538.65" Top="28.35" Width="170.1" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Agência / Código do Beneficiário" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text173" Left="538.65" Top="37.8" Width="170.1" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Banco.Cedente.CodigoFormatado]" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text174" Left="9.45" Top="66.15" Width="132.3" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[FormatDateTime([Boleto.DataEmissao], &quot;dd/MM/yyyy&quot;)]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text175" Left="9.45" Top="56.7" Width="132.3" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Data do Documento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text176" Left="141.75" Top="56.7" Width="160.65" Height="9.45" Border.Lines="Left, Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Número do Documento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text177" Left="141.75" Top="66.15" Width="160.65" Height="18.9" Border.Lines="Left, Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.NumeroDocumento]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text178" Left="302.4" Top="56.7" Width="66.15" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Espécie Doc" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text179" Left="302.4" Top="66.15" Width="66.15" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.EspecieDocumento]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text180" Left="368.55" Top="56.7" Width="56.7" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Aceite" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text181" Left="368.55" Top="66.15" Width="56.7" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.Aceite]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text182" Left="425.25" Top="66.15" Width="113.4" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[FormatDateTime([Boleto.DataProcessamento], &quot;dd/MM/yyyy&quot;)]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text183" Left="425.25" Top="56.7" Width="113.4" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Data do Processamento" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text184" Left="141.75" Top="85.05" Width="94.5" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="Carteira" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text185" Left="141.75" Top="94.5" Width="94.5" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.CarteiraImpressaoBoleto]" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text186" Left="425.25" Top="94.5" Width="113.4" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[Boleto.ValorMoeda]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text187" Left="425.25" Top="85.05" Width="113.4" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" Text="(x) Valor" Font="Arial, 6.75pt"/>
+        </DataBand>
+        <DataBand Name="ReciboCedenteInstrucoes" Top="798.55" Width="718.2" Height="141.75" DataSource="Boleto">
+          <ContainerObject Name="ContainerInstrucoesCedente" Left="9.45" Width="529.2" Height="141.75" Border.Lines="All" Border.Width="1.5">
+            <TextObject Name="lblInstrucoesCedente" Width="529.2" Height="9.45" Dock="Top" Anchor="Top, Left, Right" CanBreak="false" Text="Instruções (Texto de responsabilidade do beneficiário)" Font="Arial, 6.75pt"/>
+            <TextObject Name="Text204" Top="9.45" Width="529.2" Height="132.3" Dock="Fill" Anchor="Top, Left, Right" CanGrow="true" CanShrink="true" Text="[Boleto.MensagemInstrucoesCaixa]" Padding="2, 3, 2, 0" Font="Arial, 8.25pt" TextRenderType="HtmlTags"/>
+          </ContainerObject>
+          <TextObject Name="Text191" Left="538.65" Top="9.45" Width="170.1" Height="18.9" Border.Lines="Right, Bottom" Border.LeftLine.Width="1.5" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[IIf([Boleto.ImprimirValoresAuxiliares] == true, [Boleto.ValorDesconto], &quot;&quot;)]" HideZeros="true" HorzAlign="Right" VertAlign="Bottom" Font="Arial, 8.25pt">
+            <Formats>
+              <CurrencyFormat/>
+              <GeneralFormat/>
+            </Formats>
+          </TextObject>
+          <TextObject Name="Text192" Left="538.65" Width="170.1" Height="9.45" Border.Lines="Right, Top" Border.LeftLine.Width="1.5" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" CanBreak="false" Text="(-) Desconto / Abatimentos" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text193" Left="538.65" Top="37.8" Width="170.1" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[IIf([Boleto.ImprimirValoresAuxiliares] == true, [Boleto.ValorAbatimento], &quot;&quot;)]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Bottom" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text194" Left="538.65" Top="28.35" Width="170.1" Height="9.45" Border.Lines="Right, Top" Border.TopLine.Width="1.5" Border.RightLine.Width="1.5" CanBreak="false" Text="(-) Outras deduções" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text195" Left="538.65" Top="66.15" Width="170.1" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[IIf([Boleto.ImprimirValoresAuxiliares] == true, [Boleto.ValorMulta], &quot;&quot;)]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Bottom" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text196" Left="538.65" Top="56.7" Width="170.1" Height="9.45" Border.Lines="Right" Border.RightLine.Width="1.5" CanBreak="false" Text="(+) Mora / Multa" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text197" Left="538.65" Top="94.5" Width="170.1" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[IIf([Boleto.ImprimirValoresAuxiliares] == true, [Boleto.ValorOutrasDespesas], &quot;&quot;)]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Bottom" Font="Arial, 8.25pt"/>
+          <TextObject Name="Text198" Left="538.65" Top="85.05" Width="170.1" Height="9.45" Border.Lines="Right" Border.RightLine.Width="1.5" CanBreak="false" Text="(+) Outros Acréscimos" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text200" Left="538.65" Top="113.4" Width="170.1" Height="9.45" Border.Lines="Right" Border.RightLine.Width="1.5" CanBreak="false" Text="(=) Valor Cobrado" Font="Arial, 6.75pt"/>
+          <TextObject Name="Text199" Left="538.65" Top="122.85" Width="170.1" Height="18.9" Border.Lines="Right, Bottom" Border.RightLine.Width="1.5" Border.BottomLine.Width="1.5" Text="[IIf([Boleto.ImprimirValoresAuxiliares] == true, [Boleto.ValorPago], &quot;&quot;)]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Bottom" Font="Arial, 8.25pt"/>
+        </DataBand>
+        <DataBand Name="ReciboCedenteFooter" Top="944.3" Width="718.2" Height="141.75" DataSource="Boleto">
+          <TextObject Name="Text162" Left="500.85" Top="56.7" Width="94.5" Height="9.45" Text="Autenticação Mecânica" Padding="2, 2, 2, 0" HorzAlign="Right" Font="Arial, 6pt"/>
+          <TextObject Name="Text189" Left="604.8" Top="56.7" Width="103.95" Height="9.45" Text="- Ficha de compensação" Padding="2, 2, 2, 0" Font="Arial, 6pt, style=Bold"/>
+          <TextObject Name="Text190" Left="9.45" Top="56.7" Width="75.6" Height="9.45" Text="Sacador / Avalista" Padding="2, 2, 2, 0" Font="Arial, 6pt"/>
+          <BarcodeObject Name="codigoBarras" Left="9.45" Top="75.6" Width="430" Height="47.25" CanGrow="true" Text="34191090082094038065040838310007989610000001000" ShowText="false" AllowExpressions="true" Barcode="2/5 Interleaved"/>
+          <ContainerObject Name="containerPagadorCedente" Left="9.45" Width="699.3" Height="56.7" Border.Lines="All" Border.Width="1.5" CanGrow="true">
+            <TextObject Name="Text135" Width="699.3" Height="9.45" Text="Pagador" Font="Arial, 6.75pt"/>
+            <TextObject Name="Text160" Top="32.13" Width="500.85" Height="18.9" VisibleExpression="[OcultarEnderecoSacado] == false" CanGrow="true" Text="[Boleto.Sacado.Endereco.EnderecoFormatadoDuasLinhas]" HideZeros="true" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" Font="Arial, 8.25pt" TextRenderType="HtmlTags"/>
+            <TextObject Name="Text136" Top="9.45" Width="699.3" Height="18.9" Text="[Boleto.Sacado.NomeFormatadoParaBoleto]" Padding="2, 3, 2, 0" Font="Arial, 8.25pt"/>
+            <TextObject Name="Text188" Left="510.3" Top="47.25" Width="75.6" Height="9.45" Anchor="Bottom, Right" Text="Código de baixa" Padding="2, 0, 2, 2" HorzAlign="Right" Font="Arial, 6pt"/>
+          </ContainerObject>
+          <TextObject Name="Text165" Left="9.45" Top="132.3" Width="699.3" Height="9.45" Border.Lines="Bottom" Border.TopLine.Style="Dash" Border.BottomLine.Style="Dash" Text="Corte na linha pontilhada" HorzAlign="Right" Font="Arial, 6pt"/>
+        </DataBand>
+      </DataBand>
+    </DataBand>
+  </ReportPage>
+</Report>

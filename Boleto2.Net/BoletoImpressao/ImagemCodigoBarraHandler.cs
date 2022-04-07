@@ -5,6 +5,7 @@ using System.IO;
 
 namespace Boleto2Net
 {
+#if (NET40_OR_GREATER)
     internal class ImagemCodigoBarraHandler : IHttpHandler
     {
         #region Constantes
@@ -43,4 +44,5 @@ namespace Boleto2Net
 
         #endregion
     }
+#endif
 }

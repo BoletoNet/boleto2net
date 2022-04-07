@@ -4,12 +4,35 @@ using System.Collections.Generic;
 
 namespace Boleto2Net
 {
-    [Serializable(), Browsable(false)]
+    [Serializable()]
+#if NET40_OR_GREATER
+    [Browsable(false)]
+#endif
     public class Sacado
     {
         private string _cpfcnpj = string.Empty;
 
         public string Nome { get; set; } = string.Empty;
+        public string NomeFormatadoParaBoleto { 
+            get
+            {
+                var sacado = this.Nome;
+                switch (this.TipoCPFCNPJ("A"))
+                {
+                    case "F":
+                        sacado += string.Format(" - CPF: " + Utils.FormataCPF(this.CPFCNPJ));
+                        break;
+                    case "J":
+                        sacado += string.Format(" - CNPJ: " + Utils.FormataCNPJ(this.CPFCNPJ));
+                        break;
+                }
+                
+                if (this.Observacoes != string.Empty)
+                    sacado += " - " + this.Observacoes;
+
+                return sacado;
+            } 
+        }
         public string Observacoes { get; set; } = string.Empty;
         public Endereco Endereco { get; set; } = new Endereco();
         public string CPFCNPJ

@@ -3,7 +3,10 @@ using System.ComponentModel;
 
 namespace Boleto2Net
 {
-    [Serializable, Browsable(false)]
+    [Serializable]
+#if NET40_OR_GREATER
+    [Browsable(false)]
+#endif
     public class Cedente
     {
         private string _cpfcnpj;

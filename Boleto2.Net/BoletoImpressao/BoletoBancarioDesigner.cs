@@ -3,6 +3,8 @@ using System.ComponentModel;
 
 namespace Boleto2Net
 {
+#if (NET40_OR_GREATER)
+    
     internal class BoletoBancarioDesigner : System.Web.UI.Design.ControlDesigner
     {
         public override void Initialize(IComponent component)
@@ -31,4 +33,6 @@ namespace Boleto2Net
             return String.Format(pattern, e.Message);
         }
     }
+
+#endif
 }
