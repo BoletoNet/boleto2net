@@ -306,3 +306,7 @@ OpenCover/
 
 # Custom
 reportoutput/
+
+#App Teste Temp Data
+Boleto2.Net.AppTeste/App_Data
+Boleto2.Net.AppTeste/App_Data/**
