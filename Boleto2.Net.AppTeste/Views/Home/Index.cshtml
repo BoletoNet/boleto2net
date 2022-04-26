@@ -5,179 +5,665 @@
     ViewData["Title"] = "Home Page";
 }
 
-<style>
-    .linha {
-        display: flex;
-        flex-direction: row;
-        max-width: 1400px;
-        justify-content: flex-start;
-        gap: 10px;
-    }
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-    .content {
-        display: flex;
-        flex-direction: column;
-        margin: 0 auto;
-        padding: 10px 0;
-        max-height: 90px;
-    }
-</style>
+<div class="container-fluid container-fixed-lg">
 
-<div class="text-center">
-    <h1 class="display-4">Gerar Boleto</h1>
+   
+    <form id="submitForm" role="form" method="post" action="@Url.Action("GeraBoleto","Home")">
+
+        <br />
+        <br />
+        <br />
+
+        <div class="text-center">
+
+            <h1 class="display-8">Boleto</h1>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_CodigoMoeda, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_CodigoMoeda, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_EspecieMoeda, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_EspecieMoeda, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_QuantidadeMoeda, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_QuantidadeMoeda, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_ValorMoeda, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_ValorMoeda, new { @class = "form-control" })
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_EspecieDocumento, new { @class = "form-control-label" })
+                    @Html.EnumDropDownListFor(x => x.Boleto_EspecieDocumento, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_NossoNumero, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_NossoNumero, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_DataProcessamento, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_DataProcessamento, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_DataEmissao, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_DataEmissao, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_DataVencimento, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_DataVencimento, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_NumeroControleParticipante, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_NumeroControleParticipante, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_NumeroDocumento, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_NumeroDocumento, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_Aceite, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_Aceite, new { @class = "form-control full-width" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Boleto_ValorTitulo, new { @class = "form-control-label" })
+                    @Html.TextBoxFor(x => x.Boleto_ValorTitulo, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+
+        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+            <li class="active">
+                <a href="#tabBeneficiario" data-toggle="tab">Beneficiário</a>
+            </li>
+            <li>
+                <a href="#tabPagador" data-toggle="tab">Pagador</a>
+            </li>
+            <li>
+                <a href="#tabAvalista" data-toggle="tab">Avalista</a>
+            </li>
+            <li>
+                <a href="#tabJurosDescontoProtesto" data-toggle="tab">Ju./Des./Prot.</a>
+            </li>
+            <li>
+                <a href="#tabInstrucoes" data-toggle="tab">Instruções</a>
+            </li>
+        </ul>
+
+        <div id="my-tab-content" class="tab-content">
+
+            <div class="tab-pane active" id="tabBeneficiario">
+                <br />
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_CPFCNPJ, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_CPFCNPJ, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_Codigo, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_Codigo, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_CodigoDV, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_CodigoDV, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_CodigoTransmissao, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_CodigoTransmissao, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_Nome, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_Nome, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_NumeroBanco, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_NumeroBanco, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_Observacoes, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_Observacoes, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_Agencia, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_Agencia, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_DigitoAgencia, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_DigitoAgencia, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_OperacaoConta, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_OperacaoConta, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_Conta, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_Conta, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_DigitoConta, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_DigitoConta, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_MensagemFixaTopoBoleto, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_MensagemFixaTopoBoleto, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_MensagemFixaSacado, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_MensagemFixaSacado, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_TipoDistribuicao, new { @class = "form-control-label" })
+                            @Html.EnumDropDownListFor(x => x.Cedente_TipoDistribuicao, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_Carteira, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_Carteira, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_VariacaoCarteira, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_VariacaoCarteira, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_TipoCarteira, new { @class = "form-control-label" })
+                            @Html.EnumDropDownListFor(x => x.Cedente_TipoCarteira, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_TipoFormaCadastramento, new { @class = "form-control-label" })
+                            @Html.EnumDropDownListFor(x => x.Cedente_TipoFormaCadastramento, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_TipoImpressaoBoleto, new { @class = "form-control-label" })
+                            @Html.EnumDropDownListFor(x => x.Cedente_TipoImpressaoBoleto, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_TipoDocumento, new { @class = "form-control-label" })
+                            @Html.EnumDropDownListFor(x => x.Cedente_TipoDocumento, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <h3 class="display-8">Endereço</h3>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_LogradouroEndereco, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_LogradouroEndereco, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_LogradouroNumero, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_LogradouroNumero, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_LogradouroComplemento, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_LogradouroComplemento, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_Bairro, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_Bairro, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_Cidade, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_Cidade, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_UF, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_UF, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Cedente_CEP, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Cedente_CEP, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+            </div>
+
+            <div class="tab-pane" id="tabPagador">
+                <br />
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Sacado_CPFCNPJ, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Sacado_CPFCNPJ, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Sacado_Nome, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Sacado_Nome, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Sacado_Observacoes, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Sacado_Observacoes, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Sacado_LogradouroEndereco, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Sacado_LogradouroEndereco, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Sacado_LogradouroNumero, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Sacado_LogradouroNumero, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Sacado_LogradouroComplemento, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Sacado_LogradouroComplemento, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Sacado_Bairro, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Sacado_Bairro, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Sacado_Cidade, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Sacado_Cidade, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Sacado_UF, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Sacado_UF, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Sacado_CEP, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Sacado_CEP, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+            </div>
+
+            <div class="tab-pane" id="tabAvalista">
+                <br />
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Avalista_CPFCNPJ, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Avalista_CPFCNPJ, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Avalista_Nome, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Avalista_Nome, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Avalista_Observacoes, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Avalista_Observacoes, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Avalista_LogradouroEndereco, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Avalista_LogradouroEndereco, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Avalista_LogradouroNumero, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Avalista_LogradouroNumero, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Avalista_LogradouroComplemento, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Avalista_LogradouroComplemento, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Avalista_Bairro, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Avalista_Bairro, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Avalista_Cidade, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Avalista_Cidade, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Avalista_UF, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Avalista_UF, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Avalista_CEP, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Avalista_CEP, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+            </div>
+
+            <div class="tab-pane" id="tabJurosDescontoProtesto">
+                <br />
+
+                <div class="text-center">
+                    <h3 class="display-8">Juros</h3>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Juros_ValorJurosDia, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Juros_ValorJurosDia, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Juros_PercentualJurosDia, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Juros_PercentualJurosDia, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Juros_ValorIOF, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Juros_ValorIOF, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Juros_DataJuros, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Juros_DataJuros, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <h3 class="display-8">Desconto</h3>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Desconto_ValorDesconto, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Desconto_ValorDesconto, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Desconto_DataDesconto, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Desconto_DataDesconto, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <h3 class="display-8">Protesto</h3>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Protesto_CodigoProtesto, new { @class = "form-control-label" })
+                            @Html.EnumDropDownListFor(x => x.Protesto_CodigoProtesto, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Protesto_DiasProtesto, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Protesto_DiasProtesto, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+            </div>
+
+            <div class="tab-pane" id="tabInstrucoes">
+                <br />
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Instruções_CodigoInstrucao1, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Instruções_CodigoInstrucao1, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Instruções_ComplementoInstrucao1, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Instruções_ComplementoInstrucao1, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Instruções_CodigoInstrucao2, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Instruções_CodigoInstrucao2, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Instruções_ComplementoInstrucao2, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Instruções_ComplementoInstrucao2, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Instruções_CodigoInstrucao3, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Instruções_CodigoInstrucao3, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Instruções_ComplementoInstrucao3, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Instruções_ComplementoInstrucao3, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Instruções_MensagemInstrucoesCaixa, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Instruções_MensagemInstrucoesCaixa, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Instruções_MensagemArquivoRemessa, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Instruções_MensagemArquivoRemessa, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Instruções_RegistroArquivoRetorno, new { @class = "form-control-label" })
+                            @Html.TextBoxFor(x => x.Instruções_RegistroArquivoRetorno, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+        </div>
+
+
+
+        <button type="submit">Gerar</button>
+
+    </form>
+
 </div>
-
-@{
-    Html.BeginForm("GeraBoleto", "Home", Model, FormMethod.Post);
-
-    <div class="linha">
-        <div class="content" style="flex: 2">
-            @Html.LabelFor(x => x.Cnpj)
-            @Html.TextBoxFor(x => x.Cnpj)
-        </div>
-
-        <div class="content" style="flex: 10">
-            @Html.LabelFor(x => x.RazaoSocial)
-            @Html.TextBoxFor(x => x.RazaoSocial)
-        </div>
-    </div>
-
-    <div class="linha">
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.EnderecoLogradouro)
-            @Html.TextBoxFor(x => x.EnderecoLogradouro)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.EnderecoNumero)
-            @Html.TextBoxFor(x => x.EnderecoNumero)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.EnderecoComplemento)
-            @Html.TextBoxFor(x => x.EnderecoComplemento)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.EnderecoBairro)
-            @Html.TextBoxFor(x => x.EnderecoBairro)
-        </div>
-    </div>
-
-    <div class="linha">
-        <div class="content" style="flex: 4">
-            @Html.LabelFor(x => x.EnderecoCidade)
-            @Html.TextBoxFor(x => x.EnderecoCidade)
-        </div>
-
-        <div class="content" style="flex: 4">
-            @Html.LabelFor(x => x.EnderecoEstado)
-            @Html.TextBoxFor(x => x.EnderecoEstado)
-        </div>
-
-        <div class="content" style="flex: 4">
-            @Html.LabelFor(x => x.EnderecoCep)
-            @Html.TextBoxFor(x => x.EnderecoCep)
-        </div>
-    </div>
-
-    <div class="linha">
-        <div class="content" style="flex: 12">
-            @Html.LabelFor(x => x.Observacoes)
-            @Html.TextBoxFor(x => x.Observacoes)
-        </div>
-    </div>
-
-    <div class="linha">
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.NumeroBanco)
-            @Html.TextBoxFor(x => x.NumeroBanco)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.Agencia)
-            @Html.TextBoxFor(x => x.Agencia)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.DigitoAgencia)
-            @Html.TextBoxFor(x => x.DigitoAgencia)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.OperacaoConta)
-            @Html.TextBoxFor(x => x.OperacaoConta)
-        </div>
-    </div>
-
-    <div class="linha">
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.Conta)
-            @Html.TextBoxFor(x => x.Conta)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.DigitoConta)
-            @Html.TextBoxFor(x => x.DigitoConta)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.DigitoAgencia)
-            @Html.TextBoxFor(x => x.DigitoAgencia)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.CodigoCedente)
-            @Html.TextBoxFor(x => x.CodigoCedente)
-        </div>
-    </div>
-
-    <div class="linha">
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.DigitoCodigoCedente)
-            @Html.TextBoxFor(x => x.DigitoCodigoCedente)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.CodigoTransmissao)
-            @Html.TextBoxFor(x => x.CodigoTransmissao)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.Carteira)
-            @Html.TextBoxFor(x => x.Carteira)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.VariacaoCarteira)
-            @Html.TextBoxFor(x => x.VariacaoCarteira)
-        </div>
-    </div>
-
-    <div class="linha">
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.TipoCarteira)
-            @Html.TextBoxFor(x => x.TipoCarteira)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.TipoFormaCadastramento)
-            @Html.TextBoxFor(x => x.TipoFormaCadastramento)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.TipoImpressaoBoleto)
-            @Html.TextBoxFor(x => x.TipoImpressaoBoleto)
-        </div>
-
-        <div class="content" style="flex: 3">
-            @Html.LabelFor(x => x.TipoDocumento)
-            @Html.TextBoxFor(x => x.TipoDocumento)
-        </div>
-    </div>
-
-    <button type="submit">Gerar</button>
-
-    Html.EndForm();
-}
-
