@@ -9,7 +9,6 @@ namespace Boleto2Net
         public string CarteiraPadrao { get; set; } = string.Empty;
         public string VariacaoCarteiraPadrao { get; set; } = string.Empty;
         public string CarteiraComVariacaoPadrao => string.IsNullOrEmpty(CarteiraPadrao) || string.IsNullOrEmpty(VariacaoCarteiraPadrao) ? $"{CarteiraPadrao}{VariacaoCarteiraPadrao}" : $"{CarteiraPadrao}/{VariacaoCarteiraPadrao}";
-
         public string Agencia { get; set; } = Empty;
         public string DigitoAgencia { get; set; } = Empty;
         public string Conta { get; set; } = Empty;

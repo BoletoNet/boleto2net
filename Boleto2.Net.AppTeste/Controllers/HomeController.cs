@@ -43,12 +43,12 @@ namespace Boleto2.Net.AppTeste.Controllers
                 var boletoProxy = new Boleto2Net.Boleto2NetProxy();
 
 
-                boletoProxy.SetupCobranca(model.Cnpj, model.RazaoSocial, model.EnderecoLogradouro, model.EnderecoNumero,
-                    model.EnderecoComplemento, model.EnderecoBairro, model.EnderecoCidade, model.EnderecoEstado,
-                    model.EnderecoCep, model.Observacoes, model.NumeroBanco, model.Agencia, model.DigitoAgencia,
-                    model.OperacaoConta, model.Conta, model.DigitoAgencia, model.CodigoCedente, model.DigitoCodigoCedente,
-                    model.CodigoTransmissao, model.Carteira, model.VariacaoCarteira, model.TipoCarteira, model.TipoFormaCadastramento,
-                    model.TipoImpressaoBoleto, model.TipoDocumento, ref mensagemErro);
+                boletoProxy.SetupCobranca(model.Cedente_CPFCNPJ, model.Cedente_Nome, model.Cedente_LogradouroEndereco, model.Cedente_LogradouroNumero,
+                    model.Cedente_LogradouroComplemento, model.Cedente_Bairro, model.Cedente_Cidade, model.Cedente_UF,
+                    model.Cedente_CEP, model.Cedente_Observacoes, model.Cedente_NumeroBanco, model.Cedente_Agencia, model.Cedente_DigitoAgencia,
+                    model.Cedente_OperacaoConta, model.Cedente_Conta, model.Cedente_DigitoAgencia, model.Cedente_Codigo, model.Cedente_CodigoDV,
+                    model.Cedente_CodigoTransmissao, model.Cedente_Carteira, model.Cedente_VariacaoCarteira, (int)model.Cedente_TipoCarteira, (int)model.Cedente_TipoFormaCadastramento,
+                    (int)model.Cedente_TipoImpressaoBoleto, (int)model.Cedente_TipoDocumento, ref mensagemErro);
 
                 boletoProxy.NovoBoleto(ref mensagemErro);
                 boletoProxy.DefinirBoleto("DM", "123456", "453", DateTime.Now, DateTime.Now, DateTime.Now.AddDays(10), 141.50m, "1", "N", ref mensagemErro);
