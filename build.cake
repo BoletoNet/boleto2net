@@ -1,7 +1,7 @@
 #addin Cake.Coveralls
 #tool "nuget:?package=NUnit.ConsoleRunner"
 #tool "nuget:?package=OpenCover"
-#tool coveralls.net&version=4.0.1
+#tool coveralls.net&version=3.0.0
 using System.Xml.Linq;
 
 var target = Argument("target", "Default");
