@@ -1,8 +1,7 @@
 #addin Cake.Coveralls
 #tool "nuget:?package=NUnit.ConsoleRunner"
 #tool "nuget:?package=OpenCover"
-#tool coveralls.net
-#tool coveralls.io
+#tool coveralls.net&version=0.7.0
 using System.Xml.Linq;
 
 var target = Argument("target", "Default");
@@ -50,5 +49,4 @@ Task("Build").IsDependentOn("RestorePackages").Does(() =>
 Task("Default").IsDependentOn("Build").Does(() => {});
 //Task("CiBuild").IsDependentOn("RunCoverage").IsDependentOn("RunNugetPack").Does(() => {});
 Task("CiBuild").IsDependentOn("RunTests").IsDependentOn("RunNugetPack").Does(() => {});
-
 RunTarget(target);
