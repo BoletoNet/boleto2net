@@ -64,6 +64,9 @@ namespace Boleto2Net
                         header += Environment.NewLine;
                         header += GerarHeaderLoteRemessaCNAB240(numeroArquivoRemessa, ref numeroRegistroGeral);
                         break;
+                    case TipoArquivo.CNAB400:
+                        header += GerarHeaderRemessaCNAB400(numeroArquivoRemessa, ref numeroRegistroGeral);
+                        break;
                     default:
                         throw new Exception("Santander - Header - Tipo de arquivo inexistente.");
                 }
@@ -109,6 +112,15 @@ namespace Boleto2Net
                         }
 
                         break;
+                    case TipoArquivo.CNAB400:
+                        detalhe += GerarDetalheRemessaCNAB400Registro1(boleto, ref numeroRegistro);
+                        strline = GerarDetalheRemessaCNAB400Registro2(boleto, ref numeroRegistro);
+                        if (!IsNullOrWhiteSpace(strline))
+                        {
+                            detalhe += Environment.NewLine;
+                            detalhe += strline;
+                        }
+                        break;
                     default:
                         throw new Exception("Santander - Detalhe - Tipo de arquivo inexistente.");
                 }
@@ -142,6 +154,9 @@ namespace Boleto2Net
                         // Trailler do Arquivo
                         trailler += Environment.NewLine;
                         trailler += GerarTrailerRemessaCNAB240(ref numeroRegistroGeral);
+                        break;
+                    case TipoArquivo.CNAB400:
+                        trailler = GerarTrailerRemessaCNAB400(ref numeroRegistroGeral, valorBoletoGeral);
                         break;
                     default:
                         throw new Exception("Santander - Trailler - Tipo de arquivo inexistente.");
@@ -671,6 +686,270 @@ namespace Boleto2Net
                 throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
             }
         }
+
+        #region CNAB400
+        private string GerarHeaderRemessaCNAB400(int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        {
+            try
+            {
+                numeroRegistroGeral++;
+                var reg = new TRegistroEDI();
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0002, 001, 0, "1", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0003, 007, 0, "REMESSA", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0010, 002, 0, "01", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0012, 008, 0, "COBRANCA", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0020, 007, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0027, 004, 0, Cedente.ContaBancaria.Agencia, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0031, 008, 0, Cedente.Codigo, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0039, 007, 0, Cedente.ContaBancaria.Conta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0046, 001, 0, Cedente.ContaBancaria.DigitoConta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0047, 030, 0, Cedente.Nome, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0077, 018, 0, "033SANTANDER", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0095, 006, 0, DateTime.Now, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0101, 016, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0117, 275, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0392, 003, 0, numeroArquivoRemessa, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
+                reg.CodificarLinha();
+                return reg.LinhaRegistro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
+            }
+        }
+
+        private string GerarDetalheRemessaCNAB400Registro1(Boleto boleto, ref int numeroRegistroGeral)
+        {
+            try
+            {
+                numeroRegistroGeral++;
+                var reg = new TRegistroEDI();
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "1", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0002, 002, 0, Cedente.TipoCPFCNPJ("0"), '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 014, 0, Cedente.CPFCNPJ, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0018, 004, 0, Cedente.ContaBancaria.Agencia, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0022, 008, 0, Cedente.Codigo, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0030, 007, 0, Cedente.ContaBancaria.Conta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0037, 001, 0, Cedente.ContaBancaria.DigitoConta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 025, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0063, 013, 0, (boleto.NossoNumero + boleto.NossoNumeroDV), '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0076, 001, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0077, 001, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0078, 004, 2, boleto.PercentualMulta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0082, 002, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0084, 014, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0098, 004, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0102, 006, 0, boleto.DataMulta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0108, 001, 0, "5", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0109, 002, 0, boleto.CodigoOcorrencia, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 008, 0, boleto.NumeroDocumento, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0119, 002, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0121, 006, 0, boleto.DataVencimento, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 013, 2, boleto.ValorTitulo, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0140, 003, 0, "033", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0143, 004, 0, Cedente.ContaBancaria.Agencia, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0147, 001, 0, Cedente.ContaBancaria.DigitoAgencia, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0148, 002, 0, AjustaEspecieCnab400(boleto.EspecieDocumento), '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0150, 001, 0, boleto.Aceite, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0151, 006, 0, boleto.DataEmissao, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0157, 002, 0, boleto.CodigoInstrucao1, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0159, 002, 0, boleto.CodigoInstrucao2, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0161, 013, 2, boleto.ValorJurosDia, '0');
+
+                if (boleto.ValorDesconto == 0)
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0174, 006, 0, "0", '0'); // Sem Desconto
+                else
+                    reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0174, 006, 0, boleto.DataDesconto, '0'); // Com Desconto
+
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0180, 013, 2, boleto.ValorDesconto, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0193, 013, 2, boleto.ValorIOF, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0206, 013, 2, boleto.ValorAbatimento, '0');
+
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0219, 002, 0, boleto.Sacado.TipoCPFCNPJ("00"), '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 014, 0, boleto.Sacado.CPFCNPJ, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0235, 040, 0, boleto.Sacado.Nome, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0275, 040, 0, boleto.Sacado.Endereco.FormataLogradouro(40), ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0315, 012, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0327, 008, 0, boleto.Sacado.Endereco.CEP.Replace("-", ""), '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0335, 015, 0, boleto.Sacado.Endereco.Cidade, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0350, 002, 0, boleto.Sacado.Endereco.UF, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 030, 0, boleto.Avalista.Nome, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0382, 001, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0383, 001, 0, "I", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0384, 002, 0, "01", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0386, 006, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0392, 002, 0, boleto.DiasProtesto, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0394, 001, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0395, 006, 0, numeroRegistroGeral, '0');
+                reg.CodificarLinha();
+                return reg.LinhaRegistro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400 - Registro 1.", ex);
+            }
+        }
+
+        private string GerarDetalheRemessaCNAB400Registro2(Boleto boleto, ref int numeroRegistroGeral)
+        {
+            try
+            {
+                if (IsNullOrWhiteSpace(boleto.MensagemArquivoRemessa))
+                    return "";
+
+                numeroRegistroGeral++;
+                var reg = new TRegistroEDI();
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "2", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 016, 0, Empty, ' '); // 4 campos de 80 caracteres cada.
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 020, 0, Cedente.CodigoTransmissao, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0038, 010, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0048, 002, 0, "01", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0050, 050, 0, boleto.MensagemArquivoRemessa, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0100, 283, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0383, 001, 0, "I", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0384, 002, 0, "01", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0386, 009, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, ' ');
+                reg.CodificarLinha();
+                return reg.LinhaRegistro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400 - Registro 2.", ex);
+            }
+        }
+
+        private string GerarTrailerRemessaCNAB400(ref int numeroRegistroGeral, decimal valorBoletoGeral)
+        {
+            try
+            {
+                numeroRegistroGeral++;
+                var reg = new TRegistroEDI();
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "9", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0002, 006, 0, numeroRegistroGeral, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 013, 0, valorBoletoGeral, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0021, 374, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
+                reg.CodificarLinha();
+                return reg.LinhaRegistro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro durante a geração do registro TRAILER do arquivo de REMESSA.", ex);
+            }
+        }
+
+        private string DescricaoOcorrenciaCnab400(string codigo)
+        {
+            switch (codigo)
+            {
+                case "02":
+                    return "Entrada Confirmada";
+                case "03":
+                    return "Entrada Rejeitada";
+                case "06":
+                    return "Liquidação normal";
+                case "09":
+                    return "Baixado Automaticamente via Arquivo";
+                case "10":
+                    return "Baixado conforme instruções da Agência";
+                case "11":
+                    return "Em Ser - Arquivo de Títulos pendentes";
+                case "12":
+                    return "Abatimento Concedido";
+                case "13":
+                    return "Abatimento Cancelado";
+                case "14":
+                    return "Vencimento Alterado";
+                case "15":
+                    return "Liquidação em Cartório";
+                case "16":
+                    return "Título Pago em Cheque  Vinculado";
+                case "17":
+                    return "Liquidação após baixa ou Título não registrado";
+                case "18":
+                    return "Acerto de Depositária";
+                case "19":
+                    return "Confirmação Recebimento Instrução de Protesto";
+                case "20":
+                    return "Confirmação Recebimento Instrução Sustação de Protesto";
+                case "21":
+                    return "Acerto do Controle do Participante";
+                case "23":
+                    return "Entrada do Título em Cartório";
+                case "24":
+                    return "Entrada rejeitada por CEP Irregular";
+                case "27":
+                    return "Baixa Rejeitada";
+                case "28":
+                    return "Débito de tarifas/custas";
+                case "30":
+                    return "Alteração de Outros Dados Rejeitados";
+                case "32":
+                    return "Instrução Rejeitada";
+                case "33":
+                    return "Confirmação Pedido Alteração Outros Dados";
+                case "34":
+                    return "Retirado de Cartório e Manutenção Carteira";
+                case "35":
+                    return "Desagendamento ) débito automático";
+                case "68":
+                    return "Acerto dos dados ) rateio de Crédito";
+                case "69":
+                    return "Cancelamento dos dados ) rateio";
+                default:
+                    return "";
+            }
+        }
+
+        private TipoEspecieDocumento AjustaEspecieCnab400(string codigoEspecie)
+        {
+            switch (codigoEspecie)
+            {
+                case "01":
+                    return TipoEspecieDocumento.DM;
+                case "02":
+                    return TipoEspecieDocumento.NP;
+                case "03":
+                    return TipoEspecieDocumento.NS;
+                case "05":
+                    return TipoEspecieDocumento.RC;
+                case "10":
+                    return TipoEspecieDocumento.LC;
+                case "11":
+                    return TipoEspecieDocumento.ND;
+                case "12":
+                    return TipoEspecieDocumento.DS;
+                default:
+                    return TipoEspecieDocumento.OU;
+            }
+        }
+
+        private string AjustaEspecieCnab400(TipoEspecieDocumento especieDocumento)
+        {
+            switch (especieDocumento)
+            {
+                case TipoEspecieDocumento.DM:
+                    return "01";
+                case TipoEspecieDocumento.NP:
+                    return "02";
+                case TipoEspecieDocumento.NS:
+                    return "03";
+                case TipoEspecieDocumento.RC:
+                    return "05";
+                case TipoEspecieDocumento.LC:
+                    return "10";
+                case TipoEspecieDocumento.ND:
+                    return "11";
+                case TipoEspecieDocumento.DS:
+                    return "12";
+                default:
+                    return "99";
+            }
+        }
+        #endregion
 
 
 
