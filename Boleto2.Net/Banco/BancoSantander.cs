@@ -720,6 +720,9 @@ namespace Boleto2Net
         {
             try
             {
+                var nossoNum8Digitos = (boleto.NossoNumero + boleto.NossoNumeroDV).Substring(5);
+
+
                 numeroRegistroGeral++;
                 var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "1", '0');
@@ -727,8 +730,8 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 014, 0, Cedente.CPFCNPJ, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0018, 020, 0, Cedente.CodigoTransmissao, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 025, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0063, 013, 0, (boleto.NossoNumero + boleto.NossoNumeroDV), '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0076, 001, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0063, 008, 0, nossoNum8Digitos, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0071, 006, 0, boleto.DataDesconto, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0077, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0078, 004, 2, boleto.PercentualMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0082, 002, 0, "0", '0');
