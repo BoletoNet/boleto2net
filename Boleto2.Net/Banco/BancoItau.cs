@@ -151,6 +151,16 @@ namespace Boleto2Net
 
                 //DATA DE GERAÇÃO DATA DE GERAÇÃO DO ARQUIVO 095 100
                 arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(94, 6)).ToString("##-##-##"));
+                arquivoRetorno.Banco.Cedente = new Cedente();
+                arquivoRetorno.Banco.Cedente.Nome = registro.Substring(46, 30).Trim();
+
+                arquivoRetorno.Banco.Cedente.ContaBancaria = new ContaBancaria();
+
+                arquivoRetorno.Banco.Cedente.ContaBancaria.Agencia = registro.Substring(26, 4);
+                arquivoRetorno.Banco.Cedente.ContaBancaria.Conta = registro.Substring(32, 5);
+                arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoConta = registro.Substring(37, 1);
+
+                arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(394, 6));
 
             }
             catch (Exception ex)
