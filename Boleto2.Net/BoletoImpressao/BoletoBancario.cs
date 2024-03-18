@@ -465,7 +465,7 @@ namespace Boleto2Net
                 .Replace("@ENDERECOCEDENTE", MostrarEnderecoCedente ? enderecoCedente : "")
                 .Replace("@INSTRUCOES", Boleto.MensagemInstrucoesCaixa);
 
-            if (String.IsNullOrWhiteSpace(Boleto.QRCode))
+            if (string.IsNullOrWhiteSpace(Boleto.QRCode))
                 html = html
                     .Replace("@QRCODE", "")
                     .Replace("@COPIARCOLAR", "");
