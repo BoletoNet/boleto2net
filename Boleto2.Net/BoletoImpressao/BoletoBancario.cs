@@ -15,6 +15,7 @@ using System.Web.UI;
 
 namespace Boleto2Net
 {
+    using Boleto2Net.Util;
     using System.Linq;
 
     [Serializable(),
@@ -422,7 +423,7 @@ namespace Boleto2Net
             if (String.IsNullOrWhiteSpace(Boleto.Banco.Cedente.CodigoFormatado))
                 Boleto.Banco.FormataCedente();
 
-            return html
+            html = html
                 .Replace("@CODIGOBANCO", Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3))
                 .Replace("@DIGITOBANCO", Boleto.Banco.Digito.ToString())
                 .Replace("@URLIMAGEMLOGO", urlImagemLogo)
@@ -459,10 +460,26 @@ namespace Boleto2Net
                 .Replace("@AUTENTICACAOMECANICA", "")
                 .Replace("@USODOBANCO", Boleto.UsoBanco)
                 .Replace("@IMAGEMCODIGOBARRA", imagemCodigoBarras)
-                .Replace("@ACEITE", Boleto.Aceite).ToString()
+                .Replace("@ACEITE", Boleto.Aceite)
                 .Replace("@ENDERECOCEDENTE_BOLETO", MostrarEnderecoCedente ? string.Format(" - {0}", enderecoCedenteCompacto) : "")
                 .Replace("@ENDERECOCEDENTE", MostrarEnderecoCedente ? enderecoCedente : "")
                 .Replace("@INSTRUCOES", Boleto.MensagemInstrucoesCaixa);
+
+            if (string.IsNullOrWhiteSpace(Boleto.QRCode))
+                html = html
+                    .Replace("@QRCODE", "")
+                    .Replace("@COPIARCOLAR", "");
+            else
+            {
+                string copiarColar = string.Format("Escolha a forma mais conveniente para realizar seu pagamento: <b><i>Código de Barras</i></b> ou <b><i>QR Code</i></b>. Basta acessar o aplicativo da sua instituição financeira e utilizar apenas uma das opções.<br><br><b>Pix Copia e Cola</b><br><font color='Blue'>{0}</font>", Boleto.QRCode);
+                string qrCode = QRCodeHelper.GerarQrCode(Boleto.QRCode);
+                string fnQRCode = string.Format("data:image/jpeg;base64,{0}", qrCode);
+                html = html
+                    .Replace("@QRCODE", string.Format("<img class='qrcode' src='{0}' />", fnQRCode))
+                    .Replace("@COPIARCOLAR", copiarColar);
+            }
+
+            return html.ToString();
         }
 
         #endregion Html
