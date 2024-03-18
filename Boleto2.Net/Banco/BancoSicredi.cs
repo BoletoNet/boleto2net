@@ -1111,6 +1111,7 @@ namespace Boleto2Net
         {
             switch (boleto.EspecieDocumento) 
             {
+                case TipoEspecieDocumento.DM:
                 case TipoEspecieDocumento.DMI:
                 case TipoEspecieDocumento.DR:
                 case TipoEspecieDocumento.NP:

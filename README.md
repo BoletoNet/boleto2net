@@ -2,7 +2,7 @@
 [![Nuget count](http://img.shields.io/nuget/v/Boleto2.Net.svg)](http://www.nuget.org/packages/Boleto2.Net/)
 [![Issues open](https://img.shields.io/github/issues/BoletoNet/boleto2net.svg)](https://huboard.com/BoletoNet/boleto2net/)
 [![Coverage Status](https://coveralls.io/repos/github/BoletoNet/boleto2net/badge.svg?branch=master)](https://coveralls.io/github/BoletoNet/boleto2net?branch=master)
-
+[![MyGet Ultimo PR](https://img.shields.io/myget/boleto2netbuild/v/boleto2.net.svg)](https://www.myget.org/gallery/boleto2netbuild)
 # boleto2net
 Nova versão do Boleto.Net
 

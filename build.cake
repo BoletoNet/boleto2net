@@ -21,14 +21,14 @@ Task("RunNugetPack").WithCriteria(string.IsNullOrWhiteSpace(EnvironmentVariable(
     var nupkg = GetFiles("*.nupkg").First();
 });
 
-Task("RunCoverage").IsDependentOn("Build").Does(() =>
-{
-    OpenCover(tool => tool.NUnit3("./**/bin/Release/*.Testes.dll"),
-              new FilePath("./coverage.xml"),
-              new OpenCoverSettings().WithFilter("+[*]Boleto2Net.*").WithFilter("-[*]Boleto2Net.Testes.*")
-    );
-    CoverallsNet("coverage.xml", CoverallsNetReportType.OpenCover);
-});
+// Task("RunCoverage").IsDependentOn("Build").Does(() =>
+// {
+//     OpenCover(tool => tool.NUnit3("./**/bin/Release/*.Testes.dll"),
+//               new FilePath("./coverage.xml"),
+//               new OpenCoverSettings().WithFilter("+[*]Boleto2Net.*").WithFilter("-[*]Boleto2Net.Testes.*")
+//     );
+//     CoverallsNet("coverage.xml", CoverallsNetReportType.OpenCover);
+// });
 
 Task("RunTests").IsDependentOn("Build").Does(() =>
 {
@@ -47,6 +47,6 @@ Task("Build").IsDependentOn("RestorePackages").Does(() =>
 });
 
 Task("Default").IsDependentOn("Build").Does(() => {});
-Task("CiBuild").IsDependentOn("RunCoverage").IsDependentOn("RunNugetPack").Does(() => {});
-
+//Task("CiBuild").IsDependentOn("RunCoverage").IsDependentOn("RunNugetPack").Does(() => {});
+Task("CiBuild").IsDependentOn("RunTests").IsDependentOn("RunNugetPack").Does(() => {});
 RunTarget(target);
