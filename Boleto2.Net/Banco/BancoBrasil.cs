@@ -13,6 +13,7 @@ namespace Boleto2Net
         internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoBrasil());
 
         public Cedente Cedente { get; set; }
+        public byte[] Logo { get; set; }
         public int Codigo { get; } = 1;
         public string Nome { get; } = "Banco do Brasil";
         public string Digito { get; } = "9";
@@ -936,6 +937,7 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 001, 0, "1", '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0005, 006, 0, boleto.DataMulta, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0011, 012, 2, boleto.ValorMulta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0023, 003, 0, boleto.DiasLimiteRecebimento.HasValue ? boleto.DiasLimiteRecebimento.Value.ToString("000") : string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0023, 372, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
                 reg.CodificarLinha();

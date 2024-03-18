@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Boleto2Net
 {
-    [Serializable, Browsable(false)]
+    [Serializable, Browsable(true)]
     public class Cedente
     {
         private string _cpfcnpj;

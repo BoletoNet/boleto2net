@@ -19,6 +19,7 @@ namespace Boleto2Net
         public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
         public bool RemoveAcentosArquivoRemessa { get; } = true;
         private int NumeroArquivoRemessaCNAB400 { get; set; } // Safra repete o número do arquivo remessa na linha de detalhe (CNAB 400)
+        public byte[] Logo { get; set; }
 
         public void FormataCedente()
         {
