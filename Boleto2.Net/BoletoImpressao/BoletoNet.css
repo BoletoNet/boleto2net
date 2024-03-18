@@ -433,3 +433,21 @@ img {
 	border-right: dotted 1px #000000;
 	margin-right: 4px;
 }
+
+.break {
+	display: block;
+	clear: both;
+	page-break-after: always;
+}
+
+.qrcode {
+	margin-right: 10px;
+	height: 30mm;
+	width: 30mm;
+}
+
+.copiarcolar {
+	border: none;
+	font-family: 'Courier New', monospace;
+	font-size: 10px;
+}

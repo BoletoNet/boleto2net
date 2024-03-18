@@ -111,6 +111,7 @@ namespace Boleto2Net
         public string ComplementoInstrucao3 { get; set; } = string.Empty;
 
         public string MensagemInstrucoesCaixa { get; set; } = string.Empty;
+        public string QRCode { get; set; } = string.Empty;
         public string MensagemArquivoRemessa { get; set; } = string.Empty;
         public string RegistroArquivoRetorno { get; set; } = string.Empty;
 
