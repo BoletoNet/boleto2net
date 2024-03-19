@@ -7,6 +7,7 @@ namespace Boleto2Net
         Banrisul = 041,
         Caixa = 104,
         Bradesco = 237,
+        ABC = 246,
         Itau = 341,
         Safra = 422,
         Sicredi = 748,
