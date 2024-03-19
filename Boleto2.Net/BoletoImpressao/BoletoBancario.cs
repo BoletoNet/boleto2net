@@ -402,6 +402,13 @@ namespace Boleto2Net
                 }
                 if (Boleto.Avalista.Observacoes != string.Empty)
                     avalista += " - " + Boleto.Avalista.Observacoes;
+
+                if (MostrarEnderecoCedente)
+                {
+                    avalista += "<br />" + Boleto.Avalista.Endereco.FormataLogradouro(0) + "<br />" + string.Format("{0} - {1}/{2}", Boleto.Avalista.Endereco.Bairro, Boleto.Avalista.Endereco.Cidade, Boleto.Avalista.Endereco.UF);
+                    if (Boleto.Avalista.Endereco.CEP != String.Empty)
+                        avalista += string.Format(" - CEP: {0}", Utils.FormataCEP(Boleto.Avalista.Endereco.CEP));
+                }
             }
 
 
