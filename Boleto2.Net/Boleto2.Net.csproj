@@ -69,6 +69,7 @@
     <Compile Include="Banco\BancoBrasil.cs" />
     <Compile Include="Banco\BancoCaixa.cs" />
     <Compile Include="Banco\Banco.cs" />
+    <Compile Include="Banco\BancoDaycoval.cs" />
     <Compile Include="Banco\BancoItau.cs" />
     <Compile Include="Banco\Bancos.cs" />
     <Compile Include="Banco\BancoSafra.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira17.cs" />
     <Compile Include="Banco\Carteiras\BancoBradesco\BancoBradescoCarteira09.cs" />
     <Compile Include="Banco\Carteiras\BancoCaixa\BancoCaixaCarteiraSIG14.cs" />
+    <Compile Include="Banco\Carteiras\BancoDaycoval\BancoDaycovalCarteira121.cs" />
     <Compile Include="Banco\Carteiras\BancoItau\BancoItauCarteira109.cs" />
     <Compile Include="Banco\Carteiras\BancoItau\BancoItauCarteira112.cs" />
     <Compile Include="Banco\Carteiras\BancoSafra\BancoSafraCarteira1.cs" />

@@ -194,5 +194,30 @@ namespace Boleto2Net.Extensions
             return digito;
         }
         
+        public static string CalcularDVDaycoval(this string texto)
+        {
+            string digito;
+            int soma = 0, peso = 2, digTmp = 0;
+
+            for (int i = texto.Length - 1; i >= 0; i--)
+            {
+                digTmp = Convert.ToInt32(texto.Substring(i, 1)) * peso;
+                for (int n = 0; n < digTmp.ToString().Length; n++)
+                    soma += Convert.ToInt32(digTmp.ToString().Substring(n, 1));
+
+                if (peso == 2)
+                    peso = 1;
+                else
+                    peso = peso + 1;
+            }
+
+            var resto = (soma % 10);
+            if (resto == 0)
+                digito = "0";
+            else
+                digito = (10 - resto).ToString();
+            return digito;
+        }
+        
     }
 }

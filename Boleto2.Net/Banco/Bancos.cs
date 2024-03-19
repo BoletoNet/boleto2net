@@ -10,6 +10,7 @@ namespace Boleto2Net
         ABC = 246,
         Itau = 341,
         Safra = 422,
+        Daycoval = 707,
         Sicredi = 748,
         Sicoob = 756
     }
