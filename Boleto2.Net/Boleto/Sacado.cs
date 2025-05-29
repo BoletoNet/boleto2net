@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Boleto2Net
 {
-    [Serializable(), Browsable(false)]
+    [Serializable(), Browsable(true)]
     public class Sacado
     {
         private string _cpfcnpj = string.Empty;

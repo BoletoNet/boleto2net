@@ -18,6 +18,7 @@ namespace Boleto2Net
         }
 
         public Cedente Cedente { get; set; }
+        public byte[] Logo { get; set; }
 
         public int Codigo { get; } = 756;
         public string Nome { get; } = "Sicoob";

@@ -5,6 +5,7 @@ namespace Boleto2Net
     public interface IBanco
     {
         Cedente Cedente { get; set; }
+        byte[] Logo { get; set; }
         int Codigo { get; }
         string Nome { get; }
         string Digito { get; }

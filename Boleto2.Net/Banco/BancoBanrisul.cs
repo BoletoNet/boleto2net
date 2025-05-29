@@ -13,6 +13,7 @@ namespace Boleto2Net
         internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoBanrisul());
 
         public Cedente Cedente { get; set; }
+        public byte[] Logo { get; set; }
         public int Codigo { get; } = 41;
         public string Nome { get; } = "Banrisul";
         public string Digito { get; } = "8";
