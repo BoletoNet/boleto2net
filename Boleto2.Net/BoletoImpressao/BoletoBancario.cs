@@ -754,11 +754,18 @@ namespace Boleto2Net
             }
 
             var fnCodigoBarras = Path.GetTempFileName();
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, Boleto.CodigoBarra.CodigoDeBarras.Length);
-            cb.ToBitmap().Save(fnCodigoBarras);
+            try
+            {
+                var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, _withBarras, _heightBarras, Boleto.CodigoBarra.CodigoDeBarras.Length);
+                cb.ToBitmap().Save(fnCodigoBarras);
 
-            //return HtmlOffLine(fnCorte, fnLogo, fnBarra, fnPonto, fnBarraInterna, fnCodigoBarras).ToString();
-            return HtmlOffLine(null, fnLogo, fnBarra, fnCodigoBarras).ToString();
+                //return HtmlOffLine(fnCorte, fnLogo, fnBarra, fnPonto, fnBarraInterna, fnCodigoBarras).ToString();
+                return HtmlOffLine(null, fnLogo, fnBarra, fnCodigoBarras).ToString();
+            }
+            finally
+            {
+                File.Delete(fnCodigoBarras);
+            }
         }
 
         /// <summary>
