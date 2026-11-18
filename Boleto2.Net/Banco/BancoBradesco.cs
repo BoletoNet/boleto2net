@@ -14,6 +14,7 @@ namespace Boleto2Net
         internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoBradesco());
 
         public Cedente Cedente { get; set; }
+        public byte[] Logo { get; set; }
         public int Codigo { get; } = 237;
         public string Nome { get; } = "Bradesco";
         public string Digito { get; } = "2";
@@ -842,8 +843,21 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0148, 002, 0, AjustaEspecieCnab400(boleto.EspecieDocumento), '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0150, 001, 0, boleto.Aceite, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0151, 006, 0, boleto.DataEmissao, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0157, 002, 0, boleto.CodigoInstrucao1, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0159, 002, 0, boleto.CodigoInstrucao2, '0');
+
+                string vInstrucao1, vInstrucao2;
+                if (boleto.CodigoProtesto == TipoCodigoProtesto.ProtestarDiasCorridos && boleto.DiasProtesto > 0
+                    && boleto.CodigoInstrucao1.PadLeft(2, '0') == "00" && boleto.CodigoInstrucao2.PadLeft(2, '0') == "00" )
+                {
+                    vInstrucao1 = "06";
+                    vInstrucao2 = boleto.DiasProtesto.ToString();
+                }
+                else
+                {
+                    vInstrucao1 = boleto.CodigoInstrucao1;
+                    vInstrucao2 = boleto.CodigoInstrucao2;
+                }
+                reg.Adicionar(TTiposDadoEDI.ediInteiro______________, 0157, 002, 0, vInstrucao1, '0');                                           //157-158
+                reg.Adicionar(TTiposDadoEDI.ediInteiro______________, 0159, 002, 0, vInstrucao2, '0');                                           //159-160
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0161, 013, 2, boleto.ValorJurosDia, '0');
 
                 if (boleto.ValorDesconto == 0)

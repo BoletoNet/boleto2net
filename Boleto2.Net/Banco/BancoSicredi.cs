@@ -11,6 +11,7 @@ namespace Boleto2Net
         internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoSicredi());
 
         public Cedente Cedente { get; set; }
+        public byte[] Logo { get; set; }
         public int Codigo { get; } = 748;
         public string Nome { get; } = "Sicredi";
         public string Digito { get; } = "X";
@@ -593,7 +594,7 @@ namespace Boleto2Net
 
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0072, 001, 0, String.Empty, ' ');
 
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0073, 030, 0, Cedente.Nome, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0073, 030, 0, Cedente.Nome, ' ');                
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0103, 030, 0, "SICREDI", ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0133, 010, 0, String.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0143, 001, 0, "1", '0');
