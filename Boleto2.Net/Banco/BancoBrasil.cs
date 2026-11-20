@@ -11,6 +11,10 @@ namespace Boleto2Net
     internal sealed class BancoBrasil : IBanco
     {
         internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoBrasil());
+        private BancoBrasil()
+        {
+            IdsRetornoCnab400RegistroDetalhe.Add("5");
+        }
 
         public Cedente Cedente { get; set; }
         public int Codigo { get; } = 1;
@@ -911,7 +915,28 @@ namespace Boleto2Net
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0378, 014, 0, boleto.Avalista.CPFCNPJ, ' ');
                 }
 
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0392, 002, 0, string.Empty, ' ');
+                switch (boleto.CodigoProtesto)
+                {
+                    case TipoCodigoProtesto.NaoProtestar:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0392, 002, 0, 07, '0');
+                        break;
+                    case TipoCodigoProtesto.ProtestarDiasCorridos:
+                        if (boleto.DiasProtesto == 10 || boleto.DiasProtesto == 15 || boleto.DiasProtesto == 20 || boleto.DiasProtesto == 25 || boleto.DiasProtesto == 30 || boleto.DiasProtesto == 45)
+                            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0392, 002, 0, boleto.DiasProtesto, '0');
+                        else
+                            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0392, 002, 0, 06, '0'); /*Indica Protesto em dias corridos*/
+                        break;
+                    case TipoCodigoProtesto.ProtestarDiasUteis:
+                        if (boleto.DiasProtesto == 3 || boleto.DiasProtesto == 4 || boleto.DiasProtesto == 5)
+                            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0392, 002, 0, boleto.DiasProtesto, '0');
+                        else
+                            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0392, 002, 0, 05, '0'); /*permite até 5º dia, padrão é 5*/
+                        break;
+                    default:
+                        reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0392, 002, 0, 0, '0');
+                        break;
+                }
+
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0394, 001, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
                 reg.CodificarLinha();
@@ -936,7 +961,8 @@ namespace Boleto2Net
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 001, 0, "1", '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0005, 006, 0, boleto.DataMulta, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0011, 012, 2, boleto.ValorMulta, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0023, 372, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0023, 003, 0, boleto.DiasBaixaDevolucao, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0026, 369, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
                 reg.CodificarLinha();
                 return reg.LinhaRegistro;
@@ -988,6 +1014,32 @@ namespace Boleto2Net
         public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
+        }
+
+        public void LerDetalheRetornoCNAB400Segmento5(ref Boleto boleto, string registro)
+        {
+            try
+            {
+                //Identificação do Registro Transação: “5” - Boleto com Pix
+                //02 002 a 003 9(002) Tipo de Serviço: “10”
+                //03 004 a 005 9(002) Ocorrência de registro QR Code 27
+                //04 006 a 140 9(135) Brancos
+                //05 141 a 217 X(077) URL do QR Code ou Chave Pix
+                //06 218 a 252 X(035) TXID – Identificação do QR Code
+                //07 253 a 394 X(142) Brancos
+                //08 395 a 400 X(006) Sequencial de registro
+
+                //Nº Controle do Participante
+                boleto.URLQRCode = registro.Substring(140, 77);
+
+                //Carteira
+                boleto.OcorrenciaRegistro = registro.Substring(1, 2);
+                boleto.TXID = registro.Substring(217, 35);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
+            }
         }
 
         public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)

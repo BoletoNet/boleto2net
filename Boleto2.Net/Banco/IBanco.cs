@@ -51,6 +51,7 @@ namespace Boleto2Net
         void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro);
         void LerHeaderRetornoCNAB400(ArquivoRetorno arquivoRetorno, string registro);
         void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro);
+        void LerDetalheRetornoCNAB400Segmento5(ref Boleto boleto, string registro);
         void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro);
         void LerTrailerRetornoCNAB400(string registro);
 

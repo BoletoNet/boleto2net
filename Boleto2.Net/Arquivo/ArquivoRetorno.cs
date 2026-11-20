@@ -198,6 +198,9 @@ namespace Boleto2Net
                 case "1":
                     Banco.LerDetalheRetornoCNAB400Segmento1(ref boleto, registro);
                     break;
+                case "5":
+                    Banco.LerDetalheRetornoCNAB400Segmento5(ref boleto, registro);
+                    break;
                 case "7":
                     Banco.LerDetalheRetornoCNAB400Segmento7(ref boleto, registro);
                     break;

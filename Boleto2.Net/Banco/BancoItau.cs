@@ -212,6 +212,10 @@ namespace Boleto2Net
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
             }
         }
+        public void LerDetalheRetornoCNAB400Segmento5(ref Boleto boleto, string registro)
+        {
+            throw new NotImplementedException();
+        }
 
         public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
         {

@@ -862,6 +862,11 @@ namespace Boleto2Net
             throw new NotImplementedException();
         }
 
+        public void LerDetalheRetornoCNAB400Segmento5(ref Boleto boleto, string registro)
+        {
+            throw new NotImplementedException();
+        }
+
         public void LerTrailerRetornoCNAB400(string registro)
         {
         }

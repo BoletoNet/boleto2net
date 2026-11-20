@@ -111,7 +111,13 @@ namespace Boleto2Net
         public string ComplementoInstrucao3 { get; set; } = string.Empty;
 
         public string MensagemInstrucoesCaixa { get; set; } = string.Empty;
+
+        // PIX
         public string QRCode { get; set; } = string.Empty;
+        public string URLQRCode { get; set; } = string.Empty;
+        public string TXID { get; set; } = string.Empty;
+        public string OcorrenciaRegistro { get; set; } = string.Empty;
+
         public string MensagemArquivoRemessa { get; set; } = string.Empty;
         public string RegistroArquivoRetorno { get; set; } = string.Empty;
 
